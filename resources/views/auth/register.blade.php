@@ -18,10 +18,10 @@
         <x-auth.icon-input
             icon="person"
             label="Nama Lengkap"
-            name="name"
+            name="nama"
             type="text"
             placeholder="Nama lengkap Anda"
-            :value="old('name')"
+            :value="old('nama')"
             required
             autofocus
             autocomplete="name"
