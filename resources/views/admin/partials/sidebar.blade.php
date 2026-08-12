@@ -150,6 +150,18 @@
                     </a>
                 </li>
 
+                {{-- UI Kit (Referensi Komponen — hapus sebelum launching) --}}
+                <li class="nav-item mt-3 pt-3 border-top">
+                    <a class="nav-link {{ request()->routeIs('admin.ui-kit') ? 'active' : '' }}" href="{{ route('admin.ui-kit') }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <x-admin-icon name="package" />
+                        </span>
+                        <span class="nav-link-title">
+                            UI Kit
+                        </span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

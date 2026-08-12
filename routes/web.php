@@ -21,6 +21,10 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+        Route::get('/admin/ui-kit', function () {
+        return view('admin.ui-kit');
+    })->name('admin.ui-kit');
 });
 
 
