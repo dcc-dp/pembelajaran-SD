@@ -79,6 +79,6 @@ class MataPelajaranController extends Controller
 
         return redirect()
             ->route('admin.mata-pelajaran.index')
-            ->with('success', 'Mata pelajaran berhasil dihapus.');
+            ->with('danger', 'Mata pelajaran berhasil dihapus.');
     }
 }
