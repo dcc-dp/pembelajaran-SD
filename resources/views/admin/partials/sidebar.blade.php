@@ -76,7 +76,7 @@
                             Kelas
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ route('admin.mata-pelajaran.index') }}">
                             Mata Pelajaran
                         </a>
 
