@@ -161,5 +161,25 @@
         </div>
 
     </div>
+        {{-- Assets Simple-DataTables (Vanilla JS DataTables) --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.querySelector("#simple-datatable-demo");
+            if (table) {
+                new simpleDatatables.DataTable(table, {
+                    searchable: true,
+                    perPage: 5,
+                    labels: {
+                        placeholder: "Cari data guru, sekolah...",
+                        perPage: "{select} data per halaman",
+                        noRows: "Tidak ada data ditemukan",
+                        info: "Menampilkan {start} - {end} dari {rows} data",
+                    }
+                });
+            }
+        });
+    </script>
 
 @endsection
