@@ -1,6 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Mata Pelajaran')
+@section('page-title', 'Mata Pelajaran')
 
 @section('content')
 
@@ -126,7 +127,7 @@
                                         </a>
 
                                         <form action="{{ route('admin.mata-pelajaran.destroy', $mataPelajaran) }}" method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus mata pelajaran ini?')">
+                                            onsubmit="return confirm('Data ini akan dihapus permanen.')">
 
                                             @csrf
                                             @method('DELETE')

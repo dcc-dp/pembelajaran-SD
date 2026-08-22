@@ -1,6 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Tambah Mata Pelajaran')
+@section('page-title', 'Tambah Mata Pelajaran')
 
 @section('content')
 
