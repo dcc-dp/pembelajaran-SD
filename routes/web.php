@@ -17,4 +17,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'role:Super Admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+        Route::get('/admin/ui-kit', function () {
+        return view('admin.ui-kit');
+    })->name('admin.ui-kit');
+});
+
+
 require __DIR__.'/auth.php';
