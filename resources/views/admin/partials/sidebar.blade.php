@@ -80,7 +80,7 @@
                             Mata Pelajaran
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ route('admin.kategori-dokumen.index') }}">
                             Kategori Dokumen
                         </a>
 

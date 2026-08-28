@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
+use App\Http\Controllers\Admin\KategoriDokumenController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +30,9 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
 
     Route::resource('/admin/mata-pelajaran', MataPelajaranController::class)
     ->names('admin.mata-pelajaran');
+
+    Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
+    ->names('admin.kategori-dokumen');
 });
 
 
