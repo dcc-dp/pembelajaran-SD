@@ -1,13 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Mata Pelajaran')
-@section('page-title', 'Tambah Mata Pelajaran')
+@section('title', 'Tambah Kategori Dokumen')
+@section('page-title', 'Tambah Kategori Dokumen')
 
 @section('content')
 
     <div class="container-xl">
 
-        {{-- Breadcrumb --}}
         <div class="mb-4 pb-3 border-bottom">
 
             <nav aria-label="breadcrumb">
@@ -21,14 +20,14 @@
                     </li>
 
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.mata-pelajaran.index') }}" class="text-decoration-none">
+                        <a href="{{ route('admin.kategori-dokumen.index') }}" class="text-decoration-none">
                             Master Data
                         </a>
                     </li>
 
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.mata-pelajaran.index') }}" class="text-decoration-none">
-                            Mata Pelajaran
+                        <a href="{{ route('admin.kategori-dokumen.index') }}" class="text-decoration-none">
+                            Kategori Dokumen
                         </a>
                     </li>
 
@@ -70,12 +69,8 @@
 
             <div class="d-flex align-items-center gap-2 mb-3">
 
-                <span class="badge bg-danger-subtle text-danger fs-6 px-3 py-2 rounded-pill fw-bold">
-                    3
-                </span>
-
                 <h3 class="fw-bold text-dark mb-0">
-                    Tambah Mata Pelajaran
+                    Tambah Kategori Dokumen
                 </h3>
 
             </div>
@@ -85,21 +80,28 @@
 
                 <div class="card-body p-4">
 
-                    <form action="{{ route('admin.mata-pelajaran.store') }}" method="POST">
+                    <form action="{{ route('admin.kategori-dokumen.store') }}" method="POST">
 
                         @csrf
 
                         <div class="row g-3">
 
-                            {{-- Nama Mata Pelajaran --}}
+
+                            {{-- Nama Kategori --}}
                             <div class="col-md-6">
 
                                 <label class="form-label fw-bold">
-                                    Nama Mata Pelajaran*
+                                    Nama Kategori*
                                 </label>
 
-                                <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
-                                    value="{{ old('nama') }}" placeholder="Masukkan nama mata pelajaran..." required>
+                                <input
+                                    type="text"
+                                    name="nama"
+                                    class="form-control @error('nama') is-invalid @enderror"
+                                    value="{{ old('nama') }}"
+                                    placeholder="Masukkan nama kategori dokumen..."
+                                    required
+                                >
 
                                 @error('nama')
                                     <div class="invalid-feedback">
@@ -117,9 +119,15 @@
                                     Urutan*
                                 </label>
 
-                                <input type="number" name="urutan"
-                                    class="form-control @error('urutan') is-invalid @enderror" value="{{ old('urutan') }}"
-                                    placeholder="Contoh: 1" min="1" required>
+                                <input
+                                    type="number"
+                                    name="urutan"
+                                    class="form-control @error('urutan') is-invalid @enderror"
+                                    value="{{ old('urutan') }}"
+                                    placeholder="Contoh: 1"
+                                    min="1"
+                                    required
+                                >
 
                                 @error('urutan')
                                     <div class="invalid-feedback">
@@ -130,24 +138,60 @@
                             </div>
 
 
+                            {{-- Deskripsi --}}
+                            <div class="col-12">
+
+                                <label class="form-label fw-bold">
+                                    Deskripsi
+                                </label>
+
+                                <textarea
+                                    name="deskripsi"
+                                    rows="4"
+                                    class="form-control @error('deskripsi') is-invalid @enderror"
+                                    placeholder="Masukkan deskripsi kategori dokumen..."
+                                >{{ old('deskripsi') }}</textarea>
+
+                                @error('deskripsi')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+
+                            </div>
+
+
                             {{-- Status --}}
                             <div class="col-md-6">
+
                                 <label class="form-label fw-bold">
                                     Status*
                                 </label>
 
-                                <select name="status" class="form-select @error('status') is-invalid @enderror" required>
+                                <select
+                                    name="status"
+                                    class="form-select @error('status') is-invalid @enderror"
+                                    required
+                                >
+
                                     <option value="" disabled selected>
                                         Pilih status...
                                     </option>
 
-                                    <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>
+                                    <option
+                                        value="aktif"
+                                        {{ old('status') == 'aktif' ? 'selected' : '' }}
+                                    >
                                         Aktif
                                     </option>
 
-                                    <option value="tidak_aktif" {{ old('status') == 'tidak_aktif' ? 'selected' : '' }}>
+                                    <option
+                                        value="tidak_aktif"
+                                        {{ old('status') == 'tidak_aktif' ? 'selected' : '' }}
+                                    >
                                         Tidak Aktif
                                     </option>
+
                                 </select>
 
                                 @error('status')
@@ -155,24 +199,8 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+
                             </div>
-
-
-                            <!-- {{-- Informasi --}}
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-bold">
-                                    Keterangan
-                                </label>
-
-                                <div class="form-control bg-light text-muted" style="height: auto;">
-
-                                    Status menentukan apakah mata pelajaran
-                                    ditampilkan sebagai mata pelajaran aktif.
-
-                                </div>
-
-                            </div> -->
 
 
                             {{-- Tombol --}}
@@ -180,7 +208,10 @@
 
                                 <div class="d-flex gap-2">
 
-                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary rounded-pill px-4"
+                                    >
 
                                         <x-admin-icon name="check" />
 
@@ -189,8 +220,10 @@
                                     </button>
 
 
-                                    <a href="{{ route('admin.mata-pelajaran.index') }}"
-                                        class="btn btn-light border rounded-pill px-4">
+                                    <a
+                                        href="{{ route('admin.kategori-dokumen.index') }}"
+                                        class="btn btn-light border rounded-pill px-4"
+                                    >
 
                                         Batal
 

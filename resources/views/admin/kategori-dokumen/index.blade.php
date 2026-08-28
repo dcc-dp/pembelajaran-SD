@@ -203,23 +203,13 @@
                                         </a>
 
 
-                                        {{-- Hapus --}}
-                                        <form
-                                            action="{{ route(
-                                                'admin.kategori-dokumen.destroy',
-                                                $kategoriDokumen
-                                            ) }}"
-                                            method="POST"
+                                        <form action="{{ route('admin.kategori-dokumen.destroy', $kategoriDokumen) }}" method="POST"
                                             onsubmit="return confirm('Data ini akan dihapus permanen.')">
 
                                             @csrf
-
                                             @method('DELETE')
 
-
-                                            <button
-                                                type="submit"
-                                                class="btn btn-sm btn-outline-danger">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
 
                                                 Hapus
 
