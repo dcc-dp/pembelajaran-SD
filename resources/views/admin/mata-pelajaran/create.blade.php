@@ -69,11 +69,6 @@
         <div id="forms" class="mb-5 pt-3">
 
             <div class="d-flex align-items-center gap-2 mb-3">
-
-                <span class="badge bg-danger-subtle text-danger fs-6 px-3 py-2 rounded-pill fw-bold">
-                    3
-                </span>
-
                 <h3 class="fw-bold text-dark mb-0">
                     Tambah Mata Pelajaran
                 </h3>
