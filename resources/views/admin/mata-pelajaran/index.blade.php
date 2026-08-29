@@ -1,0 +1,185 @@
+@extends('admin.layouts.admin')
+
+@section('title', 'Mata Pelajaran')
+@section('page-title', 'Mata Pelajaran')
+
+@section('content')
+
+    <div class="container-xl">
+        <div class="mb-4 pb-3 border-bottom">
+
+            <nav aria-label="breadcrumb">
+
+                <ol class="breadcrumb mb-0">
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="#" class="text-decoration-none">
+                            Master Data
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Mata Pelajaran
+                    </li>
+
+                </ol>
+
+            </nav>
+
+        </div>
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if(session('danger'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('danger') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        <div class="card mb-4">
+
+            <div class="card-header d-flex align-items-center justify-content-between">
+
+                <h3 class="card-title">
+                    Mata Pelajaran
+                </h3>
+
+                <a href="{{ route('admin.mata-pelajaran.create') }}" class="btn btn-primary btn-sm">
+
+                    <x-admin-icon name="package" />
+
+                    Tambah Data
+                </a>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-vcenter card-table" id="simple-datatable-demo">
+
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Urutan</th>
+                            <th>Status</th>
+                            <th class="w-1">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @forelse($mataPelajarans as $mataPelajaran)
+
+                            <tr>
+
+                                <td>
+                                    {{ $mataPelajaran->nama }}
+                                </td>
+
+                                <td>
+                                    {{ $mataPelajaran->urutan }}
+                                </td>
+
+                                <td>
+
+                                    @if($mataPelajaran->status === 'aktif')
+
+                                        <span class="badge bg-green-lt text-green">
+                                            Aktif
+                                        </span>
+
+                                    @else
+
+                                        <span class="badge bg-red-lt text-red">
+                                            Nonaktif
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    <div class="d-flex gap-1">
+
+                                        {{-- Edit --}}
+                                        <a href="{{ route('admin.mata-pelajaran.edit', $mataPelajaran) }}"
+                                            class="btn btn-sm btn-outline-primary">
+
+                                            Edit
+
+                                        </a>
+
+                                        <form action="{{ route('admin.mata-pelajaran.destroy', $mataPelajaran) }}" method="POST"
+                                            onsubmit="return confirm('Data ini akan dihapus permanen.')">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+
+                                                Hapus
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+                                <td colspan="4" class="text-center text-secondary py-5">
+                                    Belum ada data mata pelajaran.
+                                </td>
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+        {{-- Assets Simple-DataTables (Vanilla JS DataTables) --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.querySelector("#simple-datatable-demo");
+            if (table) {
+                new simpleDatatables.DataTable(table, {
+                    searchable: true,
+                    perPage: 5,
+                    labels: {
+                        placeholder: "Cari data guru, sekolah...",
+                        perPage: "{select} data per halaman",
+                        noRows: "Tidak ada data ditemukan",
+                        info: "Menampilkan {start} - {end} dari {rows} data",
+                    }
+                });
+            }
+        });
+    </script>
+
+@endsection

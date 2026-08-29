@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\PaketLanggananController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\MataPelajaranController;
+use App\Http\Controllers\Admin\KategoriDokumenController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,11 +21,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:Super Admin'])->group(function () {
+
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-        Route::get('/admin/ui-kit', function () {
+    Route::get('/admin/ui-kit', function () {
         return view('admin.ui-kit');
     })->name('admin.ui-kit');
 
@@ -31,8 +34,18 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
         'admin/paket-langganan',
         PaketLanggananController::class
     )->names('admin.paket-langganan');
-    
+
+    Route::resource(
+        'admin/mata-pelajaran',
+        MataPelajaranController::class
+    )->names('admin.mata-pelajaran');
+
+    Route::resource(
+        'admin/kategori-dokumen',
+        KategoriDokumenController::class
+    )->names('admin.kategori-dokumen');
 });
 
 
 require __DIR__.'/auth.php';
+
