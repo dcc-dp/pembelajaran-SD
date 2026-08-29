@@ -104,14 +104,22 @@
 
                 {{-- Paket Langganan --}}
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.paket-langganan.*') ? 'active' : '' }}" href="#">
+
+                    <a
+                        class="nav-link {{ request()->routeIs('admin.paket-langganan.*') ? 'active' : '' }}"
+                        href="{{ route('admin.paket-langganan.index') }}"
+                    >
+
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <x-admin-icon name="package" />
                         </span>
+
                         <span class="nav-link-title">
                             Paket Langganan
                         </span>
+
                     </a>
+
                 </li>
 
                 {{-- Langganan --}}
