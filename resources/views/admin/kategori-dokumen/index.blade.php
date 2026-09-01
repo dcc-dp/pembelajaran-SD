@@ -54,10 +54,10 @@
 
 
         {{-- Alert Danger --}}
-        @if(session('danger'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
 
-                {{ session('danger') }}
+                {{ session('success') }}
 
                 <button
                     type="button"

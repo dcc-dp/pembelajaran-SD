@@ -16,7 +16,10 @@ class KategoriDokumenController extends Controller
     {
         $kategoriDokumens = KategoriDokumen::orderBy('urutan')->get();
 
-        return view('admin.kategori-dokumen.index', compact('kategoriDokumens'));
+        return view(
+            'admin.kategori-dokumen.index',
+            compact('kategoriDokumens')
+        );
     }
 
     /**
@@ -47,7 +50,7 @@ class KategoriDokumenController extends Controller
     }
 
     /**
-     * Menampilkan form edit kategori dokumen.
+     * Menampilkan form edit.
      */
     public function edit(KategoriDokumen $kategoriDokumen)
     {
@@ -89,10 +92,25 @@ class KategoriDokumenController extends Controller
      */
     public function destroy(KategoriDokumen $kategoriDokumen)
     {
-        $kategoriDokumen->delete();
+        $deleted = KategoriDokumen::where(
+            'id',
+            $kategoriDokumen->id
+        )->delete();
+
+        if ($deleted) {
+            return redirect()
+                ->route('admin.kategori-dokumen.index')
+                ->with(
+                    'success',
+                    'Kategori dokumen berhasil dihapus.'
+                );
+        }
 
         return redirect()
             ->route('admin.kategori-dokumen.index')
-            ->with('danger', 'Kategori dokumen berhasil dihapus.');
+            ->with(
+                'danger',
+                'Kategori dokumen gagal dihapus.'
+            );
     }
 }

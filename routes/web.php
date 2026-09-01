@@ -30,10 +30,13 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
 
     Route::resource('/admin/mata-pelajaran', MataPelajaranController::class)
     ->names('admin.mata-pelajaran');
-
+    
     Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
-    ->names('admin.kategori-dokumen');
-});
+        ->parameters([
+            'kategori-dokumen' => 'kategoriDokumen'
+        ])
+        ->names('admin.kategori-dokumen');
+    });
 
 
 require __DIR__.'/auth.php';
