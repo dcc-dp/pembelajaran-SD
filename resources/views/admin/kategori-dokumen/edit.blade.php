@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit Mata Pelajaran')
-@section('page-title', 'Edit Mata Pelajaran')
+@section('title', 'Edit Kategori Dokumen')
+@section('page-title', 'Edit Kategori Dokumen')
 
 @section('content')
 
@@ -9,27 +9,29 @@
 
     {{-- Header --}}
     <div class="mb-4 pb-3 border-bottom">
+
         <nav aria-label="breadcrumb">
+
             <ol class="breadcrumb mb-0">
 
                 <li class="breadcrumb-item">
                     <a href="{{ route('admin.dashboard') }}"
-                       class="text-decoration-none">
+                        class="text-decoration-none">
                         Dashboard
                     </a>
                 </li>
 
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.mata-pelajaran.index') }}"
-                       class="text-decoration-none">
+                    <a href="#"
+                        class="text-decoration-none">
                         Master Data
                     </a>
                 </li>
 
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.mata-pelajaran.index') }}"
-                       class="text-decoration-none">
-                        Mata Pelajaran
+                    <a href="{{ route('admin.kategori-dokumen.index') }}"
+                        class="text-decoration-none">
+                        Kategori Dokumen
                     </a>
                 </li>
 
@@ -38,7 +40,9 @@
                 </li>
 
             </ol>
+
         </nav>
+
     </div>
 
 
@@ -47,76 +51,111 @@
 
         {{-- Card Header --}}
         <div class="card-header">
+
             <div>
+
                 <h3 class="card-title mb-1">
-                    Edit Mata Pelajaran
+                    Edit Kategori Dokumen
                 </h3>
 
                 <div class="text-muted">
-                    Perbarui informasi mata pelajaran
+                    Perbarui informasi kategori dokumen
                 </div>
+
             </div>
+
         </div>
 
 
         {{-- Form --}}
         <form
-            action="{{ route('admin.mata-pelajaran.update', $mataPelajaran->id) }}"
+            action="{{ route('admin.kategori-dokumen.update', $kategoriDokumen->id) }}"
             method="POST"
         >
 
             @csrf
             @method('PUT')
 
+
             <div class="card-body">
 
                 <div class="row g-3">
 
-                    {{-- Nama Mata Pelajaran --}}
+                    {{-- Nama Kategori --}}
                     <div class="col-md-6">
 
                         <label class="form-label fw-bold">
-                            Nama Mata Pelajaran*
+                            Nama Kategori*
                         </label>
 
                         <input
                             type="text"
                             name="nama"
                             class="form-control @error('nama') is-invalid @enderror"
-                            value="{{ old('nama', $mataPelajaran->nama) }}"
-                            placeholder="Masukkan nama mata pelajaran"
+                            value="{{ old('nama', $kategoriDokumen->nama) }}"
+                            placeholder="Masukkan nama kategori dokumen"
                             required
                         >
 
                         @error('nama')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                         @enderror
 
                     </div>
 
 
-                    {{-- Kode Mata Pelajaran --}}
+                    {{-- Urutan --}}
                     <div class="col-md-6">
 
                         <label class="form-label fw-bold">
-                            Urutan Mata Pelajaran*
+                            Urutan*
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             name="urutan"
+                            min="1"
                             class="form-control @error('urutan') is-invalid @enderror"
-                            value="{{ old('urutan', $mataPelajaran->urutan) }}"
-                            placeholder="Masukkan Urutan mata pelajaran"
+                            value="{{ old('urutan', $kategoriDokumen->urutan) }}"
+                            placeholder="Masukkan urutan kategori"
                             required
                         >
 
                         @error('urutan')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
+                        @enderror
+
+                    </div>
+
+
+                    {{-- Deskripsi --}}
+                    <div class="col-md-12">
+
+                        <label class="form-label fw-bold">
+                            Deskripsi
+                        </label>
+
+                        <textarea
+                            name="deskripsi"
+                            rows="4"
+                            class="form-control @error('deskripsi') is-invalid @enderror"
+                            placeholder="Masukkan deskripsi kategori dokumen"
+                        >{{ old('deskripsi', $kategoriDokumen->deskripsi) }}</textarea>
+
+                        @error('deskripsi')
+
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+
                         @enderror
 
                     </div>
@@ -141,14 +180,14 @@
 
                             <option
                                 value="aktif"
-                                {{ old('status', $mataPelajaran->status) == 'aktif' ? 'selected' : '' }}
+                                {{ old('status', $kategoriDokumen->status) === 'aktif' ? 'selected' : '' }}
                             >
                                 Aktif
                             </option>
 
                             <option
                                 value="tidak_aktif"
-                                {{ old('status', $mataPelajaran->status) == 'tidak_aktif' ? 'selected' : '' }}
+                                {{ old('status', $kategoriDokumen->status) === 'tidak_aktif' ? 'selected' : '' }}
                             >
                                 Tidak Aktif
                             </option>
@@ -156,9 +195,11 @@
                         </select>
 
                         @error('status')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                         @enderror
 
                     </div>
@@ -172,12 +213,13 @@
             <div class="card-footer d-flex justify-content-end gap-2">
 
                 <a
-                    href="{{ route('admin.mata-pelajaran.index') }}"
+                    href="{{ route('admin.kategori-dokumen.index') }}"
                     class="btn btn-secondary"
                 >
                     <i class="fas fa-arrow-left me-1"></i>
                     Batal
                 </a>
+
 
                 <button
                     type="submit"

@@ -92,25 +92,10 @@ class KategoriDokumenController extends Controller
      */
     public function destroy(KategoriDokumen $kategoriDokumen)
     {
-        $deleted = KategoriDokumen::where(
-            'id',
-            $kategoriDokumen->id
-        )->delete();
-
-        if ($deleted) {
-            return redirect()
-                ->route('admin.kategori-dokumen.index')
-                ->with(
-                    'success',
-                    'Kategori dokumen berhasil dihapus.'
-                );
-        }
+        $kategoriDokumen->delete();
 
         return redirect()
             ->route('admin.kategori-dokumen.index')
-            ->with(
-                'danger',
-                'Kategori dokumen gagal dihapus.'
-            );
+            ->with('success', 'Kategori Dookumen berhasil dihapus.');
     }
 }
