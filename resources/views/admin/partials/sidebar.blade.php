@@ -84,7 +84,7 @@
                             Kategori Dokumen
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ route('admin.jenis-dokumen.index') }}">
                             Jenis Dokumen
                         </a>
                     </div>

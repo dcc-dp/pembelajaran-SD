@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
 use App\Http\Controllers\Admin\KategoriDokumenController;
+use App\Http\Controllers\Admin\JenisDokumenController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,6 +38,12 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
         ])
         ->names('admin.kategori-dokumen');
     });
+
+    Route::resource('/admin/jenis-dokumen', JenisDokumenController::class)
+    ->parameters([
+        'jenis-dokumen' => 'jenisDokumen'
+    ])
+    ->names('admin.jenis-dokumen');
 
 
 require __DIR__.'/auth.php';
