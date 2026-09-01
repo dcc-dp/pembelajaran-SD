@@ -1,12 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Kategori Dokumen')
-@section('page-title', 'Tambah Kategori Dokumen')
+@section('title', 'Tambah Jenis Dokumen')
+@section('page-title', 'Tambah Jenis Dokumen')
 
 @section('content')
 
     <div class="container-xl">
 
+        {{-- Breadcrumb --}}
         <div class="mb-4 pb-3 border-bottom">
 
             <nav aria-label="breadcrumb">
@@ -14,20 +15,23 @@
                 <ol class="breadcrumb mb-0">
 
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="text-decoration-none">
                             Dashboard
                         </a>
                     </li>
 
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.kategori-dokumen.index') }}" class="text-decoration-none">
+                        <a href="{{ route('admin.jenis-dokumen.index') }}"
+                            class="text-decoration-none">
                             Master Data
                         </a>
                     </li>
 
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.kategori-dokumen.index') }}" class="text-decoration-none">
-                            Kategori Dokumen
+                        <a href="{{ route('admin.jenis-dokumen.index') }}"
+                            class="text-decoration-none">
+                            Jenis Dokumen
                         </a>
                     </li>
 
@@ -57,7 +61,11 @@
 
                 </ul>
 
-                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                <a
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="close">
+                </a>
 
             </div>
 
@@ -70,7 +78,7 @@
             <div class="d-flex align-items-center gap-2 mb-3">
 
                 <h3 class="fw-bold text-dark mb-0">
-                    Tambah Kategori Dokumen
+                    Tambah Jenis Dokumen
                 </h3>
 
             </div>
@@ -80,18 +88,65 @@
 
                 <div class="card-body p-4">
 
-                    <form action="{{ route('admin.kategori-dokumen.store') }}" method="POST">
+                    <form
+                        action="{{ route('admin.jenis-dokumen.store') }}"
+                        method="POST"
+                    >
 
                         @csrf
+
 
                         <div class="row g-3">
 
 
-                            {{-- Nama Kategori --}}
+                            {{-- Kategori Dokumen --}}
                             <div class="col-md-6">
 
                                 <label class="form-label fw-bold">
-                                    Nama Kategori*
+                                    Kategori Dokumen*
+                                </label>
+
+                                <select
+                                    name="kategori_dokumen_id"
+                                    class="form-select @error('kategori_dokumen_id') is-invalid @enderror"
+                                    required
+                                >
+
+                                    <option value="" disabled selected>
+                                        Pilih kategori dokumen...
+                                    </option>
+
+                                    @foreach($kategoriDokumens as $kategoriDokumen)
+
+                                        <option
+                                            value="{{ $kategoriDokumen->id }}"
+                                            {{ old('kategori_dokumen_id') == $kategoriDokumen->id ? 'selected' : '' }}
+                                        >
+
+                                            {{ $kategoriDokumen->nama }}
+
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+
+                                @error('kategori_dokumen_id')
+
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+
+                                @enderror
+
+                            </div>
+
+
+                            {{-- Nama Jenis Dokumen --}}
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-bold">
+                                    Nama Jenis Dokumen*
                                 </label>
 
                                 <input
@@ -99,14 +154,16 @@
                                     name="nama"
                                     class="form-control @error('nama') is-invalid @enderror"
                                     value="{{ old('nama') }}"
-                                    placeholder="Masukkan nama kategori dokumen..."
+                                    placeholder="Masukkan nama jenis dokumen..."
                                     required
                                 >
 
                                 @error('nama')
+
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
+
                                 @enderror
 
                             </div>
@@ -130,32 +187,11 @@
                                 >
 
                                 @error('urutan')
+
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
-                                @enderror
 
-                            </div>
-
-
-                            {{-- Deskripsi --}}
-                            <div class="col-12">
-
-                                <label class="form-label fw-bold">
-                                    Deskripsi
-                                </label>
-
-                                <textarea
-                                    name="deskripsi"
-                                    rows="4"
-                                    class="form-control @error('deskripsi') is-invalid @enderror"
-                                    placeholder="Masukkan deskripsi kategori dokumen..."
-                                >{{ old('deskripsi') }}</textarea>
-
-                                @error('deskripsi')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
                                 @enderror
 
                             </div>
@@ -195,9 +231,36 @@
                                 </select>
 
                                 @error('status')
+
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
+
+                                @enderror
+
+                            </div>
+
+
+                            {{-- Deskripsi --}}
+                            <div class="col-12">
+
+                                <label class="form-label fw-bold">
+                                    Deskripsi
+                                </label>
+
+                                <textarea
+                                    name="deskripsi"
+                                    rows="4"
+                                    class="form-control @error('deskripsi') is-invalid @enderror"
+                                    placeholder="Masukkan deskripsi jenis dokumen..."
+                                >{{ old('deskripsi') }}</textarea>
+
+                                @error('deskripsi')
+
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+
                                 @enderror
 
                             </div>
@@ -221,7 +284,7 @@
 
 
                                     <a
-                                        href="{{ route('admin.kategori-dokumen.index') }}"
+                                        href="{{ route('admin.jenis-dokumen.index') }}"
                                         class="btn btn-light border rounded-pill px-4"
                                     >
 
