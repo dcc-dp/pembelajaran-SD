@@ -1,198 +1,152 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit Mata Pelajaran')
+@section('title', 'Edit Mata Pelajaran: ' . $mataPelajaran->nama)
 @section('page-title', 'Edit Mata Pelajaran')
+@section('page-description', 'Perbarui data nama, urutan, atau status keaktifan mata pelajaran.')
+
+@section('page-breadcrumbs')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.dashboard') }}" class="text-secondary text-decoration-none">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.mata-pelajaran.index') }}" class="text-secondary text-decoration-none">Mata Pelajaran</a>
+            </li>
+            <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
+                Edit: {{ $mataPelajaran->nama }}
+            </li>
+        </ol>
+    </nav>
+@endsection
 
 @section('content')
 
-<div class="container-xl">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
 
-    {{-- Header --}}
-    <div class="mb-4 pb-3 border-bottom">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
+            <form action="{{ route('admin.mata-pelajaran.update', $mataPelajaran) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}"
-                       class="text-decoration-none">
-                        Dashboard
-                    </a>
-                </li>
+                <div class="card shadow-sm border-0">
+                    <div class="card-header py-3 bg-white border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar avatar-xs bg-danger-subtle text-danger rounded-circle">
+                                <i class="ti ti-edit"></i>
+                            </div>
+                            <h3 class="card-title fw-bold text-dark mb-0">Edit Formulir Mata Pelajaran</h3>
+                        </div>
+                    </div>
 
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.mata-pelajaran.index') }}"
-                       class="text-decoration-none">
-                        Master Data
-                    </a>
-                </li>
+                    <div class="card-body p-4">
 
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.mata-pelajaran.index') }}"
-                       class="text-decoration-none">
-                        Mata Pelajaran
-                    </a>
-                </li>
+                        {{-- Alert Error --}}
+                        @if($errors->any())
+                            <div class="alert alert-danger alert-dismissible mb-4" role="alert">
+                                <div class="fw-bold mb-1">Periksa kembali data formulir:</div>
+                                <ul class="mb-0 small ps-3">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                            </div>
+                        @endif
 
-                <li class="breadcrumb-item active" aria-current="page">
-                    Edit
-                </li>
+                        <div class="row g-3">
+                            {{-- Nama Mata Pelajaran --}}
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    Nama Mata Pelajaran <span class="text-danger">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="nama"
+                                    class="form-control @error('nama') is-invalid @enderror"
+                                    value="{{ old('nama', $mataPelajaran->nama) }}"
+                                    placeholder="Masukkan nama mata pelajaran..."
+                                    required
+                                >
+                                @error('nama')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
 
-            </ol>
-        </nav>
-    </div>
+                            {{-- Urutan --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    Urutan Tampilan <span class="text-danger">*</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    name="urutan"
+                                    class="form-control @error('urutan') is-invalid @enderror"
+                                    value="{{ old('urutan', $mataPelajaran->urutan) }}"
+                                    min="1"
+                                    placeholder="1"
+                                    required
+                                >
+                                @error('urutan')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <small class="form-hint">Menentukan posisi urutan saat ditampilkan pada guru.</small>
+                            </div>
 
+                            {{-- Status --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    Status <span class="text-danger">*</span>
+                                </label>
+                                <select
+                                    name="status"
+                                    class="form-select @error('status') is-invalid @enderror"
+                                    required
+                                >
+                                    <option
+                                        value="aktif"
+                                        @selected(old('status', $mataPelajaran->status) === 'aktif')
+                                    >
+                                        Aktif (Dapat Dipilih)
+                                    </option>
+                                    <option
+                                        value="tidak_aktif"
+                                        @selected(old('status', $mataPelajaran->status) === 'tidak_aktif')
+                                    >
+                                        Tidak Aktif (Disembunyikan)
+                                    </option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
 
-    {{-- Card Form --}}
-    <div class="card">
+                    </div>
 
-        {{-- Card Header --}}
-        <div class="card-header">
-            <div>
-                <h3 class="card-title mb-1">
-                    Edit Mata Pelajaran
-                </h3>
+                    <div class="card-footer bg-light py-3 border-top">
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                                <i class="ti ti-device-floppy me-1"></i>
+                                Simpan Perubahan
+                            </button>
 
-                <div class="text-muted">
-                    Perbarui informasi mata pelajaran
+                            <a href="{{ route('admin.mata-pelajaran.index') }}" class="btn btn-light border rounded-pill px-4">
+                                Batal
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+            </form>
+
         </div>
-
-
-        {{-- Form --}}
-        <form
-            action="{{ route('admin.mata-pelajaran.update', $mataPelajaran->id) }}"
-            method="POST"
-        >
-
-            @csrf
-            @method('PUT')
-
-            <div class="card-body">
-
-                <div class="row g-3">
-
-                    {{-- Nama Mata Pelajaran --}}
-                    <div class="col-md-6">
-
-                        <label class="form-label fw-bold">
-                            Nama Mata Pelajaran*
-                        </label>
-
-                        <input
-                            type="text"
-                            name="nama"
-                            class="form-control @error('nama') is-invalid @enderror"
-                            value="{{ old('nama', $mataPelajaran->nama) }}"
-                            placeholder="Masukkan nama mata pelajaran"
-                            required
-                        >
-
-                        @error('nama')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
-                    </div>
-
-
-                    {{-- Kode Mata Pelajaran --}}
-                    <div class="col-md-6">
-
-                        <label class="form-label fw-bold">
-                            Urutan Mata Pelajaran*
-                        </label>
-
-                        <input
-                            type="text"
-                            name="urutan"
-                            class="form-control @error('urutan') is-invalid @enderror"
-                            value="{{ old('urutan', $mataPelajaran->urutan) }}"
-                            placeholder="Masukkan Urutan mata pelajaran"
-                            required
-                        >
-
-                        @error('urutan')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
-                    </div>
-
-
-                    {{-- Status --}}
-                    <div class="col-md-6">
-
-                        <label class="form-label fw-bold">
-                            Status*
-                        </label>
-
-                        <select
-                            name="status"
-                            class="form-select @error('status') is-invalid @enderror"
-                            required
-                        >
-
-                            <option value="" disabled>
-                                Pilih status...
-                            </option>
-
-                            <option
-                                value="aktif"
-                                {{ old('status', $mataPelajaran->status) == 'aktif' ? 'selected' : '' }}
-                            >
-                                Aktif
-                            </option>
-
-                            <option
-                                value="tidak_aktif"
-                                {{ old('status', $mataPelajaran->status) == 'tidak_aktif' ? 'selected' : '' }}
-                            >
-                                Tidak Aktif
-                            </option>
-
-                        </select>
-
-                        @error('status')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            {{-- Card Footer --}}
-            <div class="card-footer d-flex justify-content-end gap-2">
-
-                <a
-                    href="{{ route('admin.mata-pelajaran.index') }}"
-                    class="btn btn-secondary"
-                >
-                    <i class="fas fa-arrow-left me-1"></i>
-                    Batal
-                </a>
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    <i class="fas fa-save me-1"></i>
-                    Update
-                </button>
-
-            </div>
-
-        </form>
-
     </div>
-
-</div>
 
 @endsection

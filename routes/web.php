@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PaketLanggananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
 use App\Http\Controllers\Admin\KategoriDokumenController;
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     Route::get('/admin/ui-kit', function () {
         return view('admin.ui-kit');
     })->name('admin.ui-kit');
+
+    Route::resource(
+        'admin/paket-langganan',
+        PaketLanggananController::class
+    )->names('admin.paket-langganan');
 
     Route::resource('/admin/semester', SemesterController::class)
         ->names('admin.semester');
