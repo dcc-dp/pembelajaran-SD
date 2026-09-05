@@ -59,7 +59,11 @@
                 </li>
 
                 @php
-                    $isMasterDataActive = request()->routeIs('admin.mata-pelajaran.*') || request()->routeIs('admin.kategori-dokumen.*') || request()->routeIs('admin.master-data.*');
+                    $isMasterDataActive = request()->routeIs('admin.semester.*')
+                        || request()->routeIs('admin.kelas.*')
+                        || request()->routeIs('admin.mata-pelajaran.*')
+                        || request()->routeIs('admin.kategori-dokumen.*')
+                        || request()->routeIs('admin.master-data.*');
                 @endphp
 
                 {{-- Master Data --}}
@@ -85,12 +89,12 @@
                             Kurikulum
                         </a>
 
-                        <a class="dropdown-item py-2" href="#">
+                        <a class="dropdown-item py-2 {{ request()->routeIs('admin.semester.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.semester.index') }}">
                             <span class="dropdown-item-dot me-2"></span>
                             Semester
                         </a>
 
-                        <a class="dropdown-item py-2" href="#">
+                        <a class="dropdown-item py-2 {{ request()->routeIs('admin.kelas.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.kelas.index') }}">
                             <span class="dropdown-item-dot me-2"></span>
                             Kelas
                         </a>
