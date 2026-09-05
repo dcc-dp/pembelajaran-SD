@@ -118,7 +118,8 @@
 
                 {{-- Repository --}}
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.repository.*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('admin.repository.*') ? 'active' : '' }}"
+                        href="{{ route('admin.repository.index') }}">
                         <span class="nav-link-icon">
                             <i class="ti ti-books fs-2"></i>
                         </span>

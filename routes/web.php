@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RepositoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +34,14 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     Route::get('/admin/ui-kit', function () {
         return view('admin.ui-kit');
     })->name('admin.ui-kit');
+
+    Route::get('/admin/repository/{repository}/download', [RepositoryController::class, 'download'])
+        ->name('admin.repository.download');
+
+    Route::resource(
+        'admin/repository',
+        RepositoryController::class
+    )->names('admin.repository');
 
     Route::resource(
         'admin/paket-langganan',
