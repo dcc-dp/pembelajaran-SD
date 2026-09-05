@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
 use App\Http\Controllers\Admin\KategoriDokumenController;
+use App\Http\Controllers\Admin\SemesterController;
+use App\Http\Controllers\Admin\KelasController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,11 +30,18 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
         return view('admin.ui-kit');
     })->name('admin.ui-kit');
 
+    Route::resource('/admin/semester', SemesterController::class)
+        ->names('admin.semester');
+
+    Route::resource('/admin/kelas', KelasController::class)
+        ->parameters(['kelas' => 'kelas'])
+        ->names('admin.kelas');
+
     Route::resource('/admin/mata-pelajaran', MataPelajaranController::class)
-    ->names('admin.mata-pelajaran');
+        ->names('admin.mata-pelajaran');
 
     Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
-    ->names('admin.kategori-dokumen');
+        ->names('admin.kategori-dokumen');
 });
 
 
