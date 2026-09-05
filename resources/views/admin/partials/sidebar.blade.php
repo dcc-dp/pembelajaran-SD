@@ -45,15 +45,23 @@
                     </a>
                 </li>
 
+                @php
+                    $isMasterDataActive = request()->routeIs('admin.semester.*')
+                        || request()->routeIs('admin.kelas.*')
+                        || request()->routeIs('admin.mata-pelajaran.*')
+                        || request()->routeIs('admin.kategori-dokumen.*')
+                        || request()->routeIs('admin.master-data.*');
+                @endphp
+
                 {{-- Master Data --}}
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown {{ $isMasterDataActive ? 'active' : '' }}">
                     
-                      <a  class="nav-link dropdown-toggle {{ request()->routeIs('admin.master-data.*') ? 'active' : '' }}"
+                    <a class="nav-link dropdown-toggle {{ $isMasterDataActive ? 'active show' : '' }}"
                         href="#navbar-master-data"
                         data-bs-toggle="dropdown"
                         data-bs-auto-close="false"
                         role="button"
-                        aria-expanded="false"
+                        aria-expanded="{{ $isMasterDataActive ? 'true' : 'false' }}"
                     >
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <x-admin-icon name="database" />
@@ -63,24 +71,24 @@
                         </span>
                     </a>
 
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu {{ $isMasterDataActive ? 'show' : '' }}">
                         <a class="dropdown-item" href="#">
                             Kurikulum
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item {{ request()->routeIs('admin.semester.*') ? 'active' : '' }}" href="{{ route('admin.semester.index') }}">
                             Semester
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}" href="{{ route('admin.kelas.index') }}">
                             Kelas
                         </a>
 
-                        <a class="dropdown-item" href="{{ route('admin.mata-pelajaran.index') }}">
+                        <a class="dropdown-item {{ request()->routeIs('admin.mata-pelajaran.*') ? 'active' : '' }}" href="{{ route('admin.mata-pelajaran.index') }}">
                             Mata Pelajaran
                         </a>
 
-                        <a class="dropdown-item" href="{{ route('admin.kategori-dokumen.index') }}">
+                        <a class="dropdown-item {{ request()->routeIs('admin.kategori-dokumen.*') ? 'active' : '' }}" href="{{ route('admin.kategori-dokumen.index') }}">
                             Kategori Dokumen
                         </a>
 
