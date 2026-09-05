@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\MataPelajaranController;
 use App\Http\Controllers\Admin\KategoriDokumenController;
 use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,7 +27,10 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-        Route::get('/admin/ui-kit', function () {
+    Route::get('/admin/profile', [AdminProfileController::class, 'index'])->name('admin.profile');
+    Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
+    Route::get('/admin/ui-kit', function () {
         return view('admin.ui-kit');
     })->name('admin.ui-kit');
 
