@@ -50,6 +50,7 @@
                         || request()->routeIs('admin.kelas.*')
                         || request()->routeIs('admin.mata-pelajaran.*')
                         || request()->routeIs('admin.kategori-dokumen.*')
+                        || request()->routeIs('admin.jenis-dokumen.*')
                         || request()->routeIs('admin.master-data.*');
                 @endphp
 
@@ -92,7 +93,7 @@
                             Kategori Dokumen
                         </a>
 
-                        <a class="dropdown-item" href="{{ route('admin.jenis-dokumen.index') }}">
+                        <a class="dropdown-item {{ request()->routeIs('admin.jenis-dokumen.*') ? 'active' : '' }}" href="{{ route('admin.jenis-dokumen.index') }}">
                             Jenis Dokumen
                         </a>
                     </div>
