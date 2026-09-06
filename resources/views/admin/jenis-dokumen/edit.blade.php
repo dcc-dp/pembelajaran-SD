@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit Kategori Dokumen')
-@section('page-title', 'Edit Kategori Dokumen')
+@section('title', 'Edit Jenis Dokumen')
+@section('page-title', 'Edit Jenis Dokumen')
 
 @section('content')
 
@@ -29,9 +29,9 @@
                 </li>
 
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.kategori-dokumen.index') }}"
+                    <a href="{{ route('admin.jenis-dokumen.index') }}"
                         class="text-decoration-none">
-                        Kategori Dokumen
+                        Jenis Dokumen
                     </a>
                 </li>
 
@@ -55,11 +55,11 @@
             <div>
 
                 <h3 class="card-title mb-1">
-                    Edit Kategori Dokumen
+                    Edit Jenis Dokumen
                 </h3>
 
                 <div class="text-muted">
-                    Perbarui informasi kategori dokumen
+                    Perbarui informasi jenis dokumen
                 </div>
 
             </div>
@@ -69,7 +69,7 @@
 
         {{-- Form --}}
         <form
-            action="{{ route('admin.kategori-dokumen.update', $kategoriDokumen->id) }}"
+            action="{{ route('admin.jenis-dokumen.update', $jenisDokumen->id) }}"
             method="POST"
         >
 
@@ -81,19 +81,67 @@
 
                 <div class="row g-3">
 
-                    {{-- Nama Kategori --}}
+                    {{-- Kategori Dokumen --}}
                     <div class="col-md-6">
 
                         <label class="form-label fw-bold">
-                            Nama Kategori*
+                            Kategori Dokumen*
+                        </label>
+
+                        <select
+                            name="kategori_dokumen_id"
+                            class="form-select @error('kategori_dokumen_id') is-invalid @enderror"
+                            required
+                        >
+
+                            <option value="" disabled>
+                                Pilih kategori dokumen...
+                            </option>
+
+                            @foreach($kategoriDokumens as $kategoriDokumen)
+
+                                <option
+                                    value="{{ $kategoriDokumen->id }}"
+                                    {{
+                                        old(
+                                            'kategori_dokumen_id',
+                                            $jenisDokumen->kategori_dokumen_id
+                                        ) == $kategoriDokumen->id
+                                            ? 'selected'
+                                            : ''
+                                    }}
+                                >
+                                    {{ $kategoriDokumen->nama }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        @error('kategori_dokumen_id')
+
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+
+                        @enderror
+
+                    </div>
+
+
+                    {{-- Nama Jenis Dokumen --}}
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Nama Jenis Dokumen*
                         </label>
 
                         <input
                             type="text"
                             name="nama"
                             class="form-control @error('nama') is-invalid @enderror"
-                            value="{{ old('nama', $kategoriDokumen->nama) }}"
-                            placeholder="Masukkan nama kategori dokumen"
+                            value="{{ old('nama', $jenisDokumen->nama) }}"
+                            placeholder="Masukkan nama jenis dokumen"
                             required
                         >
 
@@ -120,37 +168,12 @@
                             name="urutan"
                             min="1"
                             class="form-control @error('urutan') is-invalid @enderror"
-                            value="{{ old('urutan', $kategoriDokumen->urutan) }}"
-                            placeholder="Masukkan urutan kategori"
+                            value="{{ old('urutan', $jenisDokumen->urutan) }}"
+                            placeholder="Masukkan urutan jenis dokumen"
                             required
                         >
 
                         @error('urutan')
-
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-
-                        @enderror
-
-                    </div>
-
-
-                    {{-- Deskripsi --}}
-                    <div class="col-md-12">
-
-                        <label class="form-label fw-bold">
-                            Deskripsi
-                        </label>
-
-                        <textarea
-                            name="deskripsi"
-                            rows="4"
-                            class="form-control @error('deskripsi') is-invalid @enderror"
-                            placeholder="Masukkan deskripsi kategori dokumen"
-                        >{{ old('deskripsi', $kategoriDokumen->deskripsi) }}</textarea>
-
-                        @error('deskripsi')
 
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -180,14 +203,14 @@
 
                             <option
                                 value="aktif"
-                                {{ old('status', $kategoriDokumen->status) === 'aktif' ? 'selected' : '' }}
+                                {{ old('status', $jenisDokumen->status) === 'aktif' ? 'selected' : '' }}
                             >
                                 Aktif
                             </option>
 
                             <option
                                 value="tidak_aktif"
-                                {{ old('status', $kategoriDokumen->status) === 'tidak_aktif' ? 'selected' : '' }}
+                                {{ old('status', $jenisDokumen->status) === 'tidak_aktif' ? 'selected' : '' }}
                             >
                                 Tidak Aktif
                             </option>
@@ -195,6 +218,31 @@
                         </select>
 
                         @error('status')
+
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+
+                        @enderror
+
+                    </div>
+
+
+                    {{-- Deskripsi --}}
+                    <div class="col-md-12">
+
+                        <label class="form-label fw-bold">
+                            Deskripsi
+                        </label>
+
+                        <textarea
+                            name="deskripsi"
+                            rows="4"
+                            class="form-control @error('deskripsi') is-invalid @enderror"
+                            placeholder="Masukkan deskripsi jenis dokumen"
+                        >{{ old('deskripsi', $jenisDokumen->deskripsi) }}</textarea>
+
+                        @error('deskripsi')
 
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -213,7 +261,7 @@
             <div class="card-footer d-flex justify-content-end gap-2">
 
                 <a
-                    href="{{ route('admin.kategori-dokumen.index') }}"
+                    href="{{ route('admin.jenis-dokumen.index') }}"
                     class="btn btn-secondary"
                 >
                     <i class="fas fa-arrow-left me-1"></i>

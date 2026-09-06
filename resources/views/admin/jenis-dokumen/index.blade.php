@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Kategori Dokumen')
-@section('page-title', 'Kategori Dokumen')
+@section('title', 'Jenis Dokumen')
+@section('page-title', 'Jenis Dokumen')
 
 @section('content')
 
@@ -15,19 +15,21 @@
                 <ol class="breadcrumb mb-0">
 
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="text-decoration-none">
                             Dashboard
                         </a>
                     </li>
 
                     <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none">
+                        <a href="#"
+                            class="text-decoration-none">
                             Master Data
                         </a>
                     </li>
 
                     <li class="breadcrumb-item active" aria-current="page">
-                        Kategori Dokumen
+                        Jenis Dokumen
                     </li>
 
                 </ol>
@@ -36,18 +38,40 @@
 
         </div>
 
+
+        {{-- Alert Success --}}
         @if(session('success'))
+
             <div class="alert alert-success alert-dismissible fade show" role="alert">
+
                 {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+
             </div>
+
         @endif
 
+
+        {{-- Alert Danger --}}
         @if(session('danger'))
+
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
                 {{ session('danger') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+
             </div>
+
         @endif
 
 
@@ -58,12 +82,12 @@
             <div class="card-header d-flex align-items-center justify-content-between">
 
                 <h3 class="card-title">
-                    Kategori Dokumen
+                    Jenis Dokumen
                 </h3>
 
 
                 <a
-                    href="{{ route('admin.kategori-dokumen.create') }}"
+                    href="{{ route('admin.jenis-dokumen.create') }}"
                     class="btn btn-primary btn-sm">
 
                     <x-admin-icon name="package" />
@@ -86,6 +110,8 @@
 
                         <tr>
 
+                            <th>Kategori Dokumen</th>
+
                             <th>Nama</th>
 
                             <th>Deskripsi</th>
@@ -105,14 +131,22 @@
 
                     <tbody>
 
-                        @forelse($kategoriDokumens as $kategoriDokumen)
+                        @forelse($jenisDokumens as $jenisDokumen)
 
                             <tr>
+
+                                {{-- Kategori Dokumen --}}
+                                <td>
+
+                                    {{ $jenisDokumen->kategoriDokumen->nama ?? '-' }}
+
+                                </td>
+
 
                                 {{-- Nama --}}
                                 <td>
 
-                                    {{ $kategoriDokumen->nama }}
+                                    {{ $jenisDokumen->nama }}
 
                                 </td>
 
@@ -120,9 +154,9 @@
                                 {{-- Deskripsi --}}
                                 <td>
 
-                                    @if($kategoriDokumen->deskripsi)
+                                    @if($jenisDokumen->deskripsi)
 
-                                        {{ $kategoriDokumen->deskripsi }}
+                                        {{ $jenisDokumen->deskripsi }}
 
                                     @else
 
@@ -138,7 +172,7 @@
                                 {{-- Urutan --}}
                                 <td>
 
-                                    {{ $kategoriDokumen->urutan }}
+                                    {{ $jenisDokumen->urutan }}
 
                                 </td>
 
@@ -146,7 +180,7 @@
                                 {{-- Status --}}
                                 <td>
 
-                                    @if($kategoriDokumen->status === 'aktif')
+                                    @if($jenisDokumen->status === 'aktif')
 
                                         <span class="badge bg-green-lt text-green">
 
@@ -175,8 +209,8 @@
                                         {{-- Edit --}}
                                         <a
                                             href="{{ route(
-                                                'admin.kategori-dokumen.edit',
-                                                $kategoriDokumen
+                                                'admin.jenis-dokumen.edit',
+                                                $jenisDokumen
                                             ) }}"
                                             class="btn btn-sm btn-outline-primary">
 
@@ -185,13 +219,22 @@
                                         </a>
 
 
-                                        <form action="{{ route('admin.kategori-dokumen.destroy', $kategoriDokumen) }}" method="POST"
-                                            onsubmit="return confirm('Data ini akan dihapus permanen.')">
+                                        {{-- Hapus --}}
+                                        <form
+                                            action="{{ route(
+                                                'admin.jenis-dokumen.destroy',
+                                                $jenisDokumen
+                                            ) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Data ini akan dihapus permanen.')"
+                                        >
 
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-danger">
 
                                                 Hapus
 
@@ -210,10 +253,10 @@
                             <tr>
 
                                 <td
-                                    colspan="5"
+                                    colspan="6"
                                     class="text-center text-secondary py-5">
 
-                                    Belum ada data kategori dokumen.
+                                    Belum ada data jenis dokumen.
 
                                 </td>
 
@@ -258,7 +301,7 @@
 
                     labels: {
 
-                        placeholder: "Cari kategori dokumen...",
+                        placeholder: "Cari jenis dokumen...",
 
                         perPage: "{select} data per halaman",
 
