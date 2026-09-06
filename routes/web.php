@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
 use App\Http\Controllers\Admin\KategoriDokumenController;
+use App\Http\Controllers\Admin\JenisDokumenController;
 use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\AdminProfileController;
@@ -45,6 +46,10 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
 
     Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
         ->names('admin.kategori-dokumen');
+
+    Route::resource('/admin/jenis-dokumen', JenisDokumenController::class)
+        ->parameters(['jenis-dokumen' => 'jenisDokumen'])
+        ->names('admin.jenis-dokumen');
 });
 
 
