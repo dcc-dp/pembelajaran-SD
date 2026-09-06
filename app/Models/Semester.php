@@ -9,11 +9,18 @@ class Semester extends Model
 {
     use HasFactory;
 
+    protected $table = 'semesters';
+
     protected $fillable = [
         'nama',
         'urutan',
         'status',
     ];
+
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
 
     public function repositories()
     {

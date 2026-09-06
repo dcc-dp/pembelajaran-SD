@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
 use App\Http\Controllers\Admin\KategoriDokumenController;
-use App\Http\Controllers\Admin\JenisDokumenController;
+use App\Http\Controllers\Admin\SemesterController;
+use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,29 +24,29 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:Super Admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-        Route::get('/admin/ui-kit', function () {
+    Route::get('/admin/profile', [AdminProfileController::class, 'index'])->name('admin.profile');
+    Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
+    Route::get('/admin/ui-kit', function () {
         return view('admin.ui-kit');
     })->name('admin.ui-kit');
 
-    Route::resource('/admin/mata-pelajaran', MataPelajaranController::class)
-    ->names('admin.mata-pelajaran');
-    
-    Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
-        ->parameters([
-            'kategori-dokumen' => 'kategoriDokumen'
-        ])
-        ->names('admin.kategori-dokumen');
-    });
+    Route::resource('/admin/semester', SemesterController::class)
+        ->names('admin.semester');
 
-    Route::resource('/admin/jenis-dokumen', JenisDokumenController::class)
-    ->parameters([
-        'jenis-dokumen' => 'jenisDokumen'
-    ])
-    ->names('admin.jenis-dokumen');
+    Route::resource('/admin/kelas', KelasController::class)
+        ->parameters(['kelas' => 'kelas'])
+        ->names('admin.kelas');
+
+    Route::resource('/admin/mata-pelajaran', MataPelajaranController::class)
+        ->names('admin.mata-pelajaran');
+
+    Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
+        ->names('admin.kategori-dokumen');
+});
 
 
 require __DIR__.'/auth.php';
+

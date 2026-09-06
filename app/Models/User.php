@@ -16,6 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
     'nama_sekolah',
     'email',
     'no_hp',
+    'foto',
     'password'
 ])]
 #[Hidden(['password', 'remember_token'])]
@@ -23,6 +24,26 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
+
+    /**
+     * Get avatar photo URL with fallback.
+     */
+    public function getFotoUrlAttribute(): string
+    {
+        if ($this->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->foto)) {
+            return \Illuminate\Support\Facades\Storage::url($this->foto);
+        }
+
+        return asset('assets/admin/img/user.jpg');
+    }
+
+    /**
+     * Compatibility accessor for templates using ->name instead of ->nama.
+     */
+    public function getNameAttribute(): ?string
+    {
+        return $this->nama;
+    }
 
     /**
      * Get the attributes that should be cast.

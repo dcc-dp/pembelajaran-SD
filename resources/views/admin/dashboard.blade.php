@@ -36,7 +36,7 @@
                     </div>
                     <div>
                         <div class="stat-label">TOTAL GURU</div>
-                        <div class="stat-number">128</div>
+                        <div class="stat-number">{{ number_format($totalGuru ?? 0, 0, ',', '.') }}</div>
                         <div class="stat-subtext">Guru terdaftar</div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                     </div>
                     <div>
                         <div class="stat-label">MATERI</div>
-                        <div class="stat-number">64</div>
+                        <div class="stat-number">{{ number_format($totalMateri ?? 0, 0, ',', '.') }}</div>
                         <div class="stat-subtext">Modul & Perangkat Ajar</div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     </div>
                     <div>
                         <div class="stat-label">LANGGANAN AKTIF</div>
-                        <div class="stat-number">92</div>
+                        <div class="stat-number">{{ number_format($totalLanggananAktif ?? 0, 0, ',', '.') }}</div>
                         <div class="stat-subtext">Guru berlangganan</div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                     </div>
                     <div>
                         <div class="stat-label">SEKOLAH</div>
-                        <div class="stat-number">18</div>
+                        <div class="stat-number">{{ number_format($totalSekolah ?? 0, 0, ',', '.') }}</div>
                         <div class="stat-subtext">Sekolah terhubung</div>
                     </div>
                 </div>
