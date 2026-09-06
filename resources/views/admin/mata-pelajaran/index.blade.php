@@ -2,177 +2,172 @@
 
 @section('title', 'Mata Pelajaran')
 @section('page-title', 'Mata Pelajaran')
+@section('page-description', 'Kelola daftar mata pelajaran kurikulum SD yang tersedia pada sistem.')
+
+@section('page-breadcrumbs')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.dashboard') }}" class="text-secondary text-decoration-none">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="text-secondary">Master Data</span>
+            </li>
+            <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
+                Mata Pelajaran
+            </li>
+        </ol>
+    </nav>
+@endsection
+
+@section('page-actions')
+    <a href="{{ route('admin.mata-pelajaran.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+        <i class="ti ti-plus me-1"></i>
+        Tambah Mata Pelajaran
+    </a>
+@endsection
 
 @section('content')
 
-    <div class="container-xl">
-        <div class="mb-4 pb-3 border-bottom">
+    {{-- Alert Success --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible shadow-sm border-0 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="ti ti-circle-check fs-2 me-2 text-success"></i>
+                <div class="fw-medium">
+                    {{ session('success') }}
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+    @endif
 
-            <nav aria-label="breadcrumb">
+    {{-- Alert Danger --}}
+    @if(session('danger'))
+        <div class="alert alert-danger alert-dismissible shadow-sm border-0 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="ti ti-alert-circle fs-2 me-2 text-danger"></i>
+                <div class="fw-medium">
+                    {{ session('danger') }}
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+    @endif
 
-                <ol class="breadcrumb mb-0">
-
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
-                            Dashboard
-                        </a>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none">
-                            Master Data
-                        </a>
-                    </li>
-
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Mata Pelajaran
-                    </li>
-
-                </ol>
-
-            </nav>
-
+    <div class="card shadow-sm border-0">
+        <div class="card-header py-3 d-flex align-items-center justify-content-between">
+            <div>
+                <h3 class="card-title fw-bold text-dark">Daftar Mata Pelajaran</h3>
+                <p class="text-secondary small mb-0">Urutan dan status aktif mata pelajaran pada katalog materi guru.</p>
+            </div>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table table-hover" id="simple-datatable-demo">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Urutan</th>
+                        <th>Nama Mata Pelajaran</th>
+                        <th style="width: 120px;">Status</th>
+                        <th class="text-end" style="width: 140px;">Aksi</th>
+                    </tr>
+                </thead>
 
-        @if(session('danger'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('danger') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        <div class="card mb-4">
-
-            <div class="card-header d-flex align-items-center justify-content-between">
-
-                <h3 class="card-title">
-                    Mata Pelajaran
-                </h3>
-
-                <a href="{{ route('admin.mata-pelajaran.create') }}" class="btn btn-primary btn-sm">
-
-                    <x-admin-icon name="package" />
-
-                    Tambah Data
-                </a>
-
-            </div>
-
-            <div class="table-responsive">
-
-                <table class="table table-vcenter card-table" id="simple-datatable-demo">
-
-                    <thead>
+                <tbody>
+                    @forelse($mataPelajarans as $mataPelajaran)
                         <tr>
-                            <th>Nama</th>
-                            <th>Urutan</th>
-                            <th>Status</th>
-                            <th class="w-1">Aksi</th>
-                        </tr>
-                    </thead>
+                            {{-- Urutan --}}
+                            <td>
+                                <span class="badge bg-light text-dark border fw-bold px-2 py-1">
+                                    #{{ $mataPelajaran->urutan }}
+                                </span>
+                            </td>
 
-                    <tbody>
-
-                        @forelse($mataPelajarans as $mataPelajaran)
-
-                            <tr>
-
-                                <td>
-                                    {{ $mataPelajaran->nama }}
-                                </td>
-
-                                <td>
-                                    {{ $mataPelajaran->urutan }}
-                                </td>
-
-                                <td>
-
-                                    @if($mataPelajaran->status === 'aktif')
-
-                                        <span class="badge bg-green-lt text-green">
-                                            Aktif
-                                        </span>
-
-                                    @else
-
-                                        <span class="badge bg-red-lt text-red">
-                                            Nonaktif
-                                        </span>
-
-                                    @endif
-
-                                </td>
-
-                                <td>
-
-                                    <div class="d-flex gap-1">
-
-                                        {{-- Edit --}}
-                                        <a href="{{ route('admin.mata-pelajaran.edit', $mataPelajaran) }}"
-                                            class="btn btn-sm btn-outline-primary">
-
-                                            Edit
-
-                                        </a>
-
-                                        <form action="{{ route('admin.mata-pelajaran.destroy', $mataPelajaran) }}" method="POST"
-                                            onsubmit="return confirm('Data ini akan dihapus permanen.')">
-
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-
-                                                Hapus
-
-                                            </button>
-
-                                        </form>
-
+                            {{-- Nama --}}
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="avatar avatar-sm bg-danger-subtle text-danger rounded-circle flex-shrink-0">
+                                        <i class="ti ti-book"></i>
                                     </div>
+                                    <span class="fw-bold text-dark">
+                                        {{ $mataPelajaran->nama }}
+                                    </span>
+                                </div>
+                            </td>
 
-                                </td>
+                            {{-- Status --}}
+                            <td>
+                                @if($mataPelajaran->status === 'aktif')
+                                    <span class="badge bg-success-lt text-success">
+                                        <i class="ti ti-check me-1"></i>
+                                        Aktif
+                                    </span>
+                                @else
+                                    <span class="badge bg-secondary-lt text-secondary">
+                                        Nonaktif
+                                    </span>
+                                @endif
+                            </td>
 
-                            </tr>
+                            {{-- Aksi --}}
+                            <td>
+                                <div class="d-flex justify-content-end align-items-center gap-1">
+                                    <a href="{{ route('admin.mata-pelajaran.edit', $mataPelajaran) }}"
+                                        class="btn btn-sm btn-outline-primary rounded-pill px-2"
+                                        title="Edit Data">
+                                        <i class="ti ti-edit"></i>
+                                        <span class="d-none d-md-inline ms-1">Edit</span>
+                                    </a>
 
-                        @empty
+                                    <form action="{{ route('admin.mata-pelajaran.destroy', $mataPelajaran) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data mata pelajaran ini?')">
+                                        @csrf
+                                        @method('DELETE')
 
-                            <tr>
-                                <td colspan="4" class="text-center text-secondary py-5">
-                                    Belum ada data mata pelajaran.
-                                </td>
-                            </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
+                                        <button type="submit"
+                                            class="btn btn-sm btn-outline-danger rounded-pill px-2"
+                                            title="Hapus Data">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <div class="py-4 text-center">
+                                    <div class="avatar avatar-md bg-light text-secondary rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-books fs-2"></i>
+                                    </div>
+                                    <h4 class="fw-bold text-dark mb-1">Belum Ada Mata Pelajaran</h4>
+                                    <p class="text-secondary small mb-0">
+                                        Data mata pelajaran masih kosong. Silakan gunakan tombol <strong>Tambah Mata Pelajaran</strong> di atas untuk membuat data baru.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-
     </div>
-        {{-- Assets Simple-DataTables (Vanilla JS DataTables) --}}
+
+    {{-- Assets Simple-DataTables --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const table = document.querySelector("#simple-datatable-demo");
-            if (table) {
+            if (table && table.querySelectorAll("tbody tr").length > 1) {
                 new simpleDatatables.DataTable(table, {
                     searchable: true,
-                    perPage: 5,
+                    perPage: 10,
                     labels: {
-                        placeholder: "Cari data guru, sekolah...",
+                        placeholder: "Cari mata pelajaran...",
                         perPage: "{select} data per halaman",
                         noRows: "Tidak ada data ditemukan",
                         info: "Menampilkan {start} - {end} dari {rows} data",

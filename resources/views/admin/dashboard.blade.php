@@ -4,22 +4,23 @@
 
 @section('page-pretitle', 'Overview')
 @section('page-title', 'Dashboard Admin')
+@section('page-description', 'Ringkasan performa platform, aktivitas pengguna, dan status materi.')
 
 @section('content')
 
     {{-- Welcome Banner --}}
-    <div class="admin-welcome-banner mb-4">
-        <div class="d-flex align-items-center justify-content-between">
+    <div class="admin-welcome-banner mb-4 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between position-relative" style="z-index: 1;">
             <div>
-                <h2 class="banner-title">
-                    Selamat Datang, {{ auth()->user()->nama}}! 👏
+                <h2 class="banner-title mb-1">
+                    Selamat Datang, {{ auth()->user()->nama ?? auth()->user()->name ?? 'Super Admin' }}! 👋
                 </h2>
                 <div class="banner-desc">
-                    Kelola platform SD Learning Center dengan mudah dan efisien.
+                    Kelola materi pendidikan, paket langganan, dan data guru SD Learning Center dengan mudah dan efisien.
                 </div>
             </div>
-            <div class="d-none d-md-block">
-                <i class="bi bi-mortarboard banner-icon-watermark"></i>
+            <div class="d-none d-md-block pe-3">
+                <i class="ti ti-school banner-icon-watermark"></i>
             </div>
         </div>
     </div>
@@ -32,7 +33,7 @@
             <div class="card-stat-modern">
                 <div class="d-flex align-items-center gap-3">
                     <div class="stat-icon-box tint-blue">
-                        <x-admin-icon name="users" />
+                        <i class="ti ti-users"></i>
                     </div>
                     <div>
                         <div class="stat-label">TOTAL GURU</div>
@@ -48,7 +49,7 @@
             <div class="card-stat-modern">
                 <div class="d-flex align-items-center gap-3">
                     <div class="stat-icon-box tint-orange">
-                        <x-admin-icon name="book" />
+                        <i class="ti ti-books"></i>
                     </div>
                     <div>
                         <div class="stat-label">MATERI</div>
@@ -64,7 +65,7 @@
             <div class="card-stat-modern">
                 <div class="d-flex align-items-center gap-3">
                     <div class="stat-icon-box tint-green">
-                        <x-admin-icon name="credit-card" />
+                        <i class="ti ti-credit-card"></i>
                     </div>
                     <div>
                         <div class="stat-label">LANGGANAN AKTIF</div>
@@ -80,7 +81,7 @@
             <div class="card-stat-modern">
                 <div class="d-flex align-items-center gap-3">
                     <div class="stat-icon-box tint-purple">
-                        <x-admin-icon name="building" />
+                        <i class="ti ti-building"></i>
                     </div>
                     <div>
                         <div class="stat-label">SEKOLAH</div>
@@ -97,71 +98,73 @@
     <div class="row g-4 mb-4">
         <!-- Ringkasan Platform -->
         <div class="col-lg-7 col-xl-8">
-            <div class="card-section-modern h-100">
-                <div class="card-header-custom">
-                    <h5 class="card-header-title">Ringkasan Platform</h5>
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <h3 class="card-title">Ringkasan Platform</h3>
                     <div class="dropdown">
-                        <button class="btn btn-sm btn-light border rounded-pill dropdown-toggle text-secondary font-semibold" type="button" data-bs-toggle="dropdown">
+                        <button class="btn btn-sm btn-light border rounded-pill dropdown-toggle text-secondary" type="button" data-bs-toggle="dropdown">
                             7 Hari Terakhir
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3">
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
                             <li><a class="dropdown-item active" href="#">7 Hari Terakhir</a></li>
                             <li><a class="dropdown-item" href="#">30 Hari Terakhir</a></li>
                             <li><a class="dropdown-item" href="#">Bulan Ini</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="card-body-custom">
-                    <!-- Visual Chart Skeleton / Summary -->
-                    <div class="p-3 bg-light rounded-4 mb-3 border">
+
+                <div class="card-body">
+                    <!-- Visual Activity Chart Skeleton -->
+                    <div class="p-3 bg-light rounded-3 mb-4 border">
                         <div class="d-flex align-items-end justify-content-between gap-2 text-center" style="height: 140px;">
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-primary-subtle rounded-top w-75" style="height: 45%;"></div>
-                                <span class="small text-muted mt-2">Sen</span>
+                                <span class="small text-muted mt-2" style="font-size: 0.75rem;">Sen</span>
                             </div>
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-primary-subtle rounded-top w-75" style="height: 65%;"></div>
-                                <span class="small text-muted mt-2">Sel</span>
+                                <span class="small text-muted mt-2" style="font-size: 0.75rem;">Sel</span>
                             </div>
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-danger rounded-top w-75" style="height: 85%;"></div>
-                                <span class="small text-muted mt-2 fw-bold text-danger">Rab</span>
+                                <span class="small mt-2 fw-bold text-danger" style="font-size: 0.75rem;">Rab</span>
                             </div>
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-primary-subtle rounded-top w-75" style="height: 55%;"></div>
-                                <span class="small text-muted mt-2">Kam</span>
+                                <span class="small text-muted mt-2" style="font-size: 0.75rem;">Kam</span>
                             </div>
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-primary-subtle rounded-top w-75" style="height: 75%;"></div>
-                                <span class="small text-muted mt-2">Jum</span>
+                                <span class="small text-muted mt-2" style="font-size: 0.75rem;">Jum</span>
                             </div>
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-primary-subtle rounded-top w-75" style="height: 40%;"></div>
-                                <span class="small text-muted mt-2">Sab</span>
+                                <span class="small text-muted mt-2" style="font-size: 0.75rem;">Sab</span>
                             </div>
                             <div class="w-100 d-flex flex-column align-items-center justify-content-end h-100">
                                 <div class="bg-primary-subtle rounded-top w-75" style="height: 30%;"></div>
-                                <span class="small text-muted mt-2">Min</span>
+                                <span class="small text-muted mt-2" style="font-size: 0.75rem;">Min</span>
                             </div>
                         </div>
                     </div>
-                    <div class="row g-2 text-center">
+
+                    <div class="row g-3 text-center">
                         <div class="col-4">
-                            <div class="p-2 border rounded-3 bg-white">
-                                <small class="text-muted d-block">Total Unduhan</small>
-                                <span class="fw-bold text-dark fs-5">342</span>
+                            <div class="p-3 border rounded-3 bg-white">
+                                <small class="text-secondary fw-semibold d-block text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">Total Unduhan</small>
+                                <span class="fw-bold text-dark fs-3">342</span>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="p-2 border rounded-3 bg-white">
-                                <small class="text-muted d-block">Modul Baru</small>
-                                <span class="fw-bold text-dark fs-5">16</span>
+                            <div class="p-3 border rounded-3 bg-white">
+                                <small class="text-secondary fw-semibold d-block text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">Modul Baru</small>
+                                <span class="fw-bold text-dark fs-3">16</span>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="p-2 border rounded-3 bg-white">
-                                <small class="text-muted d-block">Guru Aktif</small>
-                                <span class="fw-bold text-dark fs-5">92</span>
+                            <div class="p-3 border rounded-3 bg-white">
+                                <small class="text-secondary fw-semibold d-block text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">Guru Aktif</small>
+                                <span class="fw-bold text-dark fs-3">92</span>
                             </div>
                         </div>
                     </div>
@@ -171,15 +174,15 @@
 
         <!-- Aktivitas Terbaru -->
         <div class="col-lg-5 col-xl-4">
-            <div class="card-section-modern h-100">
-                <div class="card-header-custom">
-                    <h5 class="card-header-title">Aktivitas Terbaru</h5>
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header py-3">
+                    <h3 class="card-title">Aktivitas Terbaru</h3>
                 </div>
-                <div class="card-body-custom">
+                <div class="card-body p-3">
                     <div class="list-group list-group-flush">
-                        <div class="list-group-item px-0 py-2 border-0 border-bottom d-flex align-items-start gap-3">
+                        <div class="list-group-item px-2 py-3 border-0 border-bottom d-flex align-items-start gap-3">
                             <div class="avatar avatar-sm bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                                <i class="bi bi-download"></i>
+                                <i class="ti ti-download"></i>
                             </div>
                             <div>
                                 <div class="fw-bold text-dark small">Guru Budi Utomo, S.Pd.</div>
@@ -188,9 +191,9 @@
                             </div>
                         </div>
 
-                        <div class="list-group-item px-0 py-2 border-0 border-bottom d-flex align-items-start gap-3">
-                            <div class="avatar avatar-sm bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                                <i class="bi bi-file-earmark-plus"></i>
+                        <div class="list-group-item px-2 py-3 border-0 border-bottom d-flex align-items-start gap-3">
+                            <div class="avatar avatar-sm bg-primary-subtle text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                                <i class="ti ti-file-plus"></i>
                             </div>
                             <div>
                                 <div class="fw-bold text-dark small">Admin Kurikulum</div>
@@ -199,9 +202,9 @@
                             </div>
                         </div>
 
-                        <div class="list-group-item px-0 py-2 border-0 border-bottom d-flex align-items-start gap-3">
+                        <div class="list-group-item px-2 py-3 border-0 border-bottom d-flex align-items-start gap-3">
                             <div class="avatar avatar-sm bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                                <i class="bi bi-credit-card"></i>
+                                <i class="ti ti-credit-card"></i>
                             </div>
                             <div>
                                 <div class="fw-bold text-dark small">Siti Rahmawati, S.Pd.</div>
@@ -210,9 +213,9 @@
                             </div>
                         </div>
 
-                        <div class="list-group-item px-0 py-2 border-0 d-flex align-items-start gap-3">
+                        <div class="list-group-item px-2 py-3 border-0 d-flex align-items-start gap-3">
                             <div class="avatar avatar-sm bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                                <i class="bi bi-building"></i>
+                                <i class="ti ti-building"></i>
                             </div>
                             <div>
                                 <div class="fw-bold text-dark small">SD Negeri 01 Menteng</div>
@@ -230,13 +233,13 @@
     <div class="row g-4">
         <!-- Distribusi Konten -->
         <div class="col-lg-6">
-            <div class="card-section-modern h-100">
-                <div class="card-header-custom">
-                    <h5 class="card-header-title">Distribusi Konten</h5>
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header py-3">
+                    <h3 class="card-title">Distribusi Konten Bahan Ajar</h3>
                 </div>
-                <div class="card-body-custom">
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between small font-semibold mb-1">
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
                             <span>IPAS (Ilmu Pengetahuan Alam & Sosial)</span>
                             <span class="fw-bold text-danger">40% (24 Materi)</span>
                         </div>
@@ -245,8 +248,8 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between small font-semibold mb-1">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
                             <span>Matematika</span>
                             <span class="fw-bold text-primary">25% (15 Materi)</span>
                         </div>
@@ -255,8 +258,8 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between small font-semibold mb-1">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
                             <span>Bahasa Indonesia</span>
                             <span class="fw-bold text-success">20% (12 Materi)</span>
                         </div>
@@ -266,9 +269,9 @@
                     </div>
 
                     <div>
-                        <div class="d-flex justify-content-between small font-semibold mb-1">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
                             <span>Pendidikan Pancasila & SBdP</span>
-                            <span class="fw-bold text-purple" style="color: #9333ea;">15% (9 Materi)</span>
+                            <span class="fw-bold" style="color: #9333ea;">15% (9 Materi)</span>
                         </div>
                         <div class="progress" style="height: 8px;">
                             <div class="progress-bar" role="progressbar" style="width: 15%; background-color: #9333ea;"></div>
@@ -280,52 +283,52 @@
 
         <!-- Sekolah Terbaru -->
         <div class="col-lg-6">
-            <div class="card-section-modern h-100">
-                <div class="card-header-custom">
-                    <h5 class="card-header-title">Sekolah Terbaru</h5>
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <h3 class="card-title">Sekolah Mitra Terbaru</h3>
                     <a href="#" class="text-danger fw-bold text-decoration-none small">
-                        Lihat Semua
+                        Lihat Semua <i class="ti ti-arrow-right"></i>
                     </a>
                 </div>
-                <div class="card-body-custom">
+                <div class="card-body p-3">
                     <div class="list-group list-group-flush">
-                        <div class="list-group-item px-0 py-2 border-0 border-bottom d-flex align-items-center justify-content-between">
+                        <div class="list-group-item px-2 py-3 border-0 border-bottom d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="avatar avatar-sm bg-light text-danger rounded-3 d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building"></i>
+                                    <i class="ti ti-building"></i>
                                 </div>
                                 <div>
                                     <div class="fw-bold text-dark">SD Negeri 01 Menteng</div>
                                     <small class="text-muted">Jakarta Pusat • 12 Guru</small>
                                 </div>
                             </div>
-                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">Aktif</span>
+                            <span class="badge bg-success-lt text-success">Aktif</span>
                         </div>
 
-                        <div class="list-group-item px-0 py-2 border-0 border-bottom d-flex align-items-center justify-content-between">
+                        <div class="list-group-item px-2 py-3 border-0 border-bottom d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="avatar avatar-sm bg-light text-primary rounded-3 d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building"></i>
+                                    <i class="ti ti-building"></i>
                                 </div>
                                 <div>
                                     <div class="fw-bold text-dark">SD Islam Al-Azhar 1</div>
                                     <small class="text-muted">Kebayoran Baru • 8 Guru</small>
                                 </div>
                             </div>
-                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">Aktif</span>
+                            <span class="badge bg-success-lt text-success">Aktif</span>
                         </div>
 
-                        <div class="list-group-item px-0 py-2 border-0 d-flex align-items-center justify-content-between">
+                        <div class="list-group-item px-2 py-3 border-0 d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="avatar avatar-sm bg-light text-warning rounded-3 d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building"></i>
+                                    <i class="ti ti-building"></i>
                                 </div>
                                 <div>
                                     <div class="fw-bold text-dark">SD Negeri 05 Bandung</div>
                                     <small class="text-muted">Kota Bandung • 15 Guru</small>
                                 </div>
                             </div>
-                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">Aktif</span>
+                            <span class="badge bg-success-lt text-success">Aktif</span>
                         </div>
                     </div>
                 </div>
