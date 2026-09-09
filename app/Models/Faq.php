@@ -17,4 +17,12 @@ class Faq extends Model
         'urutan',
         'status',
     ];
+
+    /**
+     * Scope untuk FAQ dengan status aktif.
+     */
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
 }

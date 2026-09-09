@@ -1,8 +1,8 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Jenis Dokumen')
-@section('page-title', 'Tambah Jenis Dokumen')
-@section('page-description', 'Tambahkan jenis dokumen baru untuk pengelompokan berkas pembelajaran.')
+@section('title', 'Tambah FAQ')
+@section('page-title', 'Tambah FAQ')
+@section('page-description', 'Tambahkan pertanyaan dan jawaban baru untuk pusat bantuan pengguna.')
 
 @section('page-breadcrumbs')
     <nav aria-label="breadcrumb">
@@ -11,10 +11,10 @@
                 <a href="{{ route('admin.dashboard') }}" class="text-secondary text-decoration-none">Dashboard</a>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-secondary">Master Data</span>
+                <span class="text-secondary">Pusat Bantuan</span>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('admin.jenis-dokumen.index') }}" class="text-secondary text-decoration-none">Jenis Dokumen</a>
+                <a href="{{ route('admin.faq.index') }}" class="text-secondary text-decoration-none">FAQ</a>
             </li>
             <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
                 Tambah Baru
@@ -28,7 +28,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-7">
 
-            <form action="{{ route('admin.jenis-dokumen.store') }}" method="POST">
+            <form action="{{ route('admin.faq.store') }}" method="POST">
                 @csrf
 
                 <div class="card shadow-sm border-0">
@@ -38,7 +38,7 @@
                                 <i class="ti ti-plus"></i>
                             </div>
                             <h3 class="card-title fw-bold text-dark mb-0">
-                                Formulir Jenis Dokumen
+                                Formulir Tambah FAQ
                             </h3>
                         </div>
                     </div>
@@ -46,53 +46,46 @@
                     <div class="card-body p-4">
                         <div class="row g-3">
 
-                            {{-- Kategori Dokumen --}}
-                            <div class="col-md-6">
+                            {{-- Pertanyaan --}}
+                            <div class="col-12">
                                 <label class="form-label required">
-                                    Kategori Dokumen
-                                </label>
-                                <select
-                                    name="kategori_dokumen_id"
-                                    class="form-select @error('kategori_dokumen_id') is-invalid @enderror"
-                                    required
-                                >
-                                    <option value="" disabled {{ old('kategori_dokumen_id') ? '' : 'selected' }}>
-                                        Pilih kategori dokumen...
-                                    </option>
-                                    @foreach($kategoriDokumens as $kategori)
-                                        <option value="{{ $kategori->id }}" @selected(old('kategori_dokumen_id') == $kategori->id)>
-                                            {{ $kategori->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('kategori_dokumen_id')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                                <small class="form-hint">Pilih kategori induk dari jenis dokumen ini.</small>
-                            </div>
-
-                            {{-- Nama Jenis Dokumen --}}
-                            <div class="col-md-6">
-                                <label class="form-label required">
-                                    Nama Jenis Dokumen
+                                    Pertanyaan
                                 </label>
                                 <input
                                     type="text"
-                                    name="nama"
-                                    value="{{ old('nama') }}"
-                                    maxlength="100"
-                                    class="form-control @error('nama') is-invalid @enderror"
-                                    placeholder="Contoh: Modul Ajar, RPP, dsb."
+                                    name="pertanyaan"
+                                    value="{{ old('pertanyaan') }}"
+                                    maxlength="255"
+                                    class="form-control @error('pertanyaan') is-invalid @enderror"
+                                    placeholder="Masukkan pertanyaan"
                                     required
                                 >
-                                @error('nama')
+                                @error('pertanyaan')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <small class="form-hint">Maksimal 100 karakter.</small>
+                                <small class="form-hint">Maksimal 255 karakter.</small>
+                            </div>
+
+                            {{-- Jawaban --}}
+                            <div class="col-12">
+                                <label class="form-label required">
+                                    Jawaban
+                                </label>
+                                <textarea
+                                    name="jawaban"
+                                    rows="5"
+                                    class="form-control @error('jawaban') is-invalid @enderror"
+                                    placeholder="Masukkan jawaban"
+                                    required
+                                >{{ old('jawaban') }}</textarea>
+                                @error('jawaban')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <small class="form-hint">Tuliskan jawaban yang informatif dan mudah dipahami.</small>
                             </div>
 
                             {{-- Urutan --}}
@@ -103,11 +96,10 @@
                                 <input
                                     type="number"
                                     name="urutan"
-                                    value="{{ old('urutan', 1) }}"
-                                    min="1"
-                                    max="255"
+                                    value="{{ old('urutan', 0) }}"
+                                    min="0"
                                     class="form-control @error('urutan') is-invalid @enderror"
-                                    placeholder="Contoh: 1"
+                                    placeholder="Contoh: 0"
                                     required
                                 >
                                 @error('urutan')
@@ -115,7 +107,7 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <small class="form-hint">Menentukan urutan tampilan pada tabel.</small>
+                                <small class="form-hint">Tentukan posisi FAQ saat ditampilkan. Angka lebih kecil akan ditampilkan lebih dahulu.</small>
                             </div>
 
                             {{-- Status --}}
@@ -142,33 +134,15 @@
                                 @enderror
                             </div>
 
-                            {{-- Deskripsi --}}
-                            <div class="col-12">
-                                <label class="form-label">
-                                    Deskripsi
-                                </label>
-                                <textarea
-                                    name="deskripsi"
-                                    rows="3"
-                                    class="form-control @error('deskripsi') is-invalid @enderror"
-                                    placeholder="Deskripsi singkat mengenai jenis dokumen ini (opsional)..."
-                                >{{ old('deskripsi') }}</textarea>
-                                @error('deskripsi')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
                             {{-- Button Form --}}
                             <div class="col-12 pt-2">
                                 <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-primary rounded-pill px-4">
                                         <i class="ti ti-device-floppy me-1"></i>
-                                        Simpan Jenis Dokumen
+                                        Simpan FAQ
                                     </button>
 
-                                    <a href="{{ route('admin.jenis-dokumen.index') }}"
+                                    <a href="{{ route('admin.faq.index') }}"
                                        class="btn btn-light border rounded-pill px-4">
                                         Batal
                                     </a>

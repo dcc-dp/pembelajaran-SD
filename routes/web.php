@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\KurikulumController;
 use App\Http\Controllers\Admin\PaketLanggananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\MataPelajaranController;
@@ -45,6 +47,11 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     )->names('admin.repository');
 
     Route::resource(
+        'admin/kurikulum',
+        KurikulumController::class
+    )->names('admin.kurikulum');
+
+    Route::resource(
         'admin/paket-langganan',
         PaketLanggananController::class
     )->names('admin.paket-langganan');
@@ -65,6 +72,11 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     Route::resource('/admin/jenis-dokumen', JenisDokumenController::class)
         ->parameters(['jenis-dokumen' => 'jenisDokumen'])
         ->names('admin.jenis-dokumen');
+
+    Route::resource(
+        'admin/faq',
+        FaqController::class
+    )->names('admin.faq');
 });
 
 
