@@ -1,8 +1,8 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Jenis Dokumen')
-@section('page-title', 'Jenis Dokumen')
-@section('page-description', 'Kelola data jenis dokumen bahan ajar untuk pengelompokan repository pembelajaran.')
+@section('title', 'Kurikulum')
+@section('page-title', 'Kurikulum')
+@section('page-description', 'Kelola data kurikulum yang digunakan dalam repository pembelajaran.')
 
 @section('page-breadcrumbs')
     <nav aria-label="breadcrumb">
@@ -14,16 +14,16 @@
                 <span class="text-secondary">Master Data</span>
             </li>
             <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
-                Jenis Dokumen
+                Kurikulum
             </li>
         </ol>
     </nav>
 @endsection
 
 @section('page-actions')
-    <a href="{{ route('admin.jenis-dokumen.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+    <a href="{{ route('admin.kurikulum.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
         <i class="ti ti-plus me-1"></i>
-        Tambah Jenis Dokumen
+        Tambah Kurikulum
     </a>
 @endsection
 
@@ -60,9 +60,9 @@
         {{-- Card Header & Filter Bar --}}
         <div class="card-header py-3 bg-white border-bottom">
             <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 w-100">
-                <h3 class="card-title fw-bold text-dark mb-0">Daftar Jenis Dokumen</h3>
+                <h3 class="card-title fw-bold text-dark mb-0">Daftar Kurikulum</h3>
 
-                <form method="GET" action="{{ route('admin.jenis-dokumen.index') }}" id="filter-form" class="row g-2 align-items-center m-0">
+                <form method="GET" action="{{ route('admin.kurikulum.index') }}" id="filter-form" class="row g-2 align-items-center m-0">
                     <div class="col-12 col-sm-auto">
                         <div class="input-icon">
                             <span class="input-icon-addon">
@@ -74,37 +74,29 @@
                                 id="search-input"
                                 value="{{ request('search') }}"
                                 class="form-control rounded-pill"
-                                placeholder="Cari jenis dokumen..."
+                                placeholder="Cari nama kurikulum..."
                             >
                         </div>
                     </div>
 
                     <div class="col-6 col-sm-auto">
-                        <select name="kategori" class="form-select rounded-pill" onchange="this.form.submit()">
-                            <option value="">Semua Kategori</option>
-                            @foreach($kategoriDokumens as $kat)
-                                <option value="{{ $kat->id }}" @selected(request('kategori') == $kat->id)>
-                                    {{ $kat->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-6 col-sm-auto">
-                        <select name="status" class="form-select rounded-pill" onchange="this.form.submit()">
+                        <select name="status" class="form-select rounded-pill">
                             <option value="">Semua Status</option>
                             <option value="aktif" @selected(request('status') === 'aktif')>Aktif</option>
                             <option value="tidak_aktif" @selected(request('status') === 'tidak_aktif')>Tidak Aktif</option>
                         </select>
                     </div>
 
-                    @if(request()->hasAny(['search', 'kategori', 'status']))
-                        <div class="col-auto">
-                            <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-light border rounded-pill px-3">
+                    <div class="col-6 col-sm-auto d-flex gap-2">
+                        <button type="submit" class="btn btn-primary rounded-pill px-3">
+                            <i class="ti ti-search me-1"></i> Cari
+                        </button>
+                        @if(request()->hasAny(['search', 'status']))
+                            <a href="{{ route('admin.kurikulum.index') }}" class="btn btn-light border rounded-pill px-3">
                                 <i class="ti ti-rotate me-1"></i> Reset
                             </a>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </form>
             </div>
         </div>
@@ -115,51 +107,35 @@
                 <thead>
                     <tr>
                         <th style="width: 60px;">NO</th>
-                        <th>KATEGORI DOKUMEN</th>
-                        <th>NAMA JENIS DOKUMEN</th>
+                        <th>NAMA KURIKULUM</th>
                         <th>DESKRIPSI</th>
-                        <th style="width: 100px;">URUTAN</th>
                         <th style="width: 140px;">STATUS</th>
                         <th class="text-end" style="width: 170px;">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($jenisDokumens as $item)
+                    @forelse($kurikulums as $item)
                         <tr>
                             {{-- No --}}
                             <td class="text-secondary fw-medium">
-                                {{ ($jenisDokumens->firstItem() ?? 1) + $loop->index }}
+                                {{ ($kurikulums->firstItem() ?? 1) + $loop->index }}
                             </td>
 
-                            {{-- Kategori Dokumen --}}
-                            <td>
-                                <span class="badge bg-blue-lt text-blue">
-                                    {{ $item->kategoriDokumen->nama ?? '-' }}
-                                </span>
-                            </td>
-
-                            {{-- Nama Jenis Dokumen --}}
+                            {{-- Nama Kurikulum --}}
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="avatar avatar-sm bg-danger-subtle text-danger rounded-circle flex-shrink-0">
-                                        <i class="ti ti-file-text"></i>
+                                        <i class="ti ti-book"></i>
                                     </div>
-                                    <a href="{{ route('admin.jenis-dokumen.show', $item) }}" class="fw-bold text-dark text-decoration-none">
+                                    <a href="{{ route('admin.kurikulum.show', $item) }}" class="fw-bold text-dark text-decoration-none">
                                         {{ $item->nama }}
                                     </a>
                                 </div>
                             </td>
 
                             {{-- Deskripsi --}}
-                            <td class="text-secondary small" style="max-width: 250px;">
-                                {{ $item->deskripsi ? \Illuminate\Support\Str::limit($item->deskripsi, 60, '...') : '-' }}
-                            </td>
-
-                            {{-- Urutan --}}
-                            <td>
-                                <span class="badge bg-light text-dark border">
-                                    {{ $item->urutan }}
-                                </span>
+                            <td class="text-secondary">
+                                {{ \Illuminate\Support\Str::limit($item->deskripsi, 60, '...') ?: '-' }}
                             </td>
 
                             {{-- Status --}}
@@ -180,7 +156,7 @@
                             <td>
                                 <div class="d-flex justify-content-end align-items-center gap-1">
                                     {{-- Detail --}}
-                                    <a href="{{ route('admin.jenis-dokumen.show', $item) }}"
+                                    <a href="{{ route('admin.kurikulum.show', $item) }}"
                                         class="btn btn-sm btn-outline-secondary rounded-pill px-2"
                                         title="Detail">
                                         <i class="ti ti-eye"></i>
@@ -188,7 +164,7 @@
                                     </a>
 
                                     {{-- Edit --}}
-                                    <a href="{{ route('admin.jenis-dokumen.edit', $item) }}"
+                                    <a href="{{ route('admin.kurikulum.edit', $item) }}"
                                         class="btn btn-sm btn-outline-primary rounded-pill px-2"
                                         title="Edit">
                                         <i class="ti ti-edit"></i>
@@ -196,9 +172,9 @@
                                     </a>
 
                                     {{-- Hapus --}}
-                                    <form action="{{ route('admin.jenis-dokumen.destroy', $item) }}"
+                                    <form action="{{ route('admin.kurikulum.destroy', $item) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus jenis dokumen {{ addslashes($item->nama) }}? Data yang dihapus tidak dapat dikembalikan.')">
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus kurikulum {{ addslashes($item->nama) }}? Data yang dihapus tidak dapat dikembalikan.')">
                                         @csrf
                                         @method('DELETE')
 
@@ -213,26 +189,26 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5">
+                            <td colspan="5" class="text-center py-5">
                                 <div class="py-4 text-center">
                                     <div class="avatar avatar-md bg-light text-secondary rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-files-off fs-2"></i>
+                                        <i class="ti ti-book-off fs-2"></i>
                                     </div>
-                                    <h4 class="fw-bold text-dark mb-1">Belum Ada Data Jenis Dokumen</h4>
+                                    <h4 class="fw-bold text-dark mb-1">Belum ada kurikulum</h4>
                                     <p class="text-secondary small mb-3">
-                                        @if(request()->hasAny(['search', 'kategori', 'status']))
-                                            Tidak ditemukan jenis dokumen yang sesuai dengan filter pencarian.
+                                        @if(request()->hasAny(['search', 'status']))
+                                            Tidak ditemukan data kurikulum yang sesuai dengan filter pencarian.
                                         @else
-                                            Belum ada data jenis dokumen yang tersimpan di sistem.
+                                            Belum ada data kurikulum yang ditambahkan.
                                         @endif
                                     </p>
-                                    @if(request()->hasAny(['search', 'kategori', 'status']))
-                                        <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-sm btn-light border rounded-pill px-3">
+                                    @if(request()->hasAny(['search', 'status']))
+                                        <a href="{{ route('admin.kurikulum.index') }}" class="btn btn-sm btn-light border rounded-pill px-3">
                                             <i class="ti ti-rotate me-1"></i> Reset Filter
                                         </a>
                                     @else
-                                        <a href="{{ route('admin.jenis-dokumen.create') }}" class="btn btn-primary rounded-pill px-4">
-                                            <i class="ti ti-plus me-1"></i> Tambah Jenis Dokumen
+                                        <a href="{{ route('admin.kurikulum.create') }}" class="btn btn-primary rounded-pill px-4">
+                                            <i class="ti ti-plus me-1"></i> Tambah Kurikulum
                                         </a>
                                     @endif
                                 </div>
@@ -244,20 +220,20 @@
         </div>
 
         {{-- Pagination --}}
-        @if($jenisDokumens->hasPages())
+        @if($kurikulums->hasPages())
             <div class="card-footer bg-white border-top py-3">
                 <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
                     <div class="text-secondary small">
                         Menampilkan
-                        <span class="fw-bold text-dark">{{ $jenisDokumens->firstItem() }}</span>
+                        <span class="fw-bold text-dark">{{ $kurikulums->firstItem() }}</span>
                         sampai
-                        <span class="fw-bold text-dark">{{ $jenisDokumens->lastItem() }}</span>
+                        <span class="fw-bold text-dark">{{ $kurikulums->lastItem() }}</span>
                         dari
-                        <span class="fw-bold text-dark">{{ $jenisDokumens->total() }}</span>
-                        jenis dokumen
+                        <span class="fw-bold text-dark">{{ $kurikulums->total() }}</span>
+                        kurikulum
                     </div>
                     <div>
-                        {{ $jenisDokumens->links() }}
+                        {{ $kurikulums->links() }}
                     </div>
                 </div>
             </div>

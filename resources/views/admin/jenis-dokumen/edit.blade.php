@@ -1,79 +1,55 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit Jenis Dokumen')
+@section('title', 'Edit Jenis Dokumen: ' . $jenisDokumen->nama)
 @section('page-title', 'Edit Jenis Dokumen')
+@section('page-description', 'Perbarui data jenis dokumen.')
+
+@section('page-breadcrumbs')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.dashboard') }}" class="text-secondary text-decoration-none">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="text-secondary">Master Data</span>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.jenis-dokumen.index') }}" class="text-secondary text-decoration-none">Jenis Dokumen</a>
+            </li>
+            <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
+                Edit
+            </li>
+        </ol>
+    </nav>
+@endsection
 
 @section('content')
 
-    {{-- Breadcrumb --}}
-    <div class="mb-4 pb-3 border-bottom">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}" class="text-secondary text-decoration-none">Dashboard</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <span class="text-secondary">Master Data</span>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.jenis-dokumen.index') }}" class="text-secondary text-decoration-none">Jenis Dokumen</a>
-                </li>
-                <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
-                    Edit
-                </li>
-            </ol>
-        </nav>
-    </div>
-
-    {{-- Notifikasi Error Global --}}
-    @if(isset($errors) && $errors->any())
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
-            <div class="d-flex">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-circle text-danger me-2 flex-shrink-0" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                    <path d="M12 8l0 4" />
-                    <path d="M12 16l.01 0" />
-                </svg>
-                <div>
-                    <strong>Terjadi kesalahan pada input data:</strong>
-                    <ul class="mb-0 mt-1 ps-3">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-        </div>
-    @endif
-
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-8 col-xl-7">
 
-            <div class="card shadow-sm border-0 rounded-3">
+            <form action="{{ route('admin.jenis-dokumen.update', $jenisDokumen) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-                <div class="card-header py-3 bg-white border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="avatar avatar-xs bg-primary-subtle text-primary rounded-circle">
-                            <x-admin-icon name="edit" />
+                <div class="card shadow-sm border-0">
+                    <div class="card-header py-3 bg-white border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar avatar-xs bg-danger-subtle text-danger rounded-circle">
+                                <i class="ti ti-pencil"></i>
+                            </div>
+                            <h3 class="card-title fw-bold text-dark mb-0">
+                                Formulir Edit Jenis Dokumen
+                            </h3>
                         </div>
-                        <h3 class="card-title fw-bold text-dark mb-0">
-                            Edit Data Jenis Dokumen
-                        </h3>
                     </div>
-                </div>
-
-                <form action="{{ route('admin.jenis-dokumen.update', $jenisDokumen) }}" method="POST">
-                    @csrf
-                    @method('PUT')
 
                     <div class="card-body p-4">
                         <div class="row g-3">
 
                             {{-- Kategori Dokumen --}}
                             <div class="col-md-6">
-                                <label class="form-label required fw-bold">
+                                <label class="form-label required">
                                     Kategori Dokumen
                                 </label>
                                 <select
@@ -100,7 +76,7 @@
 
                             {{-- Nama Jenis Dokumen --}}
                             <div class="col-md-6">
-                                <label class="form-label required fw-bold">
+                                <label class="form-label required">
                                     Nama Jenis Dokumen
                                 </label>
                                 <input
@@ -122,7 +98,7 @@
 
                             {{-- Urutan --}}
                             <div class="col-md-6">
-                                <label class="form-label required fw-bold">
+                                <label class="form-label required">
                                     Urutan
                                 </label>
                                 <input
@@ -140,12 +116,12 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <small class="form-hint">Menentukan urutan tampilan pada tabel dan menu.</small>
+                                <small class="form-hint">Menentukan urutan tampilan pada tabel.</small>
                             </div>
 
                             {{-- Status --}}
                             <div class="col-md-6">
-                                <label class="form-label required fw-bold">
+                                <label class="form-label required">
                                     Status
                                 </label>
                                 <select
@@ -153,10 +129,10 @@
                                     class="form-select @error('status') is-invalid @enderror"
                                     required
                                 >
-                                    <option value="aktif" {{ old('status', $jenisDokumen->status) === 'aktif' ? 'selected' : '' }}>
+                                    <option value="aktif" @selected(old('status', $jenisDokumen->status) === 'aktif')>
                                         Aktif
                                     </option>
-                                    <option value="tidak_aktif" {{ old('status', $jenisDokumen->status) === 'tidak_aktif' ? 'selected' : '' }}>
+                                    <option value="tidak_aktif" @selected(old('status', $jenisDokumen->status) === 'tidak_aktif')>
                                         Tidak Aktif
                                     </option>
                                 </select>
@@ -165,12 +141,11 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <small class="form-hint">Status aktif memungkinkan jenis dokumen dipilih saat upload berkas.</small>
                             </div>
 
                             {{-- Deskripsi --}}
-                            <div class="col-md-12">
-                                <label class="form-label fw-bold">
+                            <div class="col-12">
+                                <label class="form-label">
                                     Deskripsi
                                 </label>
                                 <textarea
@@ -186,31 +161,26 @@
                                 @enderror
                             </div>
 
+                            {{-- Button Form --}}
+                            <div class="col-12 pt-2">
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                        <i class="ti ti-device-floppy me-1"></i>
+                                        Simpan Perubahan
+                                    </button>
+
+                                    <a href="{{ route('admin.jenis-dokumen.index') }}"
+                                       class="btn btn-light border rounded-pill px-4">
+                                        Batal
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="card-footer bg-white py-3 border-top d-flex justify-content-between align-items-center">
-                        <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-light border rounded-pill px-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left me-1" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M5 12l14 0" />
-                                <path d="M5 12l6 6" />
-                                <path d="M5 12l6 -6" />
-                            </svg>
-                            Batal
-                        </a>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check me-1" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M5 12l5 5l10 -10" />
-                            </svg>
-                            Perbarui Data
-                        </button>
-                    </div>
-
-                </form>
-
-            </div>
+                </div>
+            </form>
 
         </div>
     </div>

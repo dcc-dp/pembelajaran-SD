@@ -1,8 +1,8 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Detail Jenis Dokumen: ' . $jenisDokumen->nama)
-@section('page-title', 'Detail Jenis Dokumen')
-@section('page-description', 'Informasi lengkap data jenis dokumen pembelajaran.')
+@section('title', 'Detail Kurikulum: ' . $kurikulum->nama)
+@section('page-title', 'Detail Kurikulum')
+@section('page-description', 'Informasi lengkap data kurikulum.')
 
 @section('page-breadcrumbs')
     <nav aria-label="breadcrumb">
@@ -14,7 +14,7 @@
                 <span class="text-secondary">Master Data</span>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('admin.jenis-dokumen.index') }}" class="text-secondary text-decoration-none">Jenis Dokumen</a>
+                <a href="{{ route('admin.kurikulum.index') }}" class="text-secondary text-decoration-none">Kurikulum</a>
             </li>
             <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
                 Detail
@@ -24,11 +24,11 @@
 @endsection
 
 @section('page-actions')
-    <a href="{{ route('admin.jenis-dokumen.edit', $jenisDokumen) }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+    <a href="{{ route('admin.kurikulum.edit', $kurikulum) }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
         <i class="ti ti-pencil me-1"></i>
-        Edit Jenis Dokumen
+        Edit Kurikulum
     </a>
-    <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-light border rounded-pill px-4">
+    <a href="{{ route('admin.kurikulum.index') }}" class="btn btn-light border rounded-pill px-4">
         <i class="ti ti-arrow-left me-1"></i>
         Kembali
     </a>
@@ -43,11 +43,11 @@
 
                 <div class="card-header py-3 bg-white d-flex align-items-center justify-content-between border-bottom">
                     <h3 class="card-title fw-bold text-dark mb-0">
-                        Informasi Jenis Dokumen
+                        Informasi Kurikulum
                     </h3>
 
                     <div>
-                        @if($jenisDokumen->status === 'aktif')
+                        @if($kurikulum->status === 'aktif')
                             <span class="badge bg-success-lt text-success fs-6 px-3 py-1">
                                 <i class="ti ti-check me-1"></i> Aktif
                             </span>
@@ -63,50 +63,14 @@
 
                     <div class="row g-4">
 
-                        {{-- Nama Jenis Dokumen --}}
-                        <div class="col-md-6">
+                        {{-- Nama Kurikulum --}}
+                        <div class="col-12">
                             <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                Nama Jenis Dokumen
+                                Nama Kurikulum
                             </div>
                             <h2 class="fw-bold text-dark mb-0">
-                                {{ $jenisDokumen->nama }}
+                                {{ $kurikulum->nama }}
                             </h2>
-                        </div>
-
-                        {{-- Kategori Dokumen --}}
-                        <div class="col-md-6">
-                            <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                Kategori Dokumen
-                            </div>
-                            <div>
-                                <span class="badge bg-blue-lt text-blue fs-5 px-3 py-1">
-                                    {{ $jenisDokumen->kategoriDokumen->nama ?? '-' }}
-                                </span>
-                            </div>
-                        </div>
-
-                        {{-- Urutan --}}
-                        <div class="col-md-6">
-                            <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                Urutan Tampilan
-                            </div>
-                            <div>
-                                <span class="badge bg-light text-dark border fs-5 px-3 py-1">
-                                    {{ $jenisDokumen->urutan }}
-                                </span>
-                            </div>
-                        </div>
-
-                        {{-- Berkas Terhubung --}}
-                        <div class="col-md-6">
-                            <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                Repository Terkait
-                            </div>
-                            <div>
-                                <span class="badge bg-primary-lt text-primary fs-5 px-3 py-1">
-                                    {{ $jenisDokumen->repositories->count() }} Berkas
-                                </span>
-                            </div>
                         </div>
 
                         {{-- Deskripsi --}}
@@ -114,27 +78,47 @@
                             <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 Deskripsi
                             </div>
-                            <div class="p-3 bg-light rounded-3 border text-dark">
-                                {{ $jenisDokumen->deskripsi ?: 'Tidak ada deskripsi yang ditambahkan.' }}
+                            <div class="text-muted bg-light p-3 rounded-3 border">
+                                {{ $kurikulum->deskripsi ?: 'Tidak ada deskripsi untuk kurikulum ini.' }}
                             </div>
                         </div>
 
-                        {{-- Tanggal Dibuat & Diperbarui --}}
+                        {{-- Tanggal Dibuat --}}
                         <div class="col-md-6">
                             <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 Tanggal Dibuat
                             </div>
                             <div class="fw-medium text-dark">
-                                {{ $jenisDokumen->created_at ? $jenisDokumen->created_at->translatedFormat('d F Y, H:i') : '-' }} WIB
+                                {{ $kurikulum->created_at ? $kurikulum->created_at->translatedFormat('d F Y, H:i') : '-' }} WIB
                             </div>
                         </div>
 
+                        {{-- Tanggal Terakhir Diperbarui --}}
                         <div class="col-md-6">
                             <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 Terakhir Diperbarui
                             </div>
                             <div class="fw-medium text-dark">
-                                {{ $jenisDokumen->updated_at ? $jenisDokumen->updated_at->translatedFormat('d F Y, H:i') : '-' }} WIB
+                                {{ $kurikulum->updated_at ? $kurikulum->updated_at->translatedFormat('d F Y, H:i') : '-' }} WIB
+                            </div>
+                        </div>
+
+                        {{-- Keterkaitan Data --}}
+                        <div class="col-12 pt-3 border-top">
+                            <div class="text-secondary small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05em;">
+                                Keterkaitan Data
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="p-3 bg-light rounded-3 border">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span class="text-secondary small">Repository Terkait</span>
+                                            <span class="badge bg-primary text-white rounded-pill px-3">
+                                                {{ $kurikulum->repositories()->count() }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -143,9 +127,9 @@
                 </div>
 
                 <div class="card-footer bg-light py-3 d-flex align-items-center justify-content-between">
-                    <form action="{{ route('admin.jenis-dokumen.destroy', $jenisDokumen) }}"
+                    <form action="{{ route('admin.kurikulum.destroy', $kurikulum) }}"
                         method="POST"
-                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus jenis dokumen {{ addslashes($jenisDokumen->nama) }}? Data yang dihapus tidak dapat dikembalikan.')">
+                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus kurikulum {{ addslashes($kurikulum->nama) }}? Data yang dihapus tidak dapat dikembalikan.')">
                         @csrf
                         @method('DELETE')
 
@@ -155,10 +139,10 @@
                     </form>
 
                     <div class="d-flex gap-2">
-                        <a href="{{ route('admin.jenis-dokumen.edit', $jenisDokumen) }}" class="btn btn-primary rounded-pill px-4">
+                        <a href="{{ route('admin.kurikulum.edit', $kurikulum) }}" class="btn btn-primary rounded-pill px-4">
                             <i class="ti ti-pencil me-1"></i> Edit Data
                         </a>
-                        <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-light border rounded-pill px-4">
+                        <a href="{{ route('admin.kurikulum.index') }}" class="btn btn-light border rounded-pill px-4">
                             Kembali
                         </a>
                     </div>

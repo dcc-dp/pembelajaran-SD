@@ -9,15 +9,21 @@ class Kurikulum extends Model
 {
     use HasFactory;
 
+    protected $table = 'kurikulums';
+
     protected $fillable = [
-    'nama',
-    'deskripsi',
-    'status',
-];
+        'nama',
+        'deskripsi',
+        'status',
+    ];
+
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
 
     public function repositories()
-        {
-            return $this->hasMany(Repository::class, 'kurikulum_id');
-        }
-
+    {
+        return $this->hasMany(Repository::class, 'kurikulum_id');
+    }
 }

@@ -59,7 +59,8 @@
                 </li>
 
                 @php
-                    $isMasterDataActive = request()->routeIs('admin.semester.*')
+                    $isMasterDataActive = request()->routeIs('admin.kurikulum.*')
+                        || request()->routeIs('admin.semester.*')
                         || request()->routeIs('admin.kelas.*')
                         || request()->routeIs('admin.mata-pelajaran.*')
                         || request()->routeIs('admin.kategori-dokumen.*')
@@ -85,7 +86,7 @@
                     </a>
 
                     <div class="dropdown-menu {{ $isMasterDataActive ? 'show' : '' }} border-0 ps-3">
-                        <a class="dropdown-item py-2" href="#">
+                        <a class="dropdown-item py-2 {{ request()->routeIs('admin.kurikulum.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.kurikulum.index') }}">
                             <span class="dropdown-item-dot me-2"></span>
                             Kurikulum
                         </a>
@@ -108,6 +109,8 @@
                         <a class="dropdown-item py-2 {{ request()->routeIs('admin.kategori-dokumen.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.kategori-dokumen.index') }}">
                             <span class="dropdown-item-dot me-2"></span>
                             Kategori Dokumen
+                        </a>
+
                         <a class="dropdown-item py-2 {{ request()->routeIs('admin.jenis-dokumen.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.jenis-dokumen.index') }}">
                             <span class="dropdown-item-dot me-2"></span>
                             Jenis Dokumen
@@ -175,7 +178,7 @@
 
                 {{-- FAQ --}}
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.faq.*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('admin.faq.*') ? 'active' : '' }}" href="{{ route('admin.faq.index') }}">
                         <span class="nav-link-icon">
                             <i class="ti ti-help-circle fs-2"></i>
                         </span>

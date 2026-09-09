@@ -1,8 +1,8 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Jenis Dokumen')
-@section('page-title', 'Jenis Dokumen')
-@section('page-description', 'Kelola data jenis dokumen bahan ajar untuk pengelompokan repository pembelajaran.')
+@section('title', 'FAQ')
+@section('page-title', 'FAQ')
+@section('page-description', 'Kelola pertanyaan dan jawaban yang sering ditanyakan pengguna.')
 
 @section('page-breadcrumbs')
     <nav aria-label="breadcrumb">
@@ -11,19 +11,19 @@
                 <a href="{{ route('admin.dashboard') }}" class="text-secondary text-decoration-none">Dashboard</a>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-secondary">Master Data</span>
+                <span class="text-secondary">Pusat Bantuan</span>
             </li>
             <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
-                Jenis Dokumen
+                FAQ
             </li>
         </ol>
     </nav>
 @endsection
 
 @section('page-actions')
-    <a href="{{ route('admin.jenis-dokumen.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+    <a href="{{ route('admin.faq.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
         <i class="ti ti-plus me-1"></i>
-        Tambah Jenis Dokumen
+        Tambah FAQ
     </a>
 @endsection
 
@@ -60,9 +60,9 @@
         {{-- Card Header & Filter Bar --}}
         <div class="card-header py-3 bg-white border-bottom">
             <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 w-100">
-                <h3 class="card-title fw-bold text-dark mb-0">Daftar Jenis Dokumen</h3>
+                <h3 class="card-title fw-bold text-dark mb-0">Daftar FAQ</h3>
 
-                <form method="GET" action="{{ route('admin.jenis-dokumen.index') }}" id="filter-form" class="row g-2 align-items-center m-0">
+                <form method="GET" action="{{ route('admin.faq.index') }}" id="filter-form" class="row g-2 align-items-center m-0">
                     <div class="col-12 col-sm-auto">
                         <div class="input-icon">
                             <span class="input-icon-addon">
@@ -74,37 +74,29 @@
                                 id="search-input"
                                 value="{{ request('search') }}"
                                 class="form-control rounded-pill"
-                                placeholder="Cari jenis dokumen..."
+                                placeholder="Cari pertanyaan..."
                             >
                         </div>
                     </div>
 
                     <div class="col-6 col-sm-auto">
-                        <select name="kategori" class="form-select rounded-pill" onchange="this.form.submit()">
-                            <option value="">Semua Kategori</option>
-                            @foreach($kategoriDokumens as $kat)
-                                <option value="{{ $kat->id }}" @selected(request('kategori') == $kat->id)>
-                                    {{ $kat->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-6 col-sm-auto">
-                        <select name="status" class="form-select rounded-pill" onchange="this.form.submit()">
+                        <select name="status" class="form-select rounded-pill">
                             <option value="">Semua Status</option>
                             <option value="aktif" @selected(request('status') === 'aktif')>Aktif</option>
                             <option value="tidak_aktif" @selected(request('status') === 'tidak_aktif')>Tidak Aktif</option>
                         </select>
                     </div>
 
-                    @if(request()->hasAny(['search', 'kategori', 'status']))
-                        <div class="col-auto">
-                            <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-light border rounded-pill px-3">
+                    <div class="col-6 col-sm-auto d-flex gap-2">
+                        <button type="submit" class="btn btn-primary rounded-pill px-3">
+                            <i class="ti ti-search me-1"></i> Cari
+                        </button>
+                        @if(request()->hasAny(['search', 'status']))
+                            <a href="{{ route('admin.faq.index') }}" class="btn btn-light border rounded-pill px-3">
                                 <i class="ti ti-rotate me-1"></i> Reset
                             </a>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </form>
             </div>
         </div>
@@ -115,44 +107,19 @@
                 <thead>
                     <tr>
                         <th style="width: 60px;">NO</th>
-                        <th>KATEGORI DOKUMEN</th>
-                        <th>NAMA JENIS DOKUMEN</th>
-                        <th>DESKRIPSI</th>
-                        <th style="width: 100px;">URUTAN</th>
+                        <th style="width: 90px;">URUTAN</th>
+                        <th>PERTANYAAN</th>
+                        <th>JAWABAN</th>
                         <th style="width: 140px;">STATUS</th>
                         <th class="text-end" style="width: 170px;">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($jenisDokumens as $item)
+                    @forelse($faqs as $item)
                         <tr>
                             {{-- No --}}
                             <td class="text-secondary fw-medium">
-                                {{ ($jenisDokumens->firstItem() ?? 1) + $loop->index }}
-                            </td>
-
-                            {{-- Kategori Dokumen --}}
-                            <td>
-                                <span class="badge bg-blue-lt text-blue">
-                                    {{ $item->kategoriDokumen->nama ?? '-' }}
-                                </span>
-                            </td>
-
-                            {{-- Nama Jenis Dokumen --}}
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="avatar avatar-sm bg-danger-subtle text-danger rounded-circle flex-shrink-0">
-                                        <i class="ti ti-file-text"></i>
-                                    </div>
-                                    <a href="{{ route('admin.jenis-dokumen.show', $item) }}" class="fw-bold text-dark text-decoration-none">
-                                        {{ $item->nama }}
-                                    </a>
-                                </div>
-                            </td>
-
-                            {{-- Deskripsi --}}
-                            <td class="text-secondary small" style="max-width: 250px;">
-                                {{ $item->deskripsi ? \Illuminate\Support\Str::limit($item->deskripsi, 60, '...') : '-' }}
+                                {{ ($faqs->firstItem() ?? 1) + $loop->index }}
                             </td>
 
                             {{-- Urutan --}}
@@ -160,6 +127,23 @@
                                 <span class="badge bg-light text-dark border">
                                     {{ $item->urutan }}
                                 </span>
+                            </td>
+
+                            {{-- Pertanyaan --}}
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="avatar avatar-sm bg-danger-subtle text-danger rounded-circle flex-shrink-0">
+                                        <i class="ti ti-help"></i>
+                                    </div>
+                                    <a href="{{ route('admin.faq.show', $item) }}" class="fw-bold text-dark text-decoration-none">
+                                        {{ \Illuminate\Support\Str::limit($item->pertanyaan, 70, '...') }}
+                                    </a>
+                                </div>
+                            </td>
+
+                            {{-- Jawaban --}}
+                            <td class="text-secondary small" style="max-width: 320px;">
+                                {{ \Illuminate\Support\Str::limit($item->jawaban, 80, '...') }}
                             </td>
 
                             {{-- Status --}}
@@ -180,7 +164,7 @@
                             <td>
                                 <div class="d-flex justify-content-end align-items-center gap-1">
                                     {{-- Detail --}}
-                                    <a href="{{ route('admin.jenis-dokumen.show', $item) }}"
+                                    <a href="{{ route('admin.faq.show', $item) }}"
                                         class="btn btn-sm btn-outline-secondary rounded-pill px-2"
                                         title="Detail">
                                         <i class="ti ti-eye"></i>
@@ -188,7 +172,7 @@
                                     </a>
 
                                     {{-- Edit --}}
-                                    <a href="{{ route('admin.jenis-dokumen.edit', $item) }}"
+                                    <a href="{{ route('admin.faq.edit', $item) }}"
                                         class="btn btn-sm btn-outline-primary rounded-pill px-2"
                                         title="Edit">
                                         <i class="ti ti-edit"></i>
@@ -196,9 +180,9 @@
                                     </a>
 
                                     {{-- Hapus --}}
-                                    <form action="{{ route('admin.jenis-dokumen.destroy', $item) }}"
+                                    <form action="{{ route('admin.faq.destroy', $item) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus jenis dokumen {{ addslashes($item->nama) }}? Data yang dihapus tidak dapat dikembalikan.')">
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus FAQ ini? Data yang dihapus tidak dapat dikembalikan.')">
                                         @csrf
                                         @method('DELETE')
 
@@ -213,27 +197,25 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <div class="py-4 text-center">
                                     <div class="avatar avatar-md bg-light text-secondary rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-files-off fs-2"></i>
+                                        <i class="ti ti-help-off fs-2"></i>
                                     </div>
-                                    <h4 class="fw-bold text-dark mb-1">Belum Ada Data Jenis Dokumen</h4>
-                                    <p class="text-secondary small mb-3">
-                                        @if(request()->hasAny(['search', 'kategori', 'status']))
-                                            Tidak ditemukan jenis dokumen yang sesuai dengan filter pencarian.
+                                    <h4 class="fw-bold text-dark mb-1">Belum ada FAQ</h4>
+                                    <p class="text-secondary small mb-0">
+                                        @if(request()->hasAny(['search', 'status']))
+                                            Tidak ditemukan FAQ yang sesuai dengan filter pencarian.
                                         @else
-                                            Belum ada data jenis dokumen yang tersimpan di sistem.
+                                            Belum ada pertanyaan dan jawaban yang ditambahkan.
                                         @endif
                                     </p>
-                                    @if(request()->hasAny(['search', 'kategori', 'status']))
-                                        <a href="{{ route('admin.jenis-dokumen.index') }}" class="btn btn-sm btn-light border rounded-pill px-3">
-                                            <i class="ti ti-rotate me-1"></i> Reset Filter
-                                        </a>
-                                    @else
-                                        <a href="{{ route('admin.jenis-dokumen.create') }}" class="btn btn-primary rounded-pill px-4">
-                                            <i class="ti ti-plus me-1"></i> Tambah Jenis Dokumen
-                                        </a>
+                                    @if(request()->hasAny(['search', 'status']))
+                                        <div class="mt-3">
+                                            <a href="{{ route('admin.faq.index') }}" class="btn btn-sm btn-light border rounded-pill px-3">
+                                                <i class="ti ti-rotate me-1"></i> Reset Filter
+                                            </a>
+                                        </div>
                                     @endif
                                 </div>
                             </td>
@@ -244,20 +226,20 @@
         </div>
 
         {{-- Pagination --}}
-        @if($jenisDokumens->hasPages())
+        @if($faqs->hasPages())
             <div class="card-footer bg-white border-top py-3">
                 <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
                     <div class="text-secondary small">
                         Menampilkan
-                        <span class="fw-bold text-dark">{{ $jenisDokumens->firstItem() }}</span>
+                        <span class="fw-bold text-dark">{{ $faqs->firstItem() }}</span>
                         sampai
-                        <span class="fw-bold text-dark">{{ $jenisDokumens->lastItem() }}</span>
+                        <span class="fw-bold text-dark">{{ $faqs->lastItem() }}</span>
                         dari
-                        <span class="fw-bold text-dark">{{ $jenisDokumens->total() }}</span>
-                        jenis dokumen
+                        <span class="fw-bold text-dark">{{ $faqs->total() }}</span>
+                        FAQ
                     </div>
                     <div>
-                        {{ $jenisDokumens->links() }}
+                        {{ $faqs->links() }}
                     </div>
                 </div>
             </div>
