@@ -1,7 +1,84 @@
 <?php
 
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\KurikulumController;
+use App\Http\Controllers\Admin\PaketLanggananController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\MataPelajaranController;
+use App\Http\Controllers\Admin\KategoriDokumenController;
+use App\Http\Controllers\Admin\JenisDokumenController;
+use App\Http\Controllers\Admin\SemesterController;
+use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RepositoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'role:Super Admin'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::get('/admin/profile', [AdminProfileController::class, 'index'])->name('admin.profile');
+    Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
+    Route::get('/admin/ui-kit', function () {
+        return view('admin.ui-kit');
+    })->name('admin.ui-kit');
+
+    Route::get('/admin/repository/{repository}/download', [RepositoryController::class, 'download'])
+        ->name('admin.repository.download');
+
+    Route::resource(
+        'admin/repository',
+        RepositoryController::class
+    )->names('admin.repository');
+
+    Route::resource(
+        'admin/kurikulum',
+        KurikulumController::class
+    )->names('admin.kurikulum');
+
+    Route::resource(
+        'admin/paket-langganan',
+        PaketLanggananController::class
+    )->names('admin.paket-langganan');
+
+    Route::resource('/admin/semester', SemesterController::class)
+        ->names('admin.semester');
+
+    Route::resource('/admin/kelas', KelasController::class)
+        ->parameters(['kelas' => 'kelas'])
+        ->names('admin.kelas');
+
+    Route::resource('/admin/mata-pelajaran', MataPelajaranController::class)
+        ->names('admin.mata-pelajaran');
+
+    Route::resource('/admin/kategori-dokumen', KategoriDokumenController::class)
+        ->names('admin.kategori-dokumen');
+
+    Route::resource('/admin/jenis-dokumen', JenisDokumenController::class)
+        ->parameters(['jenis-dokumen' => 'jenisDokumen'])
+        ->names('admin.jenis-dokumen');
+
+    Route::resource(
+        'admin/faq',
+        FaqController::class
+    )->names('admin.faq');
+});
+
+
+require __DIR__.'/auth.php';
+
