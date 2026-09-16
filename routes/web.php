@@ -15,8 +15,28 @@ use App\Http\Controllers\Admin\RepositoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('guest.home.index');
+})->name('guest.home');
+
+Route::get('/tentang', function () {
+    return view('guest.tentang.index');
+})->name('guest.tentang');
+
+Route::get('/paket-langganan', function () {
+    return view('guest.paket-langganan.index');
+})->name('guest.paket-langganan');
+
+Route::get('/preview-materi', function () {
+    return view('guest.preview-materi.index');
+})->name('guest.preview-materi');
+
+Route::get('/preview-materi/detail', function () {
+    return view('guest.preview-materi.show');
+})->name('guest.preview-materi.show');
+
+Route::get('/faq', function () {
+    return view('guest.faq.index');
+})->name('guest.faq');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
