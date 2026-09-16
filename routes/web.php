@@ -39,8 +39,17 @@ Route::get('/faq', function () {
 })->name('guest.faq');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    if (auth()->check() && auth()->user()->hasRole('Super Admin')) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('guru.dashboard.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/guru/dashboard', function () {
+        return view('guru.dashboard.index');
+    })->name('guru.dashboard.index');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
