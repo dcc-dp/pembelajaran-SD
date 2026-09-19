@@ -10,8 +10,10 @@ use App\Http\Controllers\Admin\JenisDokumenController;
 use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\AdminProfileController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\RepositoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,17 +40,13 @@ Route::get('/faq', function () {
     return view('guest.faq.index');
 })->name('guest.faq');
 
-Route::get('/dashboard', function () {
-    if (auth()->check() && auth()->user()->hasRole('Super Admin')) {
-        return redirect()->route('admin.dashboard');
-    }
-    return redirect()->route('guru.dashboard.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/guru/dashboard', function () {
-        return view('guru.dashboard.index');
-    })->name('guru.dashboard.index');
+    Route::get('/guru/dashboard', [GuruDashboardController::class, 'index'])->name('guru.dashboard.index');
 });
 
 Route::middleware('auth')->group(function () {
@@ -58,7 +56,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:Super Admin'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/admin/profile', [AdminProfileController::class, 'index'])->name('admin.profile');
     Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
