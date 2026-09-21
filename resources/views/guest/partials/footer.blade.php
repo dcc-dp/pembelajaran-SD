@@ -1,8 +1,8 @@
 <footer class="guest-footer pt-5 pb-4 mt-auto">
     <div class="container-xl">
-        <div class="row g-4 justify-content-between mb-5">
+        <div class="row g-4 justify-content-between mb-4 mb-md-5">
             {{-- Column 1: Brand & Profile Info --}}
-            <div class="col-lg-4 col-md-12">
+            <div class="col-12 col-md-12 col-lg-4">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <img
                         src="{{ asset('assets/admin/img/logosd.png') }}"
@@ -17,7 +17,7 @@
                 <div class="text-uppercase fw-bold text-muted mb-3" style="font-size: 0.68rem; letter-spacing: 0.08em;">
                     Sistem Informasi & Perangkat Ajar Terpadu
                 </div>
-                <p class="text-secondary small mb-4" style="line-height: 1.65; max-width: 360px;">
+                <p class="text-secondary small mb-4" style="line-height: 1.65; max-width: 420px;">
                     SD Learning Center merupakan platform digital yang berkomitmen dalam memberikan kemudahan bagi guru Sekolah Dasar di seluruh Indonesia untuk memperoleh materi pembelajaran terstandarisasi, cepat, transparan, dan terintegrasi secara profesional.
                 </p>
                 <div class="text-uppercase fw-bold text-muted mb-2" style="font-size: 0.68rem; letter-spacing: 0.06em;">
@@ -40,7 +40,7 @@
             </div>
 
             {{-- Column 2: Menu Pintas --}}
-            <div class="col-6 col-md-3 col-lg-2">
+            <div class="col-6 col-sm-5 col-md-3 col-lg-2">
                 <h5 class="footer-heading">Menu Pintas</h5>
                 <div class="footer-heading-bar"></div>
                 <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
@@ -73,7 +73,7 @@
             </div>
 
             {{-- Column 3: Kontak & Pelayanan --}}
-            <div class="col-6 col-md-4 col-lg-3">
+            <div class="col-12 col-sm-7 col-md-4 col-lg-3">
                 <h5 class="footer-heading">Kontak & Pelayanan</h5>
                 <div class="footer-heading-bar"></div>
 
@@ -118,7 +118,7 @@
             </div>
 
             {{-- Column 4: Peta Lokasi / Layanan --}}
-            <div class="col-md-5 col-lg-3">
+            <div class="col-12 col-md-5 col-lg-3">
                 <h5 class="footer-heading">Peta Lokasi Kantor</h5>
                 <div class="footer-heading-bar"></div>
 
@@ -138,7 +138,7 @@
         </div>
 
         {{-- Bottom Copyright Bar --}}
-        <div class="border-top pt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <div class="border-top pt-4 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-3">
             <div class="text-secondary small" style="font-size: 0.825rem;">
                 &copy; {{ date('Y') }} <strong>SD Learning Center</strong>. Hak Cipta Dilindungi Undang-Undang.
             </div>
