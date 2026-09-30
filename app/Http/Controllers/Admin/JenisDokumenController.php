@@ -42,7 +42,7 @@ class JenisDokumenController extends Controller
      */
     public function create()
     {
-        $kategoriDokumens = KategoriDokumen::where('status', 'aktif')
+        $kategoriDokumens = KategoriDokumen::aktif()
             ->orderBy('urutan', 'asc')
             ->get();
 
@@ -54,31 +54,7 @@ class JenisDokumenController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'kategori_dokumen_id' => [
-                'required',
-                'exists:kategori_dokumens,id',
-            ],
-            'nama' => [
-                'required',
-                'string',
-                'max:100',
-            ],
-            'deskripsi' => [
-                'nullable',
-                'string',
-            ],
-            'urutan' => [
-                'required',
-                'integer',
-                'min:1',
-                'max:255',
-            ],
-            'status' => [
-                'required',
-                'in:aktif,tidak_aktif',
-            ],
-        ]);
+        $validated = $this->validasiData($request);
 
         JenisDokumen::create($validated);
 
@@ -112,31 +88,7 @@ class JenisDokumenController extends Controller
      */
     public function update(Request $request, JenisDokumen $jenisDokumen)
     {
-        $validated = $request->validate([
-            'kategori_dokumen_id' => [
-                'required',
-                'exists:kategori_dokumens,id',
-            ],
-            'nama' => [
-                'required',
-                'string',
-                'max:100',
-            ],
-            'deskripsi' => [
-                'nullable',
-                'string',
-            ],
-            'urutan' => [
-                'required',
-                'integer',
-                'min:1',
-                'max:255',
-            ],
-            'status' => [
-                'required',
-                'in:aktif,tidak_aktif',
-            ],
-        ]);
+        $validated = $this->validasiData($request);
 
         $jenisDokumen->update($validated);
 
@@ -161,5 +113,37 @@ class JenisDokumenController extends Controller
                 ->route('admin.jenis-dokumen.index')
                 ->with('danger', 'Jenis dokumen tidak dapat dihapus karena sedang digunakan oleh data lain.');
         }
+    }
+
+    /**
+     * Memvalidasi request data jenis dokumen.
+     */
+    private function validasiData(Request $request): array
+    {
+        return $request->validate([
+            'kategori_dokumen_id' => [
+                'required',
+                'exists:kategori_dokumens,id',
+            ],
+            'nama' => [
+                'required',
+                'string',
+                'max:100',
+            ],
+            'deskripsi' => [
+                'nullable',
+                'string',
+            ],
+            'urutan' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:255',
+            ],
+            'status' => [
+                'required',
+                'in:aktif,tidak_aktif',
+            ],
+        ]);
     }
 }

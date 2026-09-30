@@ -16,8 +16,8 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         $kelas = Kelas::when($request->filled('search'), function ($query) use ($request) {
-                $query->where('nama', 'like', '%' . $request->search . '%');
-            })
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        })
             ->when($request->filled('status'), function ($query) use ($request) {
                 $query->where('status', $request->status);
             })

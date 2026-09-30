@@ -15,8 +15,8 @@ class KurikulumController extends Controller
     public function index(Request $request)
     {
         $kurikulums = Kurikulum::when($request->filled('search'), function ($query) use ($request) {
-                $query->where('nama', 'like', '%' . $request->search . '%');
-            })
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        })
             ->when($request->filled('status'), function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
@@ -40,11 +40,7 @@ class KurikulumController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama' => ['required', 'string', 'max:100'],
-            'deskripsi' => ['nullable', 'string'],
-            'status' => ['required', 'in:aktif,tidak_aktif'],
-        ]);
+        $validated = $this->validasiData($request);
 
         Kurikulum::create($validated);
 
@@ -74,11 +70,7 @@ class KurikulumController extends Controller
      */
     public function update(Request $request, Kurikulum $kurikulum)
     {
-        $validated = $request->validate([
-            'nama' => ['required', 'string', 'max:100'],
-            'deskripsi' => ['nullable', 'string'],
-            'status' => ['required', 'in:aktif,tidak_aktif'],
-        ]);
+        $validated = $this->validasiData($request);
 
         $kurikulum->update($validated);
 
@@ -93,12 +85,6 @@ class KurikulumController extends Controller
     public function destroy(Kurikulum $kurikulum)
     {
         try {
-            if ($kurikulum->repositories()->exists()) {
-                return redirect()
-                    ->route('admin.kurikulum.index')
-                    ->with('danger', 'Kurikulum tidak dapat dihapus karena sedang digunakan oleh data lain.');
-            }
-
             $kurikulum->delete();
 
             return redirect()
@@ -109,5 +95,17 @@ class KurikulumController extends Controller
                 ->route('admin.kurikulum.index')
                 ->with('danger', 'Kurikulum tidak dapat dihapus karena sedang digunakan oleh data lain.');
         }
+    }
+
+    /**
+     * Memvalidasi request data kurikulum.
+     */
+    private function validasiData(Request $request): array
+    {
+        return $request->validate([
+            'nama' => ['required', 'string', 'max:100'],
+            'deskripsi' => ['nullable', 'string'],
+            'status' => ['required', 'in:aktif,tidak_aktif'],
+        ]);
     }
 }

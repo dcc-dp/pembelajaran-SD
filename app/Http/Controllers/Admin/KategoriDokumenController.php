@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KategoriDokumen;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -36,10 +37,10 @@ class KategoriDokumenController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:100|unique:kategori_dokumens,nama',
-            'deskripsi' => 'nullable|string',
-            'urutan' => 'required|integer|min:1',
-            'status' => 'required|in:aktif,tidak_aktif',
+            'nama' => ['required', 'string', 'max:100', 'unique:kategori_dokumens,nama'],
+            'deskripsi' => ['nullable', 'string'],
+            'urutan' => ['required', 'integer', 'min:1'],
+            'status' => ['required', 'in:aktif,tidak_aktif'],
         ]);
 
         KategoriDokumen::create($validated);
@@ -75,9 +76,9 @@ class KategoriDokumenController extends Controller
                 Rule::unique('kategori_dokumens', 'nama')
                     ->ignore($kategoriDokumen->id),
             ],
-            'deskripsi' => 'nullable|string',
-            'urutan' => 'required|integer|min:1',
-            'status' => 'required|in:aktif,tidak_aktif',
+            'deskripsi' => ['nullable', 'string'],
+            'urutan' => ['required', 'integer', 'min:1'],
+            'status' => ['required', 'in:aktif,tidak_aktif'],
         ]);
 
         $kategoriDokumen->update($validated);
@@ -92,10 +93,16 @@ class KategoriDokumenController extends Controller
      */
     public function destroy(KategoriDokumen $kategoriDokumen)
     {
-        $kategoriDokumen->delete();
+        try {
+            $kategoriDokumen->delete();
 
-        return redirect()
-            ->route('admin.kategori-dokumen.index')
-            ->with('success', 'Kategori Dookumen berhasil dihapus.');
+            return redirect()
+                ->route('admin.kategori-dokumen.index')
+                ->with('success', 'Kategori dokumen berhasil dihapus.');
+        } catch (QueryException $e) {
+            return redirect()
+                ->route('admin.kategori-dokumen.index')
+                ->with('danger', 'Kategori dokumen tidak dapat dihapus karena sedang digunakan oleh data lain.');
+        }
     }
 }

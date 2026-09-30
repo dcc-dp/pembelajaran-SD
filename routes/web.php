@@ -13,12 +13,11 @@ use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\RepositoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Guest\HomeController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('guest.home.index');
-})->name('guest.home');
+Route::get('/', [HomeController::class, 'index'])->name('guest.home');
 
 Route::get('/tentang', function () {
     return view('guest.tentang.index');

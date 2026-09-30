@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $totalGuru = User::role('Guru')->count();
 
         // 2. MATERI: Menghitung data materi/perangkat ajar yang tersedia (dipublikasikan) di repository
-        $totalMateri = Repository::where('status', 'dipublikasikan')->count();
+        $totalMateri = Repository::dipublikasikan()->count();
 
         // 3. LANGGANAN AKTIF: Menghitung langganan dengan status 'aktif'
         $totalLanggananAktif = Langganan::where('status', 'aktif')->count();
@@ -26,8 +26,8 @@ class DashboardController extends Controller
         // 4. SEKOLAH: Menghitung jumlah sekolah unik yang terdaftar pada guru
         $totalSekolah = User::role('Guru')
             ->whereNotNull('nama_sekolah')
-            ->whereRaw("TRIM(nama_sekolah) != ''")
-            ->distinct('nama_sekolah')
+            ->where('nama_sekolah', '!=', '')
+            ->distinct()
             ->count('nama_sekolah');
 
         return view('admin.dashboard', compact(
