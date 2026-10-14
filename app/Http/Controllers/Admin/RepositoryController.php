@@ -9,14 +9,13 @@ use App\Models\Kurikulum;
 use App\Models\MataPelajaran;
 use App\Models\Repository;
 use App\Models\Semester;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class RepositoryController extends Controller
 {
-    /**
-     * Menampilkan daftar repository dokumen pembelajaran.
-     */
+    
     public function index(Request $request)
     {
         $repositories = Repository::with([
@@ -54,192 +53,70 @@ class RepositoryController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kurikulums = Kurikulum::where('status', 'aktif')->orderBy('nama')->get();
-        $semesters = Semester::where('status', 'aktif')->orderBy('urutan')->get();
-        $kelas = Kelas::where('status', 'aktif')->orderBy('urutan')->get();
-        $mataPelajarans = MataPelajaran::where('status', 'aktif')->orderBy('urutan')->get();
-        $jenisDokumens = JenisDokumen::where('status', 'aktif')->orderBy('urutan')->get();
-
-        return view('admin.repository.index', compact(
-            'repositories',
-            'kurikulums',
-            'semesters',
-            'kelas',
-            'mataPelajarans',
-            'jenisDokumens'
-        ));
+        return view('admin.repository.index', array_merge([
+            'repositories' => $repositories,
+        ], $this->dataDropdown()));
     }
 
-    /**
-     * Menampilkan formulir tambah repository.
-     */
+   
     public function create()
     {
-        $kurikulums = Kurikulum::where('status', 'aktif')->orderBy('nama')->get();
-        $semesters = Semester::where('status', 'aktif')->orderBy('urutan')->get();
-        $kelas = Kelas::where('status', 'aktif')->orderBy('urutan')->get();
-        $mataPelajarans = MataPelajaran::where('status', 'aktif')->orderBy('urutan')->get();
-        $jenisDokumens = JenisDokumen::where('status', 'aktif')->orderBy('urutan')->get();
-
-        return view('admin.repository.create', compact(
-            'kurikulums',
-            'semesters',
-            'kelas',
-            'mataPelajarans',
-            'jenisDokumens'
-        ));
+        return view('admin.repository.create', array_merge([], $this->dataDropdown()));
     }
 
-    /**
-     * Menyimpan data repository baru ke database.
-     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'kurikulum_id' => ['required', 'exists:kurikulums,id'],
-            'semester_id' => ['required', 'exists:semesters,id'],
-            'kelas_id' => ['required', 'exists:kelas,id'],
-            'mata_pelajaran_id' => ['required', 'exists:mata_pelajarans,id'],
-            'jenis_dokumen_id' => ['required', 'exists:jenis_dokumens,id'],
-            'judul' => ['required', 'string', 'max:255'],
-            'deskripsi' => ['nullable', 'string'],
-            'file' => ['required', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar', 'max:51200'],
-            'akses' => ['required', 'in:gratis,premium'],
-            'status' => ['required', 'in:draft,dipublikasikan,diarsipkan'],
-        ], [
-            'kurikulum_id.required' => 'Silakan pilih kurikulum.',
-            'semester_id.required' => 'Silakan pilih semester.',
-            'kelas_id.required' => 'Silakan pilih kelas.',
-            'mata_pelajaran_id.required' => 'Silakan pilih mata pelajaran.',
-            'jenis_dokumen_id.required' => 'Silakan pilih jenis dokumen.',
-            'judul.required' => 'Judul repository wajib diisi.',
-            'file.required' => 'File dokumen wajib diunggah.',
-            'file.mimes' => 'Format file yang diperbolehkan: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, atau RAR.',
-            'file.max' => 'Ukuran file dokumen maksimal 50 MB.',
-            'akses.required' => 'Silakan pilih tipe akses.',
-            'status.required' => 'Silakan pilih status publikasi.',
-        ]);
+        $validated = $this->validasiData($request, true);
 
+        $data = $validated;
         $uploadedFile = $request->file('file');
-        $namaFile = $uploadedFile->getClientOriginalName();
-        $tipeFile = strtolower($uploadedFile->getClientOriginalExtension());
-        $filePath = $uploadedFile->store('repositories', 'public');
+        $data['nama_file'] = $uploadedFile->getClientOriginalName();
+        $data['tipe_file'] = strtolower($uploadedFile->getClientOriginalExtension());
+        $data['file'] = $uploadedFile->store('repositories', 'public');
 
-        Repository::create([
-            'kurikulum_id' => $validated['kurikulum_id'],
-            'semester_id' => $validated['semester_id'],
-            'kelas_id' => $validated['kelas_id'],
-            'mata_pelajaran_id' => $validated['mata_pelajaran_id'],
-            'jenis_dokumen_id' => $validated['jenis_dokumen_id'],
-            'judul' => $validated['judul'],
-            'deskripsi' => $validated['deskripsi'] ?? null,
-            'nama_file' => $namaFile,
-            'file' => $filePath,
-            'tipe_file' => $tipeFile,
-            'akses' => $validated['akses'],
-            'status' => $validated['status'],
-        ]);
+        Repository::create($data);
 
         return redirect()
             ->route('admin.repository.index')
             ->with('success', 'Repository berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail informasi repository dokumen.
-     */
-    public function show(string $id)
+    public function show(Repository $repository)
     {
-        $repository = Repository::with([
+        $repository->load([
             'kurikulum',
             'semester',
             'kelas',
             'mataPelajaran',
-            'jenisDokumen'
-        ])->findOrFail($id);
+            'jenisDokumen',
+        ]);
 
         return view('admin.repository.show', compact('repository'));
     }
 
-    /**
-     * Mengunduh file dokumen repository.
-     */
-    public function download(string $id)
+    public function download(Repository $repository)
     {
-        $repository = Repository::findOrFail($id);
-
         if (!$repository->file || !Storage::disk('public')->exists($repository->file)) {
-            return back()->with('error', 'File dokumen tidak ditemukan di penyimpanan server.');
+            return back()->with('danger', 'File dokumen tidak ditemukan di penyimpanan server.');
         }
 
         return Storage::disk('public')->download($repository->file, $repository->nama_file);
     }
 
-    /**
-     * Menampilkan formulir edit repository.
-     */
-    public function edit(string $id)
+    
+    public function edit(Repository $repository)
     {
-        $repository = Repository::findOrFail($id);
-
-        $kurikulums = Kurikulum::where('status', 'aktif')->orderBy('nama')->get();
-        $semesters = Semester::where('status', 'aktif')->orderBy('urutan')->get();
-        $kelas = Kelas::where('status', 'aktif')->orderBy('urutan')->get();
-        $mataPelajarans = MataPelajaran::where('status', 'aktif')->orderBy('urutan')->get();
-        $jenisDokumens = JenisDokumen::where('status', 'aktif')->orderBy('urutan')->get();
-
-        return view('admin.repository.edit', compact(
-            'repository',
-            'kurikulums',
-            'semesters',
-            'kelas',
-            'mataPelajarans',
-            'jenisDokumens'
-        ));
+        return view('admin.repository.edit', array_merge([
+            'repository' => $repository,
+        ], $this->dataDropdown()));
     }
 
-    /**
-     * Memperbarui data repository di database.
-     */
-    public function update(Request $request, string $id)
+    
+    public function update(Request $request, Repository $repository)
     {
-        $repository = Repository::findOrFail($id);
+        $validated = $this->validasiData($request, false);
 
-        $validated = $request->validate([
-            'kurikulum_id' => ['required', 'exists:kurikulums,id'],
-            'semester_id' => ['required', 'exists:semesters,id'],
-            'kelas_id' => ['required', 'exists:kelas,id'],
-            'mata_pelajaran_id' => ['required', 'exists:mata_pelajarans,id'],
-            'jenis_dokumen_id' => ['required', 'exists:jenis_dokumens,id'],
-            'judul' => ['required', 'string', 'max:255'],
-            'deskripsi' => ['nullable', 'string'],
-            'file' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar', 'max:51200'],
-            'akses' => ['required', 'in:gratis,premium'],
-            'status' => ['required', 'in:draft,dipublikasikan,diarsipkan'],
-        ], [
-            'kurikulum_id.required' => 'Silakan pilih kurikulum.',
-            'semester_id.required' => 'Silakan pilih semester.',
-            'kelas_id.required' => 'Silakan pilih kelas.',
-            'mata_pelajaran_id.required' => 'Silakan pilih mata pelajaran.',
-            'jenis_dokumen_id.required' => 'Silakan pilih jenis dokumen.',
-            'judul.required' => 'Judul repository wajib diisi.',
-            'file.mimes' => 'Format file yang diperbolehkan: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, atau RAR.',
-            'file.max' => 'Ukuran file dokumen maksimal 50 MB.',
-            'akses.required' => 'Silakan pilih tipe akses.',
-            'status.required' => 'Silakan pilih status publikasi.',
-        ]);
-
-        $dataToUpdate = [
-            'kurikulum_id' => $validated['kurikulum_id'],
-            'semester_id' => $validated['semester_id'],
-            'kelas_id' => $validated['kelas_id'],
-            'mata_pelajaran_id' => $validated['mata_pelajaran_id'],
-            'jenis_dokumen_id' => $validated['jenis_dokumen_id'],
-            'judul' => $validated['judul'],
-            'deskripsi' => $validated['deskripsi'] ?? null,
-            'akses' => $validated['akses'],
-            'status' => $validated['status'],
-        ];
+        $data = $validated;
 
         if ($request->hasFile('file')) {
             if ($repository->file && Storage::disk('public')->exists($repository->file)) {
@@ -247,33 +124,89 @@ class RepositoryController extends Controller
             }
 
             $uploadedFile = $request->file('file');
-            $dataToUpdate['nama_file'] = $uploadedFile->getClientOriginalName();
-            $dataToUpdate['tipe_file'] = strtolower($uploadedFile->getClientOriginalExtension());
-            $dataToUpdate['file'] = $uploadedFile->store('repositories', 'public');
+            $data['nama_file'] = $uploadedFile->getClientOriginalName();
+            $data['tipe_file'] = strtolower($uploadedFile->getClientOriginalExtension());
+            $data['file'] = $uploadedFile->store('repositories', 'public');
+        } else {
+            unset($data['file']);
         }
 
-        $repository->update($dataToUpdate);
+        $repository->update($data);
 
         return redirect()
             ->route('admin.repository.index')
             ->with('success', 'Repository berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus repository dan file fisik terkait dari penyimpanan.
-     */
-    public function destroy(string $id)
+    
+    public function destroy(Repository $repository)
     {
-        $repository = Repository::findOrFail($id);
+        try {
+            $filePath = $repository->file;
 
-        if ($repository->file && Storage::disk('public')->exists($repository->file)) {
-            Storage::disk('public')->delete($repository->file);
+            $repository->delete();
+
+            if ($filePath && Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+
+            return redirect()
+                ->route('admin.repository.index')
+                ->with('success', 'Repository berhasil dihapus.');
+        } catch (QueryException $e) {
+            return redirect()
+                ->route('admin.repository.index')
+                ->with('danger', 'Repository tidak dapat dihapus karena sedang digunakan oleh data lain.');
+        }
+    }
+
+ 
+    private function validasiData(Request $request, bool $wajibFile): array
+    {
+        $fileRules = $wajibFile
+            ? ['required', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar', 'max:51200']
+            : ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar', 'max:51200'];
+
+        $messages = [
+            'kurikulum_id.required' => 'Silakan pilih kurikulum.',
+            'semester_id.required' => 'Silakan pilih semester.',
+            'kelas_id.required' => 'Silakan pilih kelas.',
+            'mata_pelajaran_id.required' => 'Silakan pilih mata pelajaran.',
+            'jenis_dokumen_id.required' => 'Silakan pilih jenis dokumen.',
+            'judul.required' => 'Judul repository wajib diisi.',
+            'file.mimes' => 'Format file yang diperbolehkan: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, atau RAR.',
+            'file.max' => 'Ukuran file dokumen maksimal 50 MB.',
+            'akses.required' => 'Silakan pilih tipe akses.',
+            'status.required' => 'Silakan pilih status publikasi.',
+        ];
+
+        if ($wajibFile) {
+            $messages['file.required'] = 'File dokumen wajib diunggah.';
         }
 
-        $repository->delete();
+        return $request->validate([
+            'kurikulum_id' => ['required', 'exists:kurikulums,id'],
+            'semester_id' => ['required', 'exists:semesters,id'],
+            'kelas_id' => ['required', 'exists:kelas,id'],
+            'mata_pelajaran_id' => ['required', 'exists:mata_pelajarans,id'],
+            'jenis_dokumen_id' => ['required', 'exists:jenis_dokumens,id'],
+            'judul' => ['required', 'string', 'max:255'],
+            'deskripsi' => ['nullable', 'string'],
+            'file' => $fileRules,
+            'akses' => ['required', 'in:gratis,premium'],
+            'status' => ['required', 'in:draft,dipublikasikan,diarsipkan'],
+        ], $messages);
+    }
 
-        return redirect()
-            ->route('admin.repository.index')
-            ->with('success', 'Repository berhasil dihapus.');
+   
+    private function dataDropdown(): array
+    {
+        return [
+            'kurikulums' => Kurikulum::aktif()->orderBy('nama')->get(),
+            'semesters' => Semester::aktif()->orderBy('urutan')->get(),
+            'kelas' => Kelas::aktif()->orderBy('urutan')->get(),
+            'mataPelajarans' => MataPelajaran::aktif()->orderBy('urutan')->get(),
+            'jenisDokumens' => JenisDokumen::aktif()->orderBy('urutan')->get(),
+        ];
     }
 }

@@ -10,9 +10,8 @@ use Illuminate\Validation\Rule;
 
 class AdminProfileController extends Controller
 {
-    /**
-     * Menampilkan halaman profil admin.
-     */
+    // Menampilkan halaman profil admin
+
     public function index()
     {
         $user = auth()->user();
@@ -20,9 +19,8 @@ class AdminProfileController extends Controller
         return view('admin.profile.index', compact('user'));
     }
 
-    /**
-     * Memperbarui data profil admin.
-     */
+    // Memperbarui data profil admin
+     
     public function update(Request $request)
     {
         $user = auth()->user();
@@ -40,7 +38,6 @@ class AdminProfileController extends Controller
             'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
 
-        // Validasi password jika user mengisi salah satu field password
         if ($request->filled('current_password') || $request->filled('password') || $request->filled('password_confirmation')) {
             $rules['current_password'] = ['required', 'current_password'];
             $rules['password'] = ['required', 'string', 'min:8', 'confirmed'];
@@ -55,14 +52,11 @@ class AdminProfileController extends Controller
             'foto.max' => 'Ukuran foto maksimal adalah 2 MB.',
         ]);
 
-        // Update data utama
         $user->nama = $validated['nama'];
         $user->email = $validated['email'];
         $user->no_hp = $validated['no_hp'] ?? null;
 
-        // Update foto jika diunggah
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada di storage
             if ($user->foto && Storage::disk('public')->exists($user->foto)) {
                 Storage::disk('public')->delete($user->foto);
             }
@@ -71,7 +65,6 @@ class AdminProfileController extends Controller
             $user->foto = $path;
         }
 
-        // Update password jika diisi
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }

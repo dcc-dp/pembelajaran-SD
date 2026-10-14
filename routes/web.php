@@ -13,32 +13,26 @@ use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\RepositoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Guest\FaqController as GuestFaqController;
+use App\Http\Controllers\Guest\HomeController;
+use App\Http\Controllers\Guest\PaketLanggananController as GuestPaketLanggananController;
+use App\Http\Controllers\Guest\PreviewMateriController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('guest.home.index');
-})->name('guest.home');
+Route::get('/', [HomeController::class, 'index'])->name('guest.home');
 
 Route::get('/tentang', function () {
     return view('guest.tentang.index');
 })->name('guest.tentang');
 
-Route::get('/paket-langganan', function () {
-    return view('guest.paket-langganan.index');
-})->name('guest.paket-langganan');
+Route::get('/paket-langganan', [GuestPaketLanggananController::class, 'index'])->name('guest.paket-langganan');
 
-Route::get('/preview-materi', function () {
-    return view('guest.preview-materi.index');
-})->name('guest.preview-materi');
+Route::get('/preview-materi', [PreviewMateriController::class, 'index'])->name('guest.preview-materi');
 
-Route::get('/preview-materi/detail', function () {
-    return view('guest.preview-materi.show');
-})->name('guest.preview-materi.show');
+Route::get('/preview-materi/detail/{id?}', [PreviewMateriController::class, 'show'])->name('guest.preview-materi.show');
 
-Route::get('/faq', function () {
-    return view('guest.faq.index');
-})->name('guest.faq');
+Route::get('/faq', [GuestFaqController::class, 'index'])->name('guest.faq');
 
 
 Route::get('/dashboard', DashboardController::class)

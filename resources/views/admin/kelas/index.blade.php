@@ -42,13 +42,13 @@
         </div>
     @endif
 
-    {{-- Alert Danger / Error --}}
-    @if(session('danger') || session('error'))
+    {{-- Alert Danger --}}
+    @if(session('danger'))
         <div class="alert alert-danger alert-dismissible shadow-sm border-0 mb-4" role="alert">
             <div class="d-flex align-items-center">
                 <i class="ti ti-alert-circle fs-2 me-2 text-danger"></i>
                 <div class="fw-medium">
-                    {{ session('danger') ?? session('error') }}
+                    {{ session('danger') }}
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>

@@ -141,6 +141,8 @@ body {
     font-size: clamp(1.45rem, 3vw + 0.4rem, 2.15rem);
     font-weight: 700;
     letter-spacing: -0.02em;
+    line-height: 1.4;
+    text-wrap: balance;
 }
 
 /* Buttons */
@@ -422,6 +424,25 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* White CTA Banner Card */
+.cta-card-white {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.5rem;
+    padding: 3rem 1.75rem;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .cta-card-white {
+        padding: 4.25rem 3rem;
+        border-radius: 1.75rem;
+    }
+}
+
 /* Footer */
 .guest-footer {
     background-color: #ffffff;
@@ -556,3 +577,986 @@ body {
     border-color: var(--sd-primary);
     transform: translateY(-2px);
 }
+
+/* Dynamic Materi Preview Cards */
+.materi-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 1.25rem;
+    padding: 1.5rem 1.35rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.materi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06);
+    border-color: #fecdd3;
+}
+
+.materi-card-highlight {
+    background: linear-gradient(180deg, #ffffff 0%, #fef8f8 100%);
+    border: 1.5px solid #fecdd3;
+}
+
+.badge-materi-gratis {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.28rem 0.7rem;
+    border-radius: 50rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.badge-materi-premium {
+    background-color: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.28rem 0.7rem;
+    border-radius: 50rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.materi-meta-tag {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    font-size: 0.775rem;
+    font-weight: 600;
+    padding: 0.28rem 0.65rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Complementary Highlight Cards */
+.materi-complement-card {
+    background: #f8fafc;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 1.25rem;
+    padding: 1.75rem 1.35rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+}
+
+.materi-complement-card:hover {
+    background: #ffffff;
+    border-color: #b7141b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+/* Dynamic Paket Langganan Card */
+.paket-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1.25rem;
+    padding: 2.25rem 1.65rem;
+    transition: all 0.25s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.paket-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
+    border-color: #fda4af;
+}
+
+.paket-card.paket-card-featured {
+    border: 2px solid #b7141b;
+    box-shadow: 0 12px 30px rgba(183, 20, 27, 0.09);
+    background: linear-gradient(180deg, #ffffff 0%, #fffbfb 100%);
+}
+
+.paket-badge-popular {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #b7141b;
+    color: #ffffff;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.32rem 1rem;
+    border-radius: 50rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(183, 20, 27, 0.25);
+}
+
+.paket-price-amount {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1;
+}
+
+/* Teaser Feature Check Item */
+.teaser-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 0.65rem;
+    line-height: 1.45;
+}
+
+.teaser-feature-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ecfdf5;
+    color: #059669;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Dynamic FAQ Accordion */
+.faq-accordion-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.85rem !important;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.faq-accordion-item:hover {
+    border-color: #cbd5e1;
+}
+
+.faq-accordion-button {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: #ffffff;
+    border-radius: 0.85rem !important;
+    box-shadow: none !important;
+}
+
+.faq-accordion-button:not(.collapsed) {
+    color: var(--sd-primary);
+    background-color: #fef2f2;
+}
+
+/* FAQ Dedicated Page Styles */
+.faq-search-box {
+    position: relative;
+    max-width: 520px;
+}
+
+.faq-search-icon {
+    position: absolute;
+    left: 1.15rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1.25rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.faq-search-input {
+    padding-left: 3.1rem;
+    padding-right: 1.25rem;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    border-radius: 0.85rem;
+    border: 1.5px solid #e2e8f0;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.faq-search-input:focus {
+    border-color: var(--sd-primary);
+    box-shadow: 0 0 0 3.5px rgba(183, 20, 27, 0.12);
+    outline: none;
+}
+
+.faq-category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.faq-pill-btn {
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    color: #475467;
+    font-size: 0.825rem;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-radius: 50rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.faq-pill-btn:hover {
+    background-color: #fee2e2;
+    color: #b7141b;
+    border-color: #fca5a5;
+}
+
+.faq-pill-btn.active {
+    background-color: #b7141b;
+    color: #ffffff;
+    border-color: #b7141b;
+    box-shadow: 0 4px 12px rgba(183, 20, 27, 0.2);
+}
+
+.faq-hero-card {
+    position: relative;
+    padding: 0.85rem;
+    background: linear-gradient(135deg, #fef2f2 0%, #fff7ed 100%);
+    border-radius: 1.5rem;
+    border: 1.5px solid #fed7aa;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+
+.faq-card-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.95rem;
+    margin-bottom: 0.9rem;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.faq-card-item:hover {
+    border-color: #fca5a5;
+    box-shadow: 0 6px 20px rgba(183, 20, 27, 0.06);
+}
+
+.faq-card-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    background: #ffffff;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.faq-card-btn:hover {
+    color: #b7141b;
+}
+
+.faq-card-btn:not(.collapsed) {
+    color: #b7141b;
+    background-color: #fef8f8;
+}
+
+.faq-card-icon {
+    color: #b7141b;
+    font-size: 1.25rem;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+}
+
+.faq-card-btn:not(.collapsed) .faq-card-icon {
+    transform: rotate(180deg);
+}
+
+.faq-card-body {
+    padding: 0 1.5rem 1.35rem 1.5rem;
+    color: #475467;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    background-color: #fef8f8;
+}
+
+/* ==========================================================================
+   Halaman Tentang Kami (About Us Page)
+   ========================================================================== */
+.about-platform-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: #fdeee4;
+    color: #b84d1e;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.42rem 1.15rem;
+    border-radius: 50rem;
+    letter-spacing: -0.01em;
+}
+
+.about-card-modern {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+}
+
+.about-separate-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 6px 24px -8px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+}
+
+.about-separate-card:hover {
+    border-color: #fca5a5;
+    box-shadow: 0 12px 30px -8px rgba(183, 20, 27, 0.08);
+}
+
+.about-feature-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.95rem;
+    height: 100%;
+    transition: all 0.2s ease;
+}
+
+.about-feature-chip:hover {
+    background-color: #ffffff;
+    border-color: #fca5a5;
+    box-shadow: 0 4px 14px rgba(183, 20, 27, 0.06);
+    transform: translateY(-2px);
+}
+
+.about-feature-chip-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #fee2e2;
+    color: #b7141b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.about-feature-chip-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.35;
+}
+
+.about-narrative-text {
+    color: #475467;
+    font-size: 0.985rem;
+    line-height: 1.85;
+    margin-bottom: 1.25rem;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.about-vision-box {
+    background: #fef2f2;
+    border-left: 4px solid var(--sd-primary);
+    border-radius: 0.85rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-pillar-card {
+    background: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 1.25rem;
+    padding: 1.75rem 1.5rem;
+    height: 100%;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+
+.about-pillar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(183, 20, 27, 0.07);
+    border-color: #fca5a5;
+}
+
+.about-icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.about-icon-box.tint-red {
+    background-color: #fee2e2;
+    color: #b7141b;
+}
+
+.about-icon-box.tint-amber {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.about-icon-box.tint-emerald {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.about-icon-box.tint-blue {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+/* ==========================================================================
+   Halaman Preview Materi (Preview Materials & Reader)
+   ========================================================================== */
+.preview-filter-card {
+    background: #ffffff;
+    border: 1px solid #eaecf0;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    padding: 1.5rem;
+}
+
+.preview-item-card {
+    background: #ffffff;
+    border: 1px solid #eaecf0;
+    border-radius: 1.15rem;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.preview-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    border-color: #fca5a5;
+}
+
+.preview-card-cover {
+    height: 175px;
+    background: linear-gradient(135deg, #fff5f5 0%, #fffbf0 100%);
+    position: relative;
+    padding: 1rem 1.25rem 0.75rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preview-cover-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Document Mockup inside Card Cover */
+.preview-doc-mockup {
+    width: 84px;
+    height: 104px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease;
+}
+
+.preview-item-card:hover .preview-doc-mockup {
+    transform: scale(1.05);
+}
+
+.preview-doc-strip {
+    width: 100%;
+    height: 6px;
+    background: var(--sd-primary);
+}
+
+.preview-doc-icon {
+    font-size: 1.65rem;
+    color: var(--sd-primary);
+    margin-top: 14px;
+    margin-bottom: 8px;
+}
+
+.preview-doc-line {
+    width: 60%;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin-bottom: 5px;
+}
+
+.preview-doc-line-short {
+    width: 40%;
+    height: 4px;
+    background: #edf2f7;
+    border-radius: 2px;
+}
+
+.badge-doc-format {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.35rem;
+    letter-spacing: 0.02em;
+}
+
+.badge-doc-pdf {
+    background: #fee2e2;
+    color: #b7141b;
+}
+
+.badge-doc-word {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-doc-ppt {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.badge-preview-tag {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 50rem;
+    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25);
+}
+
+/* Document Viewer (Show Page) */
+.doc-viewer-wrapper {
+    background: #1e293b;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+}
+
+.doc-viewer-toolbar {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #334155;
+}
+
+.doc-viewer-scroll {
+    height: 640px;
+    max-height: 82vh;
+    overflow-y: auto;
+    background: #334155;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #1e293b;
+    scroll-behavior: smooth;
+}
+
+.doc-viewer-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.doc-viewer-scroll::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+.doc-viewer-scroll::-webkit-scrollbar-thumb {
+    background: #64748b;
+    border-radius: 4px;
+}
+
+.doc-page-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.doc-page-paper {
+    background: #ffffff;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1 / 1.414;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.doc-page-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e293b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.85rem;
+    border-radius: 50rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.doc-canvas {
+    display: block;
+    border-radius: 4px;
+}
+
+.doc-canvas-blurred {
+    display: block;
+    filter: blur(8px);
+    opacity: 0.35;
+    pointer-events: none;
+    user-select: none;
+    border-radius: 4px;
+}
+
+.doc-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 800;
+    color: rgba(183, 20, 27, 0.1);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.05em;
+    z-index: 3;
+}
+
+.doc-page-locked {
+    background: #f8fafc;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.doc-lock-modal {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid #fecaca;
+    border-radius: 1rem;
+    box-shadow: 0 16px 36px rgba(183, 20, 27, 0.14);
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 88%;
+    max-width: 380px;
+    z-index: 5;
+}
+
+.doc-lock-icon {
+    width: 50px;
+    height: 50px;
+    background: #fee2e2;
+    color: #b7141b;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.doc-paper-skeleton-bar {
+    height: 10px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+}
+
+.doc-paper-skeleton-box {
+    height: 80px;
+    background: #f8fafc;
+    border: 1px dashed #e2e8f0;
+    border-radius: 6px;
+    margin-bottom: 1.25rem;
+}
+
+.doc-info-card {
+    background: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    padding: 1.75rem 1.5rem;
+}
+
+.doc-meta-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    margin-bottom: 0.2rem;
+}
+
+.doc-meta-value {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.doc-notice-box {
+    background-color: #fff7ed;
+    border: 1px solid #ffedd5;
+    border-radius: 0.85rem;
+    padding: 1rem 1.25rem;
+}
+
+/* ========================================================
+   Paket Langganan (Pricing Page)
+   ======================================================== */
+.pricing-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 2rem 1.75rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(183, 20, 27, 0.09);
+    border-color: #fca5a5;
+}
+
+.pricing-card-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.pricing-card-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    margin-bottom: 0.65rem;
+}
+
+.pricing-card-desc {
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    min-height: 2.8rem;
+}
+
+.pricing-price-box {
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #f1f5f9;
+}
+
+.pricing-price-amount {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #b7141b;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.pricing-price-period {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-left: 0.25rem;
+}
+
+.pricing-feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem 0;
+    flex-grow: 1;
+}
+
+.pricing-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.875rem;
+    color: #334155;
+    margin-bottom: 0.85rem;
+    line-height: 1.45;
+}
+
+.pricing-feature-item i {
+    color: #10b981;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+/* Langkah Mudah Berlangganan */
+.subscription-steps-wrapper {
+    position: relative;
+}
+
+.subscription-step-item {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.subscription-step-circle {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 2px solid #b7141b;
+    color: #b7141b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.55rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 14px rgba(183, 20, 27, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.subscription-step-item:hover .subscription-step-circle {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(183, 20, 27, 0.15);
+}
+
+.subscription-step-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+}
+
+.subscription-step-desc {
+    color: #64748b;
+    font-size: 0.825rem;
+    line-height: 1.5;
+    max-width: 220px;
+    margin: 0 auto;
+}
+
+/* Kenapa Harus Berlangganan */
+.subscription-reason-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 1.25rem;
+    padding: 2rem 1.6rem;
+    height: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.subscription-reason-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+.subscription-reason-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin-bottom: 1.25rem;
+}
+
+.subscription-reason-icon.tint-red {
+    background-color: #fee2e2;
+    color: #b7141b;
+}
+
+.subscription-reason-icon.tint-amber {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.subscription-reason-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.subscription-reason-desc {
+    color: #64748b;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+
+

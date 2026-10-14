@@ -15,6 +15,11 @@ class MataPelajaran extends Model
         'status',
     ];
 
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
+
     public function repositories()
     {
         return $this->hasMany(Repository::class, 'mata_pelajaran_id');

@@ -5,21 +5,18 @@
 @section('content')
 <div class="d-flex flex-column gap-4">
 
-    {{-- ====================================================================
-         ROW 1: WELCOME HERO BANNER (COL 8) & SUBSCRIPTION CARD (COL 4)
-         ==================================================================== --}}
+
     <div class="row g-4 align-items-stretch">
 
-        {{-- Hero Welcome Card --}}
         <div class="col-lg-8">
             <div class="guru-hero-card h-100 d-flex flex-column justify-content-between">
                 <div class="row align-items-center">
                     <div class="col-md-7">
                         <h2 class="guru-hero-title mb-1">
-                            Selamat Datang, {{ auth()->user()?->nama ?? 'Al Fina' }}
+                            Selamat Datang, {{ auth()->user()?->nama}}
                         </h2>
                         <div class="guru-hero-school">
-                            {{ auth()->user()?->nama_sekolah ?? 'SDN 01 Menteng' }}
+                            {{ auth()->user()?->nama_sekolah ??}}
                         </div>
                         <p class="guru-hero-quote">
                             "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan, Anda dapat mengubah dunia." — Nelson Mandela
@@ -36,7 +33,6 @@
                         </div>
                     </div>
 
-                    {{-- Hero Illustration Graphic --}}
                     <div class="col-md-5 d-none d-md-flex justify-content-center">
                         <div class="p-3 bg-light rounded-3 border border-light text-center shadow-sm w-100" style="max-width: 250px; background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);">
                             <div class="d-flex align-items-center justify-content-center rounded-2 mb-2 p-3 bg-white shadow-xs">
@@ -50,7 +46,6 @@
             </div>
         </div>
 
-        {{-- Subscription Status Card --}}
         <div class="col-lg-4">
             <div class="guru-sub-card">
                 <div>
@@ -98,9 +93,6 @@
 
     </div>
 
-    {{-- ====================================================================
-         ROW 2: 4 SUMMARY STAT CARDS (SESUAI SCHEMA DATABASE)
-         ==================================================================== --}}
     <div class="row g-3">
 
         {{-- Stat 1: Total Repository --}}

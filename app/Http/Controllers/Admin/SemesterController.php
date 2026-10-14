@@ -10,14 +10,12 @@ use Illuminate\Validation\Rule;
 
 class SemesterController extends Controller
 {
-    /**
-     * Menampilkan daftar semester.
-     */
+    
     public function index(Request $request)
     {
         $semesters = Semester::when($request->filled('search'), function ($query) use ($request) {
-                $query->where('nama', 'like', '%' . $request->search . '%');
-            })
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        })
             ->when($request->filled('status'), function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
@@ -28,17 +26,13 @@ class SemesterController extends Controller
         return view('admin.semester.index', compact('semesters'));
     }
 
-    /**
-     * Menampilkan form tambah semester.
-     */
+
     public function create()
     {
         return view('admin.semester.create');
     }
 
-    /**
-     * Menyimpan data semester baru.
-     */
+   
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -54,25 +48,17 @@ class SemesterController extends Controller
             ->with('success', 'Semester berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail data semester.
-     */
+   
     public function show(Semester $semester)
     {
         return view('admin.semester.show', compact('semester'));
     }
 
-    /**
-     * Menampilkan form edit semester.
-     */
     public function edit(Semester $semester)
     {
         return view('admin.semester.edit', compact('semester'));
     }
 
-    /**
-     * Memperbarui data semester.
-     */
     public function update(Request $request, Semester $semester)
     {
         $validated = $request->validate([
@@ -93,9 +79,6 @@ class SemesterController extends Controller
             ->with('success', 'Semester berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus data semester.
-     */
     public function destroy(Semester $semester)
     {
         try {

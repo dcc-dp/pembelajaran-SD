@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 
 class JenisDokumenController extends Controller
 {
-    /**
-     * Menampilkan daftar jenis dokumen.
-     */
+    
     public function index(Request $request)
     {
         $jenisDokumens = JenisDokumen::with('kategoriDokumen')
@@ -37,48 +35,20 @@ class JenisDokumenController extends Controller
         return view('admin.jenis-dokumen.index', compact('jenisDokumens', 'kategoriDokumens'));
     }
 
-    /**
-     * Menampilkan form tambah jenis dokumen.
-     */
+  
     public function create()
     {
-        $kategoriDokumens = KategoriDokumen::where('status', 'aktif')
+        $kategoriDokumens = KategoriDokumen::aktif()
             ->orderBy('urutan', 'asc')
             ->get();
 
         return view('admin.jenis-dokumen.create', compact('kategoriDokumens'));
     }
 
-    /**
-     * Menyimpan jenis dokumen baru.
-     */
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'kategori_dokumen_id' => [
-                'required',
-                'exists:kategori_dokumens,id',
-            ],
-            'nama' => [
-                'required',
-                'string',
-                'max:100',
-            ],
-            'deskripsi' => [
-                'nullable',
-                'string',
-            ],
-            'urutan' => [
-                'required',
-                'integer',
-                'min:1',
-                'max:255',
-            ],
-            'status' => [
-                'required',
-                'in:aktif,tidak_aktif',
-            ],
-        ]);
+        $validated = $this->validasiData($request);
 
         JenisDokumen::create($validated);
 
@@ -87,9 +57,7 @@ class JenisDokumenController extends Controller
             ->with('success', 'Jenis dokumen berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail jenis dokumen.
-     */
+ 
     public function show(JenisDokumen $jenisDokumen)
     {
         $jenisDokumen->load(['kategoriDokumen', 'repositories']);
@@ -97,9 +65,7 @@ class JenisDokumenController extends Controller
         return view('admin.jenis-dokumen.show', compact('jenisDokumen'));
     }
 
-    /**
-     * Menampilkan form edit.
-     */
+  
     public function edit(JenisDokumen $jenisDokumen)
     {
         $kategoriDokumens = KategoriDokumen::orderBy('urutan', 'asc')->get();
@@ -107,36 +73,10 @@ class JenisDokumenController extends Controller
         return view('admin.jenis-dokumen.edit', compact('jenisDokumen', 'kategoriDokumens'));
     }
 
-    /**
-     * Mengupdate jenis dokumen.
-     */
+   
     public function update(Request $request, JenisDokumen $jenisDokumen)
     {
-        $validated = $request->validate([
-            'kategori_dokumen_id' => [
-                'required',
-                'exists:kategori_dokumens,id',
-            ],
-            'nama' => [
-                'required',
-                'string',
-                'max:100',
-            ],
-            'deskripsi' => [
-                'nullable',
-                'string',
-            ],
-            'urutan' => [
-                'required',
-                'integer',
-                'min:1',
-                'max:255',
-            ],
-            'status' => [
-                'required',
-                'in:aktif,tidak_aktif',
-            ],
-        ]);
+        $validated = $this->validasiData($request);
 
         $jenisDokumen->update($validated);
 
@@ -145,9 +85,7 @@ class JenisDokumenController extends Controller
             ->with('success', 'Jenis dokumen berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus jenis dokumen.
-     */
+   
     public function destroy(JenisDokumen $jenisDokumen)
     {
         try {
@@ -161,5 +99,34 @@ class JenisDokumenController extends Controller
                 ->route('admin.jenis-dokumen.index')
                 ->with('danger', 'Jenis dokumen tidak dapat dihapus karena sedang digunakan oleh data lain.');
         }
+    }
+
+    private function validasiData(Request $request): array
+    {
+        return $request->validate([
+            'kategori_dokumen_id' => [
+                'required',
+                'exists:kategori_dokumens,id',
+            ],
+            'nama' => [
+                'required',
+                'string',
+                'max:100',
+            ],
+            'deskripsi' => [
+                'nullable',
+                'string',
+            ],
+            'urutan' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:255',
+            ],
+            'status' => [
+                'required',
+                'in:aktif,tidak_aktif',
+            ],
+        ]);
     }
 }

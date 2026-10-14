@@ -16,6 +16,11 @@ class KategoriDokumen extends Model
         'status',
     ];
 
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
+
     public function jenisDokumens()
     {
         return $this->hasMany(JenisDokumen::class, 'kategori_dokumen_id');
