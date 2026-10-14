@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class MataPelajaranController extends Controller
 {
-    /**
-     * Menampilkan daftar mata pelajaran.
-     */
+    
     public function index()
     {
         $mataPelajarans = MataPelajaran::orderBy('urutan')->get();
@@ -19,17 +17,13 @@ class MataPelajaranController extends Controller
         return view('admin.mata-pelajaran.index', compact('mataPelajarans'));
     }
 
-    /**
-     * Menampilkan form tambah data.
-     */
+   
     public function create()
     {
         return view('admin.mata-pelajaran.create');
     }
 
-    /**
-     * Menyimpan data baru.
-     */
+    
     public function store(Request $request)
     {
         $validated = $this->validasiData($request);
@@ -41,17 +35,13 @@ class MataPelajaranController extends Controller
             ->with('success', 'Mata pelajaran berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan form edit.
-     */
+   
     public function edit(MataPelajaran $mataPelajaran)
     {
         return view('admin.mata-pelajaran.edit', compact('mataPelajaran'));
     }
 
-    /**
-     * Mengupdate data.
-     */
+    
     public function update(Request $request, MataPelajaran $mataPelajaran)
     {
         $validated = $this->validasiData($request);
@@ -63,9 +53,7 @@ class MataPelajaranController extends Controller
             ->with('success', 'Mata pelajaran berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus data.
-     */
+    
     public function destroy(MataPelajaran $mataPelajaran)
     {
         try {
@@ -81,9 +69,7 @@ class MataPelajaranController extends Controller
         }
     }
 
-    /**
-     * Memvalidasi request data mata pelajaran.
-     */
+   
     private function validasiData(Request $request): array
     {
         return $request->validate([

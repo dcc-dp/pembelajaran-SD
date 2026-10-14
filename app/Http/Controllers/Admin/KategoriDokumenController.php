@@ -10,9 +10,7 @@ use Illuminate\Validation\Rule;
 
 class KategoriDokumenController extends Controller
 {
-    /**
-     * Menampilkan daftar kategori dokumen.
-     */
+   
     public function index()
     {
         $kategoriDokumens = KategoriDokumen::orderBy('urutan')->get();
@@ -23,17 +21,13 @@ class KategoriDokumenController extends Controller
         );
     }
 
-    /**
-     * Menampilkan form tambah kategori dokumen.
-     */
+ 
     public function create()
     {
         return view('admin.kategori-dokumen.create');
     }
 
-    /**
-     * Menyimpan kategori dokumen baru.
-     */
+ 
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -50,9 +44,7 @@ class KategoriDokumenController extends Controller
             ->with('success', 'Kategori dokumen berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan form edit.
-     */
+
     public function edit(KategoriDokumen $kategoriDokumen)
     {
         return view(
@@ -61,9 +53,7 @@ class KategoriDokumenController extends Controller
         );
     }
 
-    /**
-     * Mengupdate kategori dokumen.
-     */
+  
     public function update(
         Request $request,
         KategoriDokumen $kategoriDokumen
@@ -88,9 +78,7 @@ class KategoriDokumenController extends Controller
             ->with('success', 'Kategori dokumen berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus kategori dokumen.
-     */
+  
     public function destroy(KategoriDokumen $kategoriDokumen)
     {
         try {

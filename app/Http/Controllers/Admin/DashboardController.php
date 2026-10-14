@@ -9,21 +9,16 @@ use App\Models\User;
 
 class DashboardController extends Controller
 {
-    /**
-     * Menampilkan dashboard admin beserta data statistik dinamis.
-     */
+    // Menampilkan dashboard admin beserta data statistik dinamis
+     
     public function index()
     {
-        // 1. TOTAL GURU: Menghitung pengguna yang memiliki role 'Guru'
         $totalGuru = User::role('Guru')->count();
 
-        // 2. MATERI: Menghitung data materi/perangkat ajar yang tersedia (dipublikasikan) di repository
         $totalMateri = Repository::dipublikasikan()->count();
 
-        // 3. LANGGANAN AKTIF: Menghitung langganan dengan status 'aktif'
         $totalLanggananAktif = Langganan::where('status', 'aktif')->count();
 
-        // 4. SEKOLAH: Menghitung jumlah sekolah unik yang terdaftar pada guru
         $totalSekolah = User::role('Guru')
             ->whereNotNull('nama_sekolah')
             ->where('nama_sekolah', '!=', '')

@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class KurikulumController extends Controller
 {
-    /**
-     * Menampilkan daftar kurikulum.
-     */
+
     public function index(Request $request)
     {
         $kurikulums = Kurikulum::when($request->filled('search'), function ($query) use ($request) {
@@ -27,17 +25,13 @@ class KurikulumController extends Controller
         return view('admin.kurikulum.index', compact('kurikulums'));
     }
 
-    /**
-     * Menampilkan form tambah kurikulum.
-     */
+  
     public function create()
     {
         return view('admin.kurikulum.create');
     }
 
-    /**
-     * Menyimpan data kurikulum baru.
-     */
+    
     public function store(Request $request)
     {
         $validated = $this->validasiData($request);
@@ -49,25 +43,19 @@ class KurikulumController extends Controller
             ->with('success', 'Kurikulum berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail data kurikulum.
-     */
+   
     public function show(Kurikulum $kurikulum)
     {
         return view('admin.kurikulum.show', compact('kurikulum'));
     }
 
-    /**
-     * Menampilkan form edit kurikulum.
-     */
+   
     public function edit(Kurikulum $kurikulum)
     {
         return view('admin.kurikulum.edit', compact('kurikulum'));
     }
 
-    /**
-     * Memperbarui data kurikulum.
-     */
+    
     public function update(Request $request, Kurikulum $kurikulum)
     {
         $validated = $this->validasiData($request);
@@ -79,9 +67,7 @@ class KurikulumController extends Controller
             ->with('success', 'Kurikulum berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus data kurikulum.
-     */
+   
     public function destroy(Kurikulum $kurikulum)
     {
         try {
@@ -97,9 +83,7 @@ class KurikulumController extends Controller
         }
     }
 
-    /**
-     * Memvalidasi request data kurikulum.
-     */
+    
     private function validasiData(Request $request): array
     {
         return $request->validate([

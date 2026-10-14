@@ -15,9 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RepositoryController extends Controller
 {
-    /**
-     * Menampilkan daftar repository dokumen pembelajaran.
-     */
+    
     public function index(Request $request)
     {
         $repositories = Repository::with([
@@ -60,17 +58,12 @@ class RepositoryController extends Controller
         ], $this->dataDropdown()));
     }
 
-    /**
-     * Menampilkan formulir tambah repository.
-     */
+   
     public function create()
     {
         return view('admin.repository.create', array_merge([], $this->dataDropdown()));
     }
 
-    /**
-     * Menyimpan data repository baru ke database.
-     */
     public function store(Request $request)
     {
         $validated = $this->validasiData($request, true);
@@ -88,9 +81,6 @@ class RepositoryController extends Controller
             ->with('success', 'Repository berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail informasi repository dokumen.
-     */
     public function show(Repository $repository)
     {
         $repository->load([
@@ -104,9 +94,6 @@ class RepositoryController extends Controller
         return view('admin.repository.show', compact('repository'));
     }
 
-    /**
-     * Mengunduh file dokumen repository.
-     */
     public function download(Repository $repository)
     {
         if (!$repository->file || !Storage::disk('public')->exists($repository->file)) {
@@ -116,9 +103,7 @@ class RepositoryController extends Controller
         return Storage::disk('public')->download($repository->file, $repository->nama_file);
     }
 
-    /**
-     * Menampilkan formulir edit repository.
-     */
+    
     public function edit(Repository $repository)
     {
         return view('admin.repository.edit', array_merge([
@@ -126,9 +111,7 @@ class RepositoryController extends Controller
         ], $this->dataDropdown()));
     }
 
-    /**
-     * Memperbarui data repository di database.
-     */
+    
     public function update(Request $request, Repository $repository)
     {
         $validated = $this->validasiData($request, false);
@@ -155,9 +138,7 @@ class RepositoryController extends Controller
             ->with('success', 'Repository berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus repository dan file fisik terkait dari penyimpanan.
-     */
+    
     public function destroy(Repository $repository)
     {
         try {
@@ -179,9 +160,7 @@ class RepositoryController extends Controller
         }
     }
 
-    /**
-     * Memvalidasi data input repository untuk store dan update.
-     */
+ 
     private function validasiData(Request $request, bool $wajibFile): array
     {
         $fileRules = $wajibFile
@@ -219,9 +198,7 @@ class RepositoryController extends Controller
         ], $messages);
     }
 
-    /**
-     * Mendapatkan data untuk kebutuhan dropdown form repository.
-     */
+   
     private function dataDropdown(): array
     {
         return [

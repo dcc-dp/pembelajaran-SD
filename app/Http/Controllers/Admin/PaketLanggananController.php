@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class PaketLanggananController extends Controller
 {
-    /**
-     * Menampilkan daftar paket langganan.
-     */
+  
     public function index(Request $request)
     {
         $paketLangganans = PaketLangganan::with(['kelas', 'semester'])
@@ -39,9 +37,6 @@ class PaketLanggananController extends Controller
         return view('admin.paket-langganan.index', compact('paketLangganans', 'kelas', 'semesters'));
     }
 
-    /**
-     * Menampilkan form tambah paket.
-     */
     public function create()
     {
         $kelas = Kelas::aktif()
@@ -58,9 +53,6 @@ class PaketLanggananController extends Controller
         ));
     }
 
-    /**
-     * Menyimpan paket langganan baru.
-     */
     public function store(Request $request)
     {
         $validated = $this->validasiData($request);
@@ -72,9 +64,7 @@ class PaketLanggananController extends Controller
             ->with('success', 'Paket langganan berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail paket.
-     */
+
     public function show(PaketLangganan $paketLangganan)
     {
         $paketLangganan->load([
@@ -89,9 +79,6 @@ class PaketLanggananController extends Controller
         );
     }
 
-    /**
-     * Menampilkan form edit paket.
-     */
     public function edit(PaketLangganan $paketLangganan)
     {
         $kelas = Kelas::aktif()
@@ -109,9 +96,6 @@ class PaketLanggananController extends Controller
         ));
     }
 
-    /**
-     * Memperbarui paket langganan.
-     */
     public function update(Request $request, PaketLangganan $paketLangganan)
     {
         $validated = $this->validasiData($request);
@@ -123,9 +107,7 @@ class PaketLanggananController extends Controller
             ->with('success', 'Paket langganan berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus paket langganan.
-     */
+   
     public function destroy(PaketLangganan $paketLangganan)
     {
         try {
@@ -141,9 +123,7 @@ class PaketLanggananController extends Controller
         }
     }
 
-    /**
-     * Memvalidasi request data paket langganan.
-     */
+    
     private function validasiData(Request $request): array
     {
         return $request->validate([
