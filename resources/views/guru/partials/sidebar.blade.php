@@ -70,12 +70,12 @@
                     <span>Profil</span>
                 </a>
 
-                {{-- 6. FAQ --}}
+                {{-- 6. FAQ
                 <a href="#" class="guru-nav-link">
                     <i class="ti ti-help-circle"></i>
                     <span>FAQ</span>
-                </a>
-            </nav>
+                </a> --}}
+            </nav>  
 
             {{-- Push bottom items to bottom --}}
             <div class="mt-auto w-100">

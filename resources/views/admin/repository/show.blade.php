@@ -207,6 +207,39 @@
         <div class="col-lg-4">
             <div class="row g-3">
 
+                {{-- Sampul Dokumen --}}
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 overflow-hidden">
+                        <div class="card-header py-3 bg-white border-bottom d-flex align-items-center justify-content-between">
+                            <h4 class="card-title fw-bold text-dark mb-0">
+                                <i class="ti ti-photo me-2 text-primary"></i>Sampul Dokumen
+                            </h4>
+                            @if($repository->sampul_url)
+                                <span class="badge bg-success-lt text-success">Sampul Kustom</span>
+                            @else
+                                <span class="badge bg-secondary-lt text-secondary">Cover Tematik</span>
+                            @endif
+                        </div>
+                        <div class="card-body p-3 text-center">
+                            @if($repository->sampul_url)
+                                <div class="position-relative d-inline-block">
+                                    <img src="{{ $repository->sampul_url }}" alt="{{ $repository->judul }}" class="img-fluid rounded-3 shadow-sm" style="max-height: 240px; object-fit: contain;">
+                                </div>
+                            @else
+                                <div class="rounded-3 p-4 text-white d-flex flex-column align-items-center justify-content-center shadow-sm" style="background: {{ $repository->thematic_theme['gradient'] }}; min-height: 180px;">
+                                    <div class="avatar avatar-lg rounded-circle bg-white text-dark shadow-sm mb-3">
+                                        <i class="{{ $repository->thematic_theme['icon'] }} fs-1 text-primary"></i>
+                                    </div>
+                                    <span class="badge bg-white bg-opacity-25 text-white mb-2 fw-semibold px-3 py-1">
+                                        {{ $repository->mataPelajaran?->nama ?? 'Materi Pembelajaran' }}
+                                    </span>
+                                    <div class="small text-white-50">Menampilkan visual otomatis sesuai mapel</div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Metric 1: Hak Akses --}}
                 <div class="col-12">
                     <div class="card-stat-modern">

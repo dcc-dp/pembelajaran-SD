@@ -74,6 +74,10 @@ class RepositoryController extends Controller
         $data['tipe_file'] = strtolower($uploadedFile->getClientOriginalExtension());
         $data['file'] = $uploadedFile->store('repositories', 'public');
 
+        if ($request->hasFile('foto_sampul')) {
+            $data['foto_sampul'] = $request->file('foto_sampul')->store('repositories/sampul', 'public');
+        }
+
         Repository::create($data);
 
         return redirect()
@@ -131,6 +135,20 @@ class RepositoryController extends Controller
             unset($data['file']);
         }
 
+        if ($request->hasFile('foto_sampul')) {
+            if ($repository->foto_sampul && Storage::disk('public')->exists($repository->foto_sampul)) {
+                Storage::disk('public')->delete($repository->foto_sampul);
+            }
+            $data['foto_sampul'] = $request->file('foto_sampul')->store('repositories/sampul', 'public');
+        } elseif ($request->boolean('hapus_foto_sampul')) {
+            if ($repository->foto_sampul && Storage::disk('public')->exists($repository->foto_sampul)) {
+                Storage::disk('public')->delete($repository->foto_sampul);
+            }
+            $data['foto_sampul'] = null;
+        } else {
+            unset($data['foto_sampul']);
+        }
+
         $repository->update($data);
 
         return redirect()
@@ -143,11 +161,16 @@ class RepositoryController extends Controller
     {
         try {
             $filePath = $repository->file;
+            $fotoSampul = $repository->foto_sampul;
 
             $repository->delete();
 
             if ($filePath && Storage::disk('public')->exists($filePath)) {
                 Storage::disk('public')->delete($filePath);
+            }
+
+            if ($fotoSampul && Storage::disk('public')->exists($fotoSampul)) {
+                Storage::disk('public')->delete($fotoSampul);
             }
 
             return redirect()
@@ -176,6 +199,9 @@ class RepositoryController extends Controller
             'judul.required' => 'Judul repository wajib diisi.',
             'file.mimes' => 'Format file yang diperbolehkan: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, atau RAR.',
             'file.max' => 'Ukuran file dokumen maksimal 50 MB.',
+            'foto_sampul.image' => 'File sampul harus berupa berkas gambar.',
+            'foto_sampul.mimes' => 'Format gambar sampul yang didukung: JPG, JPEG, PNG, atau WEBP.',
+            'foto_sampul.max' => 'Ukuran gambar sampul maksimal 2 MB.',
             'akses.required' => 'Silakan pilih tipe akses.',
             'status.required' => 'Silakan pilih status publikasi.',
         ];
@@ -192,6 +218,7 @@ class RepositoryController extends Controller
             'jenis_dokumen_id' => ['required', 'exists:jenis_dokumens,id'],
             'judul' => ['required', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
+            'foto_sampul' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
             'file' => $fileRules,
             'akses' => ['required', 'in:gratis,premium'],
             'status' => ['required', 'in:draft,dipublikasikan,diarsipkan'],

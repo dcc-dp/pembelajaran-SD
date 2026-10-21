@@ -104,23 +104,41 @@
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="preview-item-card">
                         {{-- Card Header Cover --}}
-                        <div class="preview-card-cover">
-                            <div class="preview-cover-top">
-                                <span class="badge-doc-format {{ $formatClass }}">
-                                    <i class="ti ti-file-text me-1"></i> {{ $formatLabel }}
-                                </span>
-                                <span class="badge-preview-tag">
-                                    <i class="ti ti-eye me-1"></i> Preview
-                                </span>
+                        @if($item->sampul_url)
+                            <div class="preview-card-cover has-image">
+                                <img src="{{ $item->sampul_url }}" alt="{{ $item->judul }}" class="preview-card-img-cover">
+                                <div class="preview-card-img-overlay"></div>
+                                <div class="preview-cover-top">
+                                    <span class="badge-doc-format {{ $formatClass }}">
+                                        <i class="ti ti-file-text me-1"></i> {{ $formatLabel }}
+                                    </span>
+                                    <span class="badge-preview-tag">
+                                        <i class="ti ti-eye me-1"></i> Preview
+                                    </span>
+                                </div>
                             </div>
+                        @else
+                            <div class="preview-card-cover has-fallback" style="background: {{ $item->thematic_theme['gradient'] }};">
+                                <div class="preview-thematic-pattern"></div>
+                                <div class="preview-cover-top">
+                                    <span class="badge-doc-format {{ $formatClass }}">
+                                        <i class="ti ti-file-text me-1"></i> {{ $formatLabel }}
+                                    </span>
+                                    <span class="badge-preview-tag">
+                                        <i class="ti ti-eye me-1"></i> Preview
+                                    </span>
+                                </div>
 
-                            <div class="preview-doc-mockup">
-                                <div class="preview-doc-strip"></div>
-                                <i class="ti ti-book-2 preview-doc-icon"></i>
-                                <div class="preview-doc-line"></div>
-                                <div class="preview-doc-line-short"></div>
+                                <div class="preview-thematic-center">
+                                    <div class="preview-thematic-icon-box">
+                                        <i class="{{ $item->thematic_theme['icon'] }}"></i>
+                                    </div>
+                                    <span class="preview-thematic-mapel-pill">
+                                        {{ $item->mataPelajaran?->nama ?? 'Perangkat Ajar' }}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="p-4 d-flex flex-column flex-grow-1 justify-content-between">
                             <div>

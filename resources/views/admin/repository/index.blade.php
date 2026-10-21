@@ -195,9 +195,13 @@
                             {{-- Judul & Berkas --}}
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <div class="avatar avatar-sm bg-danger-subtle text-danger rounded-circle flex-shrink-0">
-                                        <i class="ti ti-books"></i>
-                                    </div>
+                                    @if($repo->sampul_url)
+                                        <img src="{{ $repo->sampul_url }}" alt="Cover" class="rounded flex-shrink-0" style="width: 38px; height: 48px; object-fit: cover; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
+                                    @else
+                                        <div class="avatar avatar-sm rounded-circle flex-shrink-0 text-white" style="background: {{ $repo->thematic_theme['gradient'] }};">
+                                            <i class="{{ $repo->thematic_theme['icon'] }}"></i>
+                                        </div>
+                                    @endif
                                     <div>
                                         <a href="{{ route('admin.repository.show', $repo) }}" class="fw-bold text-dark text-decoration-none">
                                             {{ $repo->judul }}

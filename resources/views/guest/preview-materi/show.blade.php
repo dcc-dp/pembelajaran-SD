@@ -148,6 +148,28 @@
 
                 <div class="col-lg-4">
                     <div class="doc-info-card">
+                        {{-- Visual Cover / Fallback Header --}}
+                        @if($document->sampul_url)
+                            <div class="mb-4 rounded-3 overflow-hidden position-relative shadow-sm" style="height: 180px; background: #0f172a;">
+                                <img src="{{ $document->sampul_url }}" alt="{{ $document->judul }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-white text-dark shadow-sm fw-semibold">
+                                        <i class="ti ti-photo me-1"></i> Sampul Dokumen
+                                    </span>
+                                </div>
+                            </div>
+                        @else
+                            <div class="mb-4 rounded-3 p-3 text-white position-relative shadow-sm d-flex flex-column align-items-center justify-content-center text-center overflow-hidden" style="height: 130px; background: {{ $document->thematic_theme['gradient'] }};">
+                                <div class="preview-thematic-pattern"></div>
+                                <div class="preview-thematic-icon-box mb-2" style="width: 44px; height: 44px; border-radius: 12px; margin-bottom: 0.35rem;">
+                                    <i class="{{ $document->thematic_theme['icon'] }}" style="font-size: 1.4rem;"></i>
+                                </div>
+                                <span class="preview-thematic-mapel-pill" style="font-size: 0.7rem;">
+                                    {{ $document->mataPelajaran?->nama ?? 'Perangkat Ajar' }}
+                                </span>
+                            </div>
+                        @endif
+
                         <h3 class="fw-bold text-dark fs-2 mb-4">Informasi Dokumen</h3>
 
                         <div class="mb-3">
@@ -280,21 +302,41 @@
                 @endphp
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="preview-item-card">
-                        <div class="preview-card-cover" style="height: 140px;">
-                            <div class="preview-cover-top">
-                                <span class="badge-doc-format {{ $formatClass }}">
-                                    {{ $formatLabel }}
-                                </span>
-                                <span class="badge-preview-tag" style="font-size: 0.65rem; padding: 0.2rem 0.5rem;">
-                                    Preview
-                                </span>
+                        @if($item->sampul_url)
+                            <div class="preview-card-cover has-image" style="height: 145px;">
+                                <img src="{{ $item->sampul_url }}" alt="{{ $item->judul }}" class="preview-card-img-cover">
+                                <div class="preview-card-img-overlay"></div>
+                                <div class="preview-cover-top">
+                                    <span class="badge-doc-format {{ $formatClass }}">
+                                        {{ $formatLabel }}
+                                    </span>
+                                    <span class="badge-preview-tag" style="font-size: 0.65rem; padding: 0.2rem 0.5rem;">
+                                        Preview
+                                    </span>
+                                </div>
                             </div>
-                            <div class="preview-doc-mockup" style="width: 65px; height: 80px;">
-                                <div class="preview-doc-strip"></div>
-                                <i class="ti ti-book-2 preview-doc-icon" style="font-size: 1.25rem; margin-top: 8px; margin-bottom: 4px;"></i>
-                                <div class="preview-doc-line"></div>
+                        @else
+                            <div class="preview-card-cover has-fallback" style="height: 145px; background: {{ $item->thematic_theme['gradient'] }};">
+                                <div class="preview-thematic-pattern"></div>
+                                <div class="preview-cover-top">
+                                    <span class="badge-doc-format {{ $formatClass }}">
+                                        {{ $formatLabel }}
+                                    </span>
+                                    <span class="badge-preview-tag" style="font-size: 0.65rem; padding: 0.2rem 0.5rem;">
+                                        Preview
+                                    </span>
+                                </div>
+
+                                <div class="preview-thematic-center">
+                                    <div class="preview-thematic-icon-box" style="width: 44px; height: 44px; border-radius: 12px; margin-bottom: 0.25rem;">
+                                        <i class="{{ $item->thematic_theme['icon'] }}" style="font-size: 1.4rem;"></i>
+                                    </div>
+                                    <span class="preview-thematic-mapel-pill" style="font-size: 0.65rem; padding: 0.15rem 0.6rem;">
+                                        {{ $item->mataPelajaran?->nama ?? 'Perangkat Ajar' }}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="p-3 d-flex flex-column flex-grow-1 justify-content-between">
                             <div>
@@ -323,6 +365,15 @@
 @endif
 @endsection
 
+@push('styles')
+<style>
+    .doc-page-paper.has-pdf {
+        max-width: 100% !important;
+        aspect-ratio: auto !important;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
@@ -346,7 +397,7 @@
             function renderDocumentPages() {
                 if (!loadedPdf || !scrollContainer) return;
 
-                // Hitung ruang yang tersedia di dalam viewer agar 1 halaman muat penuh (A4 / fit page)
+                // Hitung ruang yang tersedia di dalam viewer agar 1 halaman muat penuh (fit container)
                 const containerWidth = scrollContainer.clientWidth || 580;
                 const containerHeight = scrollContainer.clientHeight || 640;
 
@@ -354,11 +405,11 @@
                 const availWidth = Math.max(containerWidth - 36, 260);
                 const availHeight = Math.max(containerHeight - 74, 360);
 
-                // 1. Render Halaman 1 (Pratinjau Bebas, tampil penuh tanpa terpotong)
+                // 1. Render Halaman 1 (Pratinjau Bebas, tampil penuh tanpa terpotong baik Landscape maupun Portrait)
                 loadedPdf.getPage(1).then(function (page1) {
                     const unscaledViewport = page1.getViewport({ scale: 1 });
 
-                    // Skala proporsional agar 1 halaman tampil penuh tanpa terpotong
+                    // Skala proporsional agar 1 halaman tampil utuh tanpa terpotong
                     const scaleX = availWidth / unscaledViewport.width;
                     const scaleY = availHeight / unscaledViewport.height;
                     const fitScale = Math.min(scaleX, scaleY);
@@ -366,17 +417,23 @@
                     const displayWidth = Math.round(unscaledViewport.width * fitScale);
                     const displayHeight = Math.round(unscaledViewport.height * fitScale);
 
-                    //  ukuran dokumen A4
+                    // Sesuaikan ukuran wrapper kertas mengikuti proporsi dokumen asli (Portrait maupun Landscape)
                     if (paper1) {
+                        paper1.classList.add('has-pdf');
                         paper1.style.width = displayWidth + 'px';
                         paper1.style.height = displayHeight + 'px';
+                        paper1.style.maxWidth = '100%';
+                        paper1.style.aspectRatio = 'auto';
                     }
-                    if (paper2) {
+                    if (paper2 && loadedPdf.numPages < 2) {
+                        paper2.classList.add('has-pdf');
                         paper2.style.width = displayWidth + 'px';
                         paper2.style.height = displayHeight + 'px';
+                        paper2.style.maxWidth = '100%';
+                        paper2.style.aspectRatio = 'auto';
                     }
 
-                    // Render Canvas dengan High-DPI]
+                    // Render Canvas dengan High-DPI
                     const dpr = window.devicePixelRatio || 1;
                     const viewport1 = page1.getViewport({ scale: fitScale * dpr });
 
@@ -388,6 +445,7 @@
                     canvas1.height = viewport1.height;
                     canvas1.style.width = displayWidth + 'px';
                     canvas1.style.height = displayHeight + 'px';
+                    canvas1.style.maxWidth = '100%';
                     canvas1.style.display = 'block';
 
                     if (fallback1) fallback1.style.display = 'none';
@@ -399,7 +457,7 @@
                     });
                 });
 
-                // Render Halaman 2 (Terkunci & Buram)
+                // 2. Render Halaman 2 (Terkunci & Buram)
                 if (canvas2 && loadedPdf.numPages >= 2) {
                     loadedPdf.getPage(2).then(function (page2) {
                         const unscaledViewport2 = page2.getViewport({ scale: 1 });
@@ -409,6 +467,14 @@
 
                         const displayWidth2 = Math.round(unscaledViewport2.width * fitScale2);
                         const displayHeight2 = Math.round(unscaledViewport2.height * fitScale2);
+
+                        if (paper2) {
+                            paper2.classList.add('has-pdf');
+                            paper2.style.width = displayWidth2 + 'px';
+                            paper2.style.height = displayHeight2 + 'px';
+                            paper2.style.maxWidth = '100%';
+                            paper2.style.aspectRatio = 'auto';
+                        }
 
                         const dpr = window.devicePixelRatio || 1;
                         const viewport2 = page2.getViewport({ scale: fitScale2 * dpr });
@@ -421,6 +487,7 @@
                         canvas2.height = viewport2.height;
                         canvas2.style.width = displayWidth2 + 'px';
                         canvas2.style.height = displayHeight2 + 'px';
+                        canvas2.style.maxWidth = '100%';
                         canvas2.style.display = 'block';
 
                         if (fallback2) fallback2.style.display = 'none';
@@ -438,12 +505,20 @@
                 loadedPdf = pdf;
                 renderDocumentPages();
 
-                // Listener saat jendela di-resize agar skala dokumen tetap proporsional
+                // Listener saat jendela di-resize / reflow kontainer agar orientasi & skala dokumen selalu tepat
                 let resizeTimer;
-                window.addEventListener('resize', function () {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(renderDocumentPages, 200);
-                });
+                if (window.ResizeObserver && scrollContainer) {
+                    const resizeObserver = new ResizeObserver(function () {
+                        clearTimeout(resizeTimer);
+                        resizeTimer = setTimeout(renderDocumentPages, 100);
+                    });
+                    resizeObserver.observe(scrollContainer);
+                } else {
+                    window.addEventListener('resize', function () {
+                        clearTimeout(resizeTimer);
+                        resizeTimer = setTimeout(renderDocumentPages, 200);
+                    });
+                }
             }).catch(function (err) {
                 console.log('Pratinjau dokumen:', err);
             });

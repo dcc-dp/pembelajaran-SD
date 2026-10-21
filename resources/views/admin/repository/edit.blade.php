@@ -273,6 +273,59 @@
                                     </small>
                                 </div>
 
+                                {{-- Upload Foto Sampul (Opsional) --}}
+                                <div class="col-12">
+                                    <label class="form-label">
+                                        Foto Sampul / Cover <span class="text-secondary fw-normal">(Opsional)</span>
+                                    </label>
+
+                                    @if($repository->sampul_url)
+                                        <div class="p-3 bg-light rounded-3 border mb-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="{{ $repository->sampul_url }}" alt="Cover Saat Ini" style="height: 70px; width: 55px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                                <div>
+                                                    <div class="text-secondary small fw-medium">Sampul kustom saat ini aktif</div>
+                                                    <div class="text-dark small">Biarkan kosong jika tidak ingin mengubahnya.</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-check form-switch mb-0">
+                                                <input class="form-check-input" type="checkbox" name="hapus_foto_sampul" value="1" id="hapus_foto_sampul">
+                                                <label class="form-check-label text-danger small fw-semibold" for="hapus_foto_sampul">
+                                                    Hapus sampul ini (Gunakan cover tematik)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <input
+                                        type="file"
+                                        name="foto_sampul"
+                                        id="foto_sampul"
+                                        accept="image/jpeg,image/png,image/webp,image/jpg"
+                                        class="form-control @error('foto_sampul') is-invalid @enderror"
+                                        onchange="previewCoverImage(event)"
+                                    >
+                                    @error('foto_sampul')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <small class="form-hint">
+                                        Maksimal <strong>2 MB</strong> (JPG, PNG, atau WEBP). Jika tidak memiliki foto sampul, sistem akan otomatis menggunakan <em>cover grafis tematik</em> sesuai mata pelajaran.
+                                    </small>
+
+                                    {{-- Live Preview Sampul Baru --}}
+                                    <div id="cover-preview-wrapper" class="mt-3 d-none">
+                                        <div class="text-secondary small fw-medium mb-1">Pratinjau Sampul Baru:</div>
+                                        <div class="position-relative d-inline-block border rounded-3 p-1 bg-white shadow-sm">
+                                            <img id="cover-preview-img" src="#" alt="Pratinjau Sampul" style="max-height: 160px; max-width: 200px; object-fit: contain; border-radius: 6px;">
+                                            <button type="button" class="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 m-1 rounded-circle" onclick="resetCoverPreview()" title="Batal ganti foto">
+                                                <i class="ti ti-x"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {{-- Akses --}}
                                 <div class="col-md-6">
                                     <label class="form-label required">
@@ -349,3 +402,32 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    function previewCoverImage(event) {
+        const input = event.target;
+        const wrapper = document.getElementById('cover-preview-wrapper');
+        const img = document.getElementById('cover-preview-img');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                wrapper.classList.remove('d-none');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function resetCoverPreview() {
+        const input = document.getElementById('foto_sampul');
+        const wrapper = document.getElementById('cover-preview-wrapper');
+        const img = document.getElementById('cover-preview-img');
+
+        input.value = '';
+        img.src = '#';
+        wrapper.classList.add('d-none');
+    }
+</script>
+@endpush
