@@ -18,6 +18,7 @@ use App\Http\Controllers\Guest\HomeController;
 use App\Http\Controllers\Guest\PaketLanggananController as GuestPaketLanggananController;
 use App\Http\Controllers\Guest\PreviewMateriController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
+use App\Http\Controllers\Guru\RepositoryController as GuruRepositoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('guest.home');
@@ -39,8 +40,11 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/guru/dashboard', [GuruDashboardController::class, 'index'])->name('guru.dashboard.index');
+Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
+    Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/repository', [GuruRepositoryController::class, 'index'])->name('repository.index');
+    Route::get('/repository/{repository}', [GuruRepositoryController::class, 'show'])->name('repository.show');
+    Route::get('/repository/{repository}/download', [GuruRepositoryController::class, 'download'])->name('repository.download');
 });
 
 Route::middleware('auth')->group(function () {

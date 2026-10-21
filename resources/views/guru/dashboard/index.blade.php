@@ -22,7 +22,7 @@
                             "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan, Anda dapat mengubah dunia." — Nelson Mandela
                         </p>
                         <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
-                            <a href="#" class="btn-hero-solid">
+                            <a href="{{ route('guru.repository.index') }}" class="btn-hero-solid">
                                 <i class="ti ti-compass"></i>
                                 <span>Jelajahi Repository</span>
                             </a>

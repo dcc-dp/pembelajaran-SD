@@ -47,7 +47,8 @@
                 </a>
 
                 {{-- 2. Repository --}}
-                <a href="#" class="guru-nav-link">
+                <a href="{{ route('guru.repository.index') }}"
+                   class="guru-nav-link {{ request()->routeIs('guru.repository.*') ? 'active' : '' }}">
                     <i class="ti ti-folder"></i>
                     <span>Repository</span>
                 </a>

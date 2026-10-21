@@ -798,3 +798,337 @@ body.guru-portal {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
+
+/* ==========================================================================
+   Guru Repository & Filter Toolbar Styling (Clean Unified Card Layout)
+   ========================================================================== */
+.guru-filter-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--guru-radius-md);
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+}
+
+.guru-filter-card-header {
+    background-color: #fafbfd;
+    border-bottom: 1px solid #edf2f7;
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.guru-filter-nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.guru-filter-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: #64748b;
+    border-radius: var(--guru-radius-sm);
+    text-decoration: none;
+    transition: all 0.15s ease-in-out;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.guru-filter-nav-btn:hover {
+    color: var(--guru-primary);
+    background-color: #ffffff;
+    border-color: #e2e8f0;
+}
+
+.guru-filter-nav-btn.active {
+    color: #ffffff !important;
+    background-color: var(--guru-primary);
+    border-color: var(--guru-primary);
+    box-shadow: 0 2px 6px rgba(183, 19, 26, 0.2);
+}
+
+.guru-filter-nav-btn.active i {
+    color: #ffffff !important;
+}
+
+.guru-filter-nav-btn .badge-pill-count {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    background-color: #e2e8f0;
+    color: #475569;
+    line-height: 1;
+}
+
+.guru-filter-nav-btn.active .badge-pill-count {
+    background-color: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+}
+
+.guru-filter-card-body {
+    padding: 1.15rem 1.25rem;
+    background-color: #ffffff;
+}
+
+.guru-filter-card-body .form-control,
+.guru-filter-card-body .form-select {
+    height: 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--guru-radius-sm);
+    font-size: 0.875rem;
+    color: #1e293b;
+    background-color: #f8fafc;
+    transition: all 0.15s ease;
+}
+
+.guru-filter-card-body .form-control:focus,
+.guru-filter-card-body .form-select:focus {
+    background-color: #ffffff;
+    border-color: var(--guru-primary-border);
+    box-shadow: 0 0 0 3px rgba(183, 19, 26, 0.08);
+}
+
+.guru-filter-card-body .input-icon .form-control {
+    padding-left: 2.5rem;
+}
+
+.guru-filter-card-body .input-icon .input-icon-addon {
+    min-width: 2.5rem;
+}
+
+.guru-active-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.775rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+/* ==========================================================================
+   Guru Modern Repository Cards (Matching Guest Quality with Subscription Context)
+   ========================================================================== */
+.guru-preview-card {
+    background: #ffffff;
+    border: 1px solid #eaecf0;
+    border-radius: 1.15rem;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.guru-preview-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    border-color: #fca5a5;
+}
+
+.guru-card-cover {
+    height: 190px;
+    background: linear-gradient(135deg, #fff5f5 0%, #fffbf0 100%);
+    position: relative;
+    padding: 1rem 1.25rem 0.75rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.guru-card-cover.has-image {
+    background: #0f172a;
+    justify-content: flex-start;
+}
+
+.guru-card-img-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+}
+
+.guru-preview-card:hover .guru-card-img-cover {
+    transform: scale(1.06);
+}
+
+.guru-card-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.1) 40%, rgba(15, 23, 42, 0.65) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.guru-cover-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+}
+
+/* Format Badges */
+.badge-doc-format {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.35rem;
+    letter-spacing: 0.02em;
+}
+
+.badge-doc-pdf {
+    background: #fee2e2;
+    color: #b7141b;
+}
+
+.badge-doc-word {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-doc-ppt {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+/* Subscription Status Badges on Cover */
+.badge-sub-status {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.28rem 0.75rem;
+    border-radius: 50rem;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.badge-sub-status.free {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+
+.badge-sub-status.active {
+    background: #059669;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+}
+
+.badge-sub-status.locked {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+}
+
+/* Thematic Fallback Styling */
+.guru-thematic-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
+.guru-preview-card:hover .guru-thematic-center {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.guru-thematic-icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    margin-bottom: 0.5rem;
+}
+
+.guru-thematic-icon-box i {
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.guru-thematic-mapel-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.2rem 0.75rem;
+    border-radius: 50rem;
+    backdrop-filter: blur(4px);
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Card Body Subscription Indicator Pill */
+.guru-card-access-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    margin-bottom: 0.65rem;
+}
+
+.guru-card-access-indicator.free {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.guru-card-access-indicator.active {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.guru-card-access-indicator.locked {
+    background-color: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+
+
