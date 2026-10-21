@@ -16,7 +16,7 @@
                             Selamat Datang, {{ auth()->user()?->nama}}
                         </h2>
                         <div class="guru-hero-school">
-                            {{ auth()->user()?->nama_sekolah ??}}
+                            {{ auth()->user()?->nama_sekolah ?? "SMP 1 Kota Bogor" }}
                         </div>
                         <p class="guru-hero-quote">
                             "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan, Anda dapat mengubah dunia." — Nelson Mandela
