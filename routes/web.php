@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\Admin\FaqController;
@@ -19,45 +20,83 @@ use App\Http\Controllers\Guest\PaketLanggananController as GuestPaketLanggananCo
 use App\Http\Controllers\Guest\PreviewMateriController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\Guru\RepositoryController as GuruRepositoryController;
+use App\Http\Controllers\Guru\RiwayatUnduhanController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('guest.home');
+// ==================== GUEST ====================
+
+Route::get('/', [HomeController::class, 'index'])
+    ->name('guest.home');
 
 Route::get('/tentang', function () {
     return view('guest.tentang.index');
 })->name('guest.tentang');
 
-Route::get('/paket-langganan', [GuestPaketLanggananController::class, 'index'])->name('guest.paket-langganan');
+Route::get('/paket-langganan', [GuestPaketLanggananController::class, 'index'])
+    ->name('guest.paket-langganan');
 
-Route::get('/preview-materi', [PreviewMateriController::class, 'index'])->name('guest.preview-materi');
+Route::get('/preview-materi', [PreviewMateriController::class, 'index'])
+    ->name('guest.preview-materi');
 
-Route::get('/preview-materi/detail/{id?}', [PreviewMateriController::class, 'show'])->name('guest.preview-materi.show');
+Route::get('/preview-materi/detail/{id?}', [PreviewMateriController::class, 'show'])
+    ->name('guest.preview-materi.show');
 
-Route::get('/faq', [GuestFaqController::class, 'index'])->name('guest.faq');
+Route::get('/faq', [GuestFaqController::class, 'index'])
+    ->name('guest.faq');
 
+// ==================== DASHBOARD ====================
 
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
-    Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/repository', [GuruRepositoryController::class, 'index'])->name('repository.index');
-    Route::get('/repository/{repository}', [GuruRepositoryController::class, 'show'])->name('repository.show');
-    Route::get('/repository/{repository}/download', [GuruRepositoryController::class, 'download'])->name('repository.download');
-});
+// ==================== GURU ====================
+
+Route::middleware(['auth'])
+    ->prefix('guru')
+    ->name('guru.')
+    ->group(function () {
+        Route::get('/dashboard', [GuruDashboardController::class, 'index'])
+            ->name('dashboard.index');
+
+        Route::get('/repository', [GuruRepositoryController::class, 'index'])
+            ->name('repository.index');
+
+        Route::get('/repository/{repository}', [GuruRepositoryController::class, 'show'])
+            ->name('repository.show');
+
+        Route::get('/repository/{repository}/download', [GuruRepositoryController::class, 'download'])
+            ->name('repository.download');
+
+        // Riwayat Download
+        Route::get('/riwayat-download', [RiwayatUnduhanController::class, 'index'])
+            ->name('riwayat-download.index');
+    });
+
+// ==================== PROFIL ====================
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:Super Admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+// ==================== ADMIN ====================
 
-    Route::get('/admin/profile', [AdminProfileController::class, 'index'])->name('admin.profile');
-    Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+Route::middleware(['auth', 'role:Super Admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
+
+    Route::get('/admin/profile', [AdminProfileController::class, 'index'])
+        ->name('admin.profile');
+
+    Route::put('/admin/profile', [AdminProfileController::class, 'update'])
+        ->name('admin.profile.update');
 
     Route::get('/admin/ui-kit', function () {
         return view('admin.ui-kit');
@@ -66,20 +105,14 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     Route::get('/admin/repository/{repository}/download', [RepositoryController::class, 'download'])
         ->name('admin.repository.download');
 
-    Route::resource(
-        'admin/repository',
-        RepositoryController::class
-    )->names('admin.repository');
+    Route::resource('admin/repository', RepositoryController::class)
+        ->names('admin.repository');
 
-    Route::resource(
-        'admin/kurikulum',
-        KurikulumController::class
-    )->names('admin.kurikulum');
+    Route::resource('admin/kurikulum', KurikulumController::class)
+        ->names('admin.kurikulum');
 
-    Route::resource(
-        'admin/paket-langganan',
-        PaketLanggananController::class
-    )->names('admin.paket-langganan');
+    Route::resource('admin/paket-langganan', PaketLanggananController::class)
+        ->names('admin.paket-langganan');
 
     Route::resource('/admin/semester', SemesterController::class)
         ->names('admin.semester');
@@ -98,12 +131,8 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
         ->parameters(['jenis-dokumen' => 'jenisDokumen'])
         ->names('admin.jenis-dokumen');
 
-    Route::resource(
-        'admin/faq',
-        FaqController::class
-    )->names('admin.faq');
+    Route::resource('admin/faq', FaqController::class)
+        ->names('admin.faq');
 });
 
-
 require __DIR__.'/auth.php';
-
