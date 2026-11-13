@@ -150,7 +150,7 @@
 
                 {{-- Langganan --}}
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.langganan.*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('admin.langganan.*') ? 'active' : '' }}" href="{{ route('admin.langganan.index') }}">
                         <span class="nav-link-icon">
                             <i class="ti ti-repeat fs-2"></i>
                         </span>
@@ -162,7 +162,7 @@
 
                 {{-- Pembayaran --}}
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.pembayaran.*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('admin.pembayaran.*') ? 'active' : '' }}" href="{{ route('admin.pembayaran.index') }}">
                         <span class="nav-link-icon">
                             <i class="ti ti-credit-card fs-2"></i>
                         </span>

@@ -60,7 +60,7 @@
                 </a>
 
                 {{-- 4. Langganan Saya --}}
-                <a href="#" class="guru-nav-link">
+                <a href="{{ route('guru.langganan.index') }}" class="guru-nav-link {{ request()->routeIs('guru.langganan.*') ? 'active' : '' }}">
                     <i class="ti ti-device-desktop"></i>
                     <span>Langganan Saya</span>
                 </a>
@@ -85,7 +85,7 @@
                 <div class="guru-sidebar-cta">
                     <div class="guru-sidebar-cta-title">Upgrade to Pro</div>
                     <div class="guru-sidebar-cta-desc">Dapatkan akses ribuan modul dan perangkat ajar terlengkap</div>
-                    <a href="#" class="btn-sidebar-cta">
+                    <a href="{{ route('guru.langganan.index') }}" class="btn-sidebar-cta">
                         Lihat Paket
                     </a>
                 </div>

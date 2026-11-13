@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('kelas_id')
+                ->nullable()
                 ->constrained('kelas');
 
             $table->foreignId('semester_id')

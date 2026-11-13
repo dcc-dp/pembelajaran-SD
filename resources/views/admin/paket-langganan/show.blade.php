@@ -75,10 +75,10 @@
                         <div class="col-sm-6">
                             <div class="p-3 border rounded-3 bg-white">
                                 <div class="text-secondary small fw-bold text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                    Tingkat Kelas
+                                    Cakupan Kelas
                                 </div>
                                 <div class="fw-bold text-dark fs-4">
-                                    {{ $paketLangganan->kelas->nama ?? '-' }}
+                                    Kelas 1 s/d 6 SD
                                 </div>
                             </div>
                         </div>

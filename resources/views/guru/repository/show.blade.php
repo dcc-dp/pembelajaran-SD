@@ -14,7 +14,7 @@
         <div class="d-flex align-items-center gap-2">
             @if($canAccess)
                 <span class="badge bg-success-subtle text-success px-3 py-1.5 rounded-pill fw-semibold">
-                    <i class="ti ti-circle-check me-1"></i> Akses Terbuka (Siap Diunduh)
+                    <i class="ti ti-printer me-1"></i> Akses Terbuka (Siap Dibaca & Dicetak)
                 </span>
             @else
                 <span class="badge bg-warning-subtle text-warning px-3 py-1.5 rounded-pill fw-semibold">
@@ -81,12 +81,16 @@
                             <button type="button" class="btn btn-sm btn-icon btn-white rounded-circle shadow-xs" id="pdf-zoom-in" title="Perbesar">
                                 <i class="ti ti-zoom-in"></i>
                             </button>
+                            <span class="border-start mx-1" style="height: 16px;"></span>
+                            <button type="button" class="btn btn-sm btn-danger rounded-pill px-3 shadow-xs fw-semibold" onclick="cetakDokumenLangsung()" title="Cetak Dokumen Langsung">
+                                <i class="ti ti-printer me-1"></i> Cetak
+                            </button>
                         </div>
                     @endif
                 </div>
 
                 {{-- Viewer Body Container --}}
-                <div class="card-body p-0 bg-light position-relative" style="min-height: 580px;">
+                <div class="card-body p-0 bg-light position-relative" style="min-height: 580px;" oncontextmenu="return false;">
 
                     @if($isPdf && $fileUrl)
                         {{-- Viewer PDF Interaktif --}}
@@ -124,9 +128,9 @@
                                             </div>
                                             <h4 class="fw-bold text-dark mb-1">Halaman Dokumen Terkunci</h4>
                                             <p class="text-secondary small mb-3" style="max-width: 360px; line-height: 1.5;">
-                                                Aktifkan paket langganan untuk membaca seluruh lembar dokumen ini secara utuh dan mengunduh berkas aslinya.
+                                                Aktifkan paket langganan untuk membaca seluruh lembar dokumen ini secara utuh dan mencetaknya langsung dari aplikasi.
                                             </p>
-                                            <a href="{{ route('guest.paket-langganan') }}" class="btn btn-danger rounded-pill px-4 shadow-sm btn-sm fw-semibold">
+                                            <a href="{{ route('guru.langganan.index') }}" class="btn btn-danger rounded-pill px-4 shadow-sm btn-sm fw-semibold">
                                                 <i class="ti ti-sparkles me-1"></i> Berlangganan Sekarang
                                             </a>
                                         </div>
@@ -136,7 +140,7 @@
 
                         </div>
                     @else
-                        {{-- Non-PDF Document Fallback (Word / PPT / Excel / ZIP) --}}
+                        {{-- Non-PDF Document Fallback --}}
                         <div class="p-5 d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 520px;">
                             <div class="p-4 bg-white rounded-3 shadow-sm border mb-3 text-center" style="width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;">
                                 @if(in_array(strtolower($repository->tipe_file), ['doc', 'docx']))
@@ -160,19 +164,19 @@
 
                             @if($canAccess)
                                 <div class="alert alert-success d-inline-flex align-items-center gap-2 rounded-pill px-3 py-1.5 small mb-3">
-                                    <i class="ti ti-check"></i> Dokumen siap diunduh dan diedit di perangkat Anda
+                                    <i class="ti ti-printer"></i> Dokumen siap dicetak langsung dari aplikasi
                                 </div>
                                 <div>
-                                    <a href="{{ route('guru.repository.download', $repository) }}" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold shadow-sm">
-                                        <i class="ti ti-download me-1"></i> Unduh Berkas Asli
-                                    </a>
+                                    <button type="button" onclick="cetakDokumenLangsung()" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold shadow-sm">
+                                        <i class="ti ti-printer me-1"></i> Cetak Dokumen Sekarang
+                                    </button>
                                 </div>
                             @else
                                 <div class="alert alert-warning d-inline-flex align-items-center gap-2 rounded-pill px-3 py-1.5 small mb-3">
                                     <i class="ti ti-lock"></i> Dokumen ini memerlukan paket langganan aktif
                                 </div>
                                 <div>
-                                    <a href="{{ route('guest.paket-langganan') }}" class="btn btn-warning text-dark rounded-pill px-4 py-2 fw-semibold shadow-sm">
+                                    <a href="{{ route('guru.langganan.index') }}" class="btn btn-warning text-dark rounded-pill px-4 py-2 fw-semibold shadow-sm">
                                         <i class="ti ti-sparkles me-1"></i> Buka Akses / Beli Paket
                                     </a>
                                 </div>
@@ -184,14 +188,14 @@
             </div>
         </div>
 
-        {{-- Kolom Kanan: Aksi Download & Metadata Dokumen (4 Col) --}}
+        {{-- Kolom Kanan: Aksi Cetak & Metadata Dokumen (4 Col) --}}
         <div class="col-lg-4 d-flex flex-column gap-3">
 
-            {{-- 1. Kartu Status & Aksi Utama --}}
+            {{-- 1. Kartu Status & Aksi Utama (Hanya Baca & Cetak Langsung) --}}
             <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
                 <div class="card-header bg-white border-bottom py-3">
                     <h3 class="card-title fw-bold text-dark mb-0 fs-4">
-                        <i class="ti ti-download me-1.5 text-danger"></i> Akses & Unduhan
+                        <i class="ti ti-printer me-1.5 text-danger"></i> Akses & Cetak Dokumen
                     </h3>
                 </div>
                 <div class="card-body p-4">
@@ -199,22 +203,24 @@
                         {{-- KONDISI AKSES TERBUKA --}}
                         <div class="bg-success-subtle p-3 rounded-3 mb-3 border border-success-subtle">
                             <div class="d-flex align-items-center gap-2 text-success fw-bold small mb-1">
-                                <i class="ti ti-circle-check fs-3"></i> Akses Berkas Aktif
+                                <i class="ti ti-circle-check fs-3"></i> Akses Baca & Cetak Aktif
                             </div>
                             <p class="text-secondary small mb-0" style="line-height: 1.4;">
-                                Anda memiliki izin penuh untuk mengunduh dan memanfaatkan perangkat ajar ini.
+                                Dokumen ini hanya dapat dibaca dan dicetak langsung dari dalam aplikasi (tidak dapat diunduh sebagai berkas mentah).
                             </p>
                         </div>
 
-                        <a href="{{ route('guru.repository.download', $repository) }}"
-                           class="btn btn-danger btn-lg w-100 rounded-pill py-2.5 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
-                            <i class="ti ti-download fs-2"></i>
-                            <span>Download Berkas Asli</span>
-                        </a>
+                        <button type="button" onclick="cetakDokumenLangsung()"
+                                class="btn btn-danger btn-lg w-100 rounded-pill py-2.5 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <i class="ti ti-printer fs-2"></i>
+                            <span>Cetak Dokumen Sekarang</span>
+                        </button>
+
+                        <iframe id="print-pdf-frame" style="display:none; width:0; height:0; border:0;"></iframe>
 
                         @if($pernahDiunduh)
                             <div class="text-center text-muted small mt-2" style="font-size: 0.775rem;">
-                                <i class="ti ti-history me-1"></i> Terakhir pernah Anda unduh sebelumnya
+                                <i class="ti ti-history me-1"></i> Pernah Anda akses / cetak sebelumnya
                             </div>
                         @endif
                     @else
@@ -224,7 +230,7 @@
                                 <i class="ti ti-lock fs-3 text-warning"></i> Dokumen Terkunci
                             </div>
                             <p class="text-secondary small mb-0" style="line-height: 1.4;">
-                                Berkas ini bertipe <strong>Premium</strong>. Diperlukan paket langganan aktif untuk mengunduh berkas lengkap.
+                                Berkas ini bertipe <strong>Premium</strong>. Diperlukan paket langganan aktif untuk membaca seluruh halaman dan mencetak dokumen.
                             </p>
                         </div>
 
@@ -241,19 +247,19 @@
                                     <span class="text-muted small fw-normal">/ {{ $paketTerkait->durasi_bulan }} Bulan</span>
                                 </div>
                                 <div class="text-secondary small" style="font-size: 0.775rem;">
-                                    Akses tanpa batas ke seluruh modul kelas ini.
+                                    Akses tanpa batas ke seluruh materi Kelas 1 s/d 6 untuk semester ini.
                                 </div>
                             </div>
                         @endif
 
-                        <a href="{{ route('guest.paket-langganan') }}"
+                        <a href="{{ route('guru.langganan.index') }}"
                            class="btn btn-danger btn-lg w-100 rounded-pill py-2.5 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
                             <i class="ti ti-sparkles fs-2"></i>
                             <span>Beli Paket Langganan</span>
                         </a>
 
                         <button type="button" class="btn btn-outline-secondary w-100 rounded-pill mt-2 py-2 small disabled" style="opacity: 0.65;">
-                            <i class="ti ti-lock me-1"></i> Download Terkunci
+                            <i class="ti ti-lock me-1"></i> Cetak Dokumen Terkunci
                         </button>
                     @endif
                 </div>
@@ -346,6 +352,40 @@
 
 </div>
 @endsection
+
+@if($canAccess)
+@push('scripts')
+<script>
+function cetakDokumenLangsung() {
+    const printUrl = "{{ route('guru.repository.download', $repository) }}";
+    const printFrame = document.getElementById('print-pdf-frame');
+
+    if (printFrame) {
+        printFrame.onload = function () {
+            try {
+                printFrame.contentWindow.focus();
+                printFrame.contentWindow.print();
+            } catch (e) {
+                window.open(printUrl, '_blank');
+            }
+        };
+        printFrame.src = printUrl;
+    } else {
+        window.open(printUrl, '_blank');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('print') === '1') {
+        setTimeout(function () {
+            cetakDokumenLangsung();
+        }, 600);
+    }
+});
+</script>
+@endpush
+@endif
 
 @if($isPdf && $fileUrl)
 @push('scripts')

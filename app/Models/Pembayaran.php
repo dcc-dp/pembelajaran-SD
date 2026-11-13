@@ -43,4 +43,13 @@ class Pembayaran extends Model
     {
         return $query->where('status', self::STATUS_MENUNGGU);
     }
+
+    public function getBuktiUrlAttribute(): ?string
+    {
+        if (! $this->bukti_pembayaran) {
+            return null;
+        }
+
+        return asset('storage/' . $this->bukti_pembayaran);
+    }
 }

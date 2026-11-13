@@ -60,7 +60,7 @@
         {{-- Filter Bar --}}
         <div class="card-header py-3 bg-white border-bottom">
             <form method="GET" action="{{ route('admin.paket-langganan.index') }}" id="filter-form" class="row g-2 w-100 align-items-center">
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-6">
                     <div class="input-icon">
                         <span class="input-icon-addon">
                             <i class="ti ti-search text-muted"></i>
@@ -77,17 +77,6 @@
                 </div>
 
                 <div class="col-6 col-md-3">
-                    <select name="kelas_id" class="form-select rounded-pill" onchange="this.form.submit()">
-                        <option value="">Semua Kelas</option>
-                        @foreach($kelas as $item)
-                            <option value="{{ $item->id }}" @selected(request('kelas_id') == $item->id)>
-                                {{ $item->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-6 col-md-3">
                     <select name="semester_id" class="form-select rounded-pill" onchange="this.form.submit()">
                         <option value="">Semua Semester</option>
                         @foreach($semesters as $item)
@@ -98,7 +87,7 @@
                     </select>
                 </div>
 
-                <div class="col-12 col-md-2">
+                <div class="col-6 col-md-3">
                     <select name="status" class="form-select rounded-pill" onchange="this.form.submit()">
                         <option value="">Semua Status</option>
                         <option value="aktif" @selected(request('status') === 'aktif')>Aktif</option>
@@ -115,8 +104,8 @@
                     <tr>
                         <th style="width: 50px;">No</th>
                         <th>Paket Langganan</th>
-                        <th>Kelas</th>
                         <th>Semester</th>
+                        <th>Cakupan Kelas</th>
                         <th>Harga</th>
                         <th>Durasi</th>
                         <th>Status</th>
@@ -151,18 +140,21 @@
                                 </div>
                             </td>
 
-                            {{-- Kelas --}}
+                            {{-- Semester --}}
                             <td>
-                                <span class="badge bg-light text-dark border">
-                                    {{ $paket->kelas->nama ?? '-' }}
+                                <span class="badge bg-primary-lt text-primary">
+                                    <i class="ti ti-calendar me-1"></i>
+                                    {{ $paket->semester?->nama ?? 'Semua Semester' }}
                                 </span>
                             </td>
 
-                            {{-- Semester --}}
+                            {{-- Cakupan Kelas --}}
                             <td>
-                                <span class="text-secondary">
-                                    {{ $paket->semester?->nama ?? 'Semua Semester' }}
+                                <span class="badge bg-light text-dark border">
+                                    <i class="ti ti-school me-1"></i>
+                                    Kelas 1 s/d 6 SD
                                 </span>
+                            </td>
                             </td>
 
                             {{-- Harga --}}

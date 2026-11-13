@@ -137,17 +137,8 @@
                     </select>
                 </div>
 
-                {{-- Akses --}}
-                <div class="col-6 col-md-3">
-                    <select name="akses" class="form-select rounded-pill" onchange="this.form.submit()">
-                        <option value="">Semua Akses</option>
-                        <option value="gratis" @selected(request('akses') === 'gratis')>Gratis</option>
-                        <option value="premium" @selected(request('akses') === 'premium')>Premium</option>
-                    </select>
-                </div>
-
                 {{-- Status --}}
-                <div class="col-6 col-md-3">
+                <div class="col-6 col-md-4">
                     <select name="status" class="form-select rounded-pill" onchange="this.form.submit()">
                         <option value="">Semua Status</option>
                         <option value="dipublikasikan" @selected(request('status') === 'dipublikasikan')>Dipublikasikan</option>
@@ -156,7 +147,7 @@
                     </select>
                 </div>
 
-                @if(request()->hasAny(['search', 'kurikulum_id', 'semester_id', 'kelas_id', 'mata_pelajaran_id', 'jenis_dokumen_id', 'akses', 'status']))
+                @if(request()->hasAny(['search', 'kurikulum_id', 'semester_id', 'kelas_id', 'mata_pelajaran_id', 'jenis_dokumen_id', 'status']))
                     <div class="col-6 col-md-2">
                         <a href="{{ route('admin.repository.index') }}" class="btn btn-light border rounded-pill w-100">
                             <i class="ti ti-rotate me-1"></i> Reset
@@ -253,15 +244,10 @@
 
                             {{-- Akses --}}
                             <td>
-                                @if($repo->akses === 'gratis')
-                                    <span class="badge bg-success-lt text-success">
-                                        Gratis
-                                    </span>
-                                @else
-                                    <span class="badge bg-warning-lt text-warning">
-                                        Premium
-                                    </span>
-                                @endif
+                                <span class="badge bg-warning-lt text-warning">
+                                    <i class="ti ti-printer me-1"></i>
+                                    Premium (Baca & Cetak)
+                                </span>
                             </td>
 
                             {{-- Status --}}

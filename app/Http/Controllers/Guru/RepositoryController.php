@@ -25,6 +25,7 @@ class RepositoryController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
+        $activeSubscribedSemesterIds = $user->getActiveSubscribedSemesterIds();
         $activeSubscribedKelasIds = $user->getActiveSubscribedKelasIds();
 
         $query = Repository::query()
@@ -62,16 +63,14 @@ class RepositoryController extends Controller
 
         // Filter tipe akses
         if ($request->filled('akses')) {
-            if ($request->akses === 'gratis') {
+            if ($request->akses === 'milik_saya') {
+                if (!$user->hasRole('Super Admin')) {
+                    $query->whereIn('semester_id', $activeSubscribedSemesterIds);
+                }
+            } elseif ($request->akses === 'gratis') {
                 $query->where('akses', Repository::AKSES_GRATIS);
             } elseif ($request->akses === 'premium') {
                 $query->where('akses', Repository::AKSES_PREMIUM);
-            } elseif ($request->akses === 'milik_saya') {
-                // Dokumen yang bisa diunduh oleh user (gratis ATAU kelasnya aktif dilanggani)
-                $query->where(function ($q) use ($activeSubscribedKelasIds) {
-                    $q->where('akses', Repository::AKSES_GRATIS)
-                        ->orWhereIn('kelas_id', $activeSubscribedKelasIds);
-                });
             }
         }
 
@@ -80,15 +79,16 @@ class RepositoryController extends Controller
         // Hitung total statistik ringkas untuk informasi guru
         $totalTersedia = Repository::where('status', 'dipublikasikan')->count();
         $totalGratis = Repository::where('status', 'dipublikasikan')->where('akses', Repository::AKSES_GRATIS)->count();
-        $totalPremium = max(0, $totalTersedia - $totalGratis);
-        $totalAksesSaya = Repository::where('status', 'dipublikasikan')
-            ->where(function ($q) use ($activeSubscribedKelasIds) {
-                $q->where('akses', Repository::AKSES_GRATIS)
-                    ->orWhereIn('kelas_id', $activeSubscribedKelasIds);
-            })->count();
+        $totalPremium = Repository::where('status', 'dipublikasikan')->where('akses', Repository::AKSES_PREMIUM)->count();
+        $totalAksesSaya = $user->hasRole('Super Admin')
+            ? $totalTersedia
+            : Repository::where('status', 'dipublikasikan')
+                ->whereIn('semester_id', $activeSubscribedSemesterIds)
+                ->count();
 
         return view('guru.repository.index', [
             'repositories' => $repositories,
+            'activeSubscribedSemesterIds' => $activeSubscribedSemesterIds,
             'activeSubscribedKelasIds' => $activeSubscribedKelasIds,
             'kurikulums' => Kurikulum::aktif()->orderBy('nama')->get(),
             'kelas' => Kelas::aktif()->orderBy('urutan')->get(),
@@ -118,19 +118,16 @@ class RepositoryController extends Controller
         $user = $request->user();
         $canAccess = $user->canAccessRepository($repository);
 
-        // Jika dokumen premium dan terkunci, cari info paket langganan yang cocok dengan kelas dokumen
+        // Jika dokumen premium dan terkunci, cari info paket langganan yang cocok dengan semester dokumen
         $paketTerkait = null;
         if (!$canAccess) {
-            $paketTerkait = PaketLangganan::query()
-                ->where('kelas_id', $repository->kelas_id)
-                ->where('status', 'aktif')
+            $paketTerkait = PaketLangganan::aktif()
+                ->where('semester_id', $repository->semester_id)
                 ->first();
 
-            // Fallback paket aktif umum jika tidak ada paket spesifik kelas
+            // Fallback paket aktif pertama jika tidak spesifik
             if (!$paketTerkait) {
-                $paketTerkait = PaketLangganan::query()
-                    ->where('status', 'aktif')
-                    ->first();
+                $paketTerkait = PaketLangganan::aktif()->first();
             }
         }
 
@@ -155,7 +152,7 @@ class RepositoryController extends Controller
     }
 
     /**
-     * Mengunduh berkas asli repository bagi guru yang berhak.
+     * Mengakses stream berkas untuk pembacaan & cetak langsung dari dalam aplikasi bagi guru yang berhak.
      */
     public function download(Request $request, Repository $repository): Response
     {
@@ -166,9 +163,9 @@ class RepositoryController extends Controller
         /** @var \App\Models\User $user */
         $user = $request->user();
 
-        // Validasi hak akses (gratis atau langganan aktif)
+        // Validasi hak akses (wajib langganan aktif sesuai semester)
         if (!$user->canAccessRepository($repository)) {
-            return back()->with('error', 'Dokumen ini bertipe Premium dan terkunci. Silakan aktifkan paket langganan untuk mengunduh.');
+            return back()->with('error', 'Dokumen ini bertipe Premium dan terkunci. Silakan aktifkan paket langganan untuk mengakses dan mencetak.');
         }
 
         // Validasi fisik berkas di storage
@@ -176,13 +173,15 @@ class RepositoryController extends Controller
             return back()->with('error', 'Berkas dokumen asli tidak ditemukan di server.');
         }
 
-        // Catat riwayat unduhan
+        // Catat riwayat akses/cetak dokumen
         RiwayatUnduhan::create([
             'user_id' => $user->id,
             'repository_id' => $repository->id,
             'created_at' => now(),
         ]);
 
-        return Storage::disk('public')->download($repository->file, $repository->nama_file);
+        return Storage::disk('public')->response($repository->file, $repository->nama_file, [
+            'Content-Disposition' => 'inline; filename="' . $repository->nama_file . '"',
+        ]);
     }
 }

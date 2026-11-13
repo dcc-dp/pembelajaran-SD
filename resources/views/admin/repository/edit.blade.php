@@ -326,28 +326,19 @@
                                     </div>
                                 </div>
 
-                                {{-- Akses --}}
+                                {{-- Akses (Otomatis Premium - Baca & Cetak Langsung) --}}
                                 <div class="col-md-6">
-                                    <label class="form-label required">
-                                        Hak Akses
+                                    <label class="form-label">
+                                        Hak Akses Materi
                                     </label>
-                                    <select
-                                        name="akses"
-                                        class="form-select @error('akses') is-invalid @enderror"
-                                        required
+                                    <input type="hidden" name="akses" value="premium">
+                                    <input
+                                        type="text"
+                                        class="form-control bg-light"
+                                        value="Premium (Baca & Cetak Langsung sesuai Paket Semester)"
+                                        readonly
                                     >
-                                        <option value="gratis" @selected(old('akses', $repository->akses) === 'gratis')>
-                                            Gratis (Dapat diunduh semua guru)
-                                        </option>
-                                        <option value="premium" @selected(old('akses', $repository->akses) === 'premium')>
-                                            Premium (Hanya untuk guru berlangganan aktif)
-                                        </option>
-                                    </select>
-                                    @error('akses')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                                    <small class="form-hint text-muted">Seluruh materi hanya dapat dibaca dan dicetak langsung oleh guru berlangganan.</small>
                                 </div>
 
                                 {{-- Status --}}

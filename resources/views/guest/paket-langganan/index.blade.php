@@ -17,7 +17,7 @@
                 Akses Penuh Perangkat Ajar <br class="d-none d-md-inline"><span style="color: #b7141b;">Sekolah Dasar</span>
             </h1>
             <p class="hero-desc text-secondary mx-auto mb-0" style="max-width: 780px; line-height: 1.8;">
-                Pilih paket berlangganan sesuai jenjang kelas dan kebutuhan mengajar Anda. Dapatkan akses lengkap tanpa sensor ke seluruh modul ajar, bank soal, dan perangkat evaluasi kurikulum merdeka.
+                Pilih paket berlangganan sesuai semester mengajar Anda (Semester 1 atau Semester 2). Setiap paket mencakup akses lengkap ke seluruh modul ajar, bank soal, dan perangkat evaluasi Kelas 1 sampai Kelas 6 selama 12 bulan.
             </p>
         </div>
     </div>
@@ -40,10 +40,10 @@
                         {{-- Badges Kelas & Semester --}}
                         <div class="pricing-card-badges">
                             <span class="badge bg-danger-subtle text-danger fw-semibold px-2 py-1">
-                                <i class="ti ti-school me-1"></i> {{ $paket->kelas?->nama ?? 'Kelas SD' }}
+                                <i class="ti ti-school me-1"></i> Kelas 1 s/d 6 SD
                             </span>
-                            <span class="badge bg-secondary-subtle text-secondary fw-semibold px-2 py-1">
-                                <i class="ti ti-calendar me-1"></i> {{ $paket->semester?->nama ?? 'Semua Semester (1 Tahun)' }}
+                            <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-1">
+                                <i class="ti ti-calendar me-1"></i> {{ $paket->semester?->nama ?? 'Semester' }}
                             </span>
                         </div>
 
@@ -54,7 +54,7 @@
 
                         {{-- Deskripsi Paket --}}
                         <p class="pricing-card-desc">
-                            {{ $paket->deskripsi ?: 'Akses lengkap perangkat ajar dan dokumen kurikulum merdeka sesuai jenjang kelas terpilih.' }}
+                            {{ $paket->deskripsi ?: 'Akses lengkap perangkat ajar dan dokumen kurikulum merdeka seluruh Kelas 1 sampai Kelas 6.' }}
                         </p>
 
                         {{-- Kotak Harga & Durasi --}}
@@ -76,11 +76,11 @@
                         <ul class="pricing-feature-list">
                             <li class="pricing-feature-item">
                                 <i class="ti ti-check"></i>
-                                <span>Akses modul ajar & materi {{ $paket->kelas?->nama ?? 'Kelas SD' }}</span>
+                                <span>Akses seluruh materi <strong>Kelas 1 sampai Kelas 6 SD</strong></span>
                             </li>
                             <li class="pricing-feature-item">
                                 <i class="ti ti-check"></i>
-                                <span>Cakupan: <strong>{{ $paket->semester?->nama ?? 'Semua Semester (1 Tahun Penuh)' }}</strong></span>
+                                <span>Cakupan: <strong>{{ $paket->semester?->nama ?? 'Satu Semester Penuh' }}</strong></span>
                             </li>
                             <li class="pricing-feature-item">
                                 <i class="ti ti-check"></i>
@@ -99,7 +99,7 @@
                         {{-- Tombol Aksi --}}
                         <div class="mt-auto">
                             @auth
-                                <a href="{{ route('guru.dashboard.index') }}" class="btn btn-sd-orange w-100 rounded-pill py-2 fw-semibold shadow-sm">
+                                <a href="{{ route('guru.langganan.index') }}" class="btn btn-sd-orange w-100 rounded-pill py-2 fw-semibold shadow-sm">
                                     Pilih Paket Ini <i class="ti ti-arrow-right ms-1"></i>
                                 </a>
                             @else

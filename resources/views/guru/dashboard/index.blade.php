@@ -26,7 +26,7 @@
                                 <i class="ti ti-compass"></i>
                                 <span>Jelajahi Repository</span>
                             </a>
-                            <a href="#" class="btn-hero-outline">
+                            <a href="{{ route('guru.langganan.index') }}" class="btn-hero-outline">
                                 <i class="ti ti-refresh"></i>
                                 <span>Perpanjang Langganan</span>
                             </a>
@@ -52,40 +52,54 @@
                     <div class="guru-sub-header">
                         <div>
                             <div class="guru-sub-title">SD Learning Center</div>
-                            <div class="guru-sub-title text-primary">Premium</div>
+                            <div class="guru-sub-title text-primary">Akses Pembelajaran</div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <span class="guru-sub-badge-active">● AKTIF</span>
-                            <i class="ti ti-rosette fs-1 text-warning"></i>
+                            @if($hasAnyActiveSub ?? false)
+                                <span class="guru-sub-badge-active">● AKTIF</span>
+                                <i class="ti ti-rosette fs-1 text-warning"></i>
+                            @else
+                                <span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-pill small">● NONAKTIF</span>
+                            @endif
                         </div>
                     </div>
 
                     <div class="my-3">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="text-secondary small fw-semibold">Sisa Waktu Langganan</span>
-                            <span class="fw-bold text-dark small">45 Hari lagi</span>
-                        </div>
-                        <div class="guru-progress-bar-custom">
-                            <div class="guru-progress-fill" style="width: 70%;"></div>
+                        <div class="small fw-semibold text-secondary mb-2">Cakupan Paket Anda:</div>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded-2 bg-white border">
+                                <span class="small fw-medium text-dark"><i class="ti ti-calendar me-1 text-primary"></i> Semester 1</span>
+                                @if($activeSubSem1)
+                                    <span class="badge bg-success-subtle text-success small">Aktif (s.d {{ \Carbon\Carbon::parse($activeSubSem1->tanggal_berakhir)->format('d M Y') }})</span>
+                                @else
+                                    <span class="badge bg-light text-muted small">Belum Aktif</span>
+                                @endif
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded-2 bg-white border">
+                                <span class="small fw-medium text-dark"><i class="ti ti-calendar me-1 text-primary"></i> Semester 2</span>
+                                @if($activeSubSem2)
+                                    <span class="badge bg-success-subtle text-success small">Aktif (s.d {{ \Carbon\Carbon::parse($activeSubSem2->tanggal_berakhir)->format('d M Y') }})</span>
+                                @else
+                                    <span class="badge bg-light text-muted small">Belum Aktif</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center text-secondary small pt-2 border-top">
-                        <div>
-                            <div class="text-muted" style="font-size: 0.675rem; text-transform: uppercase;">Mulai</div>
-                            <div class="fw-bold text-dark">12 Jan 2024</div>
+                    @if(($sisaHari ?? 0) > 0)
+                        <div class="my-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-secondary small fw-semibold">Sisa Waktu Langganan</span>
+                                <span class="fw-bold text-dark small">{{ $sisaHari }} Hari lagi</span>
+                            </div>
                         </div>
-                        <div class="text-end">
-                            <div class="text-muted" style="font-size: 0.675rem; text-transform: uppercase;">Selesai</div>
-                            <div class="fw-bold text-dark">12 Jan 2025</div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
 
                 <div class="mt-4">
-                    <a href="#" class="btn-sub-renew">
+                    <a href="{{ route('guru.langganan.index') }}" class="btn-sub-renew">
                         <i class="ti ti-refresh"></i>
-                        <span>Renew Subscription</span>
+                        <span>Kelola / Perpanjang Langganan</span>
                     </a>
                 </div>
             </div>
@@ -103,7 +117,7 @@
                 </div>
                 <div>
                     <div class="guru-stat-label">Total Repository</div>
-                    <div class="guru-stat-value">1,284</div>
+                    <div class="guru-stat-value">{{ number_format($totalRepository ?? 0) }}</div>
                 </div>
             </div>
         </div>
@@ -116,7 +130,7 @@
                 </div>
                 <div>
                     <div class="guru-stat-label">Total Unduhan</div>
-                    <div class="guru-stat-value">342</div>
+                    <div class="guru-stat-value">{{ number_format($totalUnduhan ?? 0) }}</div>
                 </div>
             </div>
         </div>
@@ -129,7 +143,9 @@
                 </div>
                 <div>
                     <div class="guru-stat-label">Status Langganan</div>
-                    <div class="guru-stat-value text-success" style="font-size: 1.35rem;">Aktif</div>
+                    <div class="guru-stat-value {{ ($hasAnyActiveSub ?? false) ? 'text-success' : 'text-danger' }}" style="font-size: 1.35rem;">
+                        {{ ($hasAnyActiveSub ?? false) ? 'Aktif' : 'Tidak Aktif' }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,7 +158,7 @@
                 </div>
                 <div>
                     <div class="guru-stat-label">Sisa Masa Langganan</div>
-                    <div class="guru-stat-value">45 Hari</div>
+                    <div class="guru-stat-value">{{ ($sisaHari ?? 0) > 0 ? $sisaHari . ' Hari' : '-' }}</div>
                 </div>
             </div>
         </div>

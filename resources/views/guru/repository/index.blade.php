@@ -45,38 +45,32 @@
 
     {{-- Filter Card (Unified Clean Layout) --}}
     <div class="guru-filter-card">
-        {{-- Card Header: Tab Akses Terintegrasi --}}
+        {{-- Card Header: Tab Semester & Akses Terintegrasi --}}
         <div class="guru-filter-card-header">
             <ul class="guru-filter-nav-list">
                 <li>
-                    <a href="{{ request()->fullUrlWithQuery(['akses' => null, 'page' => 1]) }}"
-                       class="guru-filter-nav-btn {{ !request('akses') ? 'active' : '' }}">
-                        <span>Semua</span>
+                    <a href="{{ request()->fullUrlWithQuery(['semester_id' => null, 'page' => 1]) }}"
+                       class="guru-filter-nav-btn {{ !request('semester_id') && request('akses') !== 'milik_saya' ? 'active' : '' }}">
+                        <i class="ti ti-books"></i>
+                        <span>Semua Semester</span>
                         <span class="badge-pill-count">{{ $totalTersedia }}</span>
                     </a>
                 </li>
+                @foreach($semesters as $sem)
+                    <li>
+                        <a href="{{ request()->fullUrlWithQuery(['semester_id' => $sem->id, 'akses' => null, 'page' => 1]) }}"
+                           class="guru-filter-nav-btn {{ request('semester_id') == $sem->id && request('akses') !== 'milik_saya' ? 'active' : '' }}">
+                            <i class="ti ti-calendar"></i>
+                            <span>{{ $sem->nama }}</span>
+                        </a>
+                    </li>
+                @endforeach
                 <li>
-                    <a href="{{ request()->fullUrlWithQuery(['akses' => 'milik_saya', 'page' => 1]) }}"
+                    <a href="{{ request()->fullUrlWithQuery(['akses' => request('akses') === 'milik_saya' ? null : 'milik_saya', 'page' => 1]) }}"
                        class="guru-filter-nav-btn {{ request('akses') === 'milik_saya' ? 'active' : '' }}">
                         <i class="ti ti-circle-check"></i>
                         <span>Akses Saya</span>
                         <span class="badge-pill-count">{{ $totalAksesSaya }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ request()->fullUrlWithQuery(['akses' => 'gratis', 'page' => 1]) }}"
-                       class="guru-filter-nav-btn {{ request('akses') === 'gratis' ? 'active' : '' }}">
-                        <i class="ti ti-lock-open"></i>
-                        <span>Gratis</span>
-                        <span class="badge-pill-count">{{ $totalGratis }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ request()->fullUrlWithQuery(['akses' => 'premium', 'page' => 1]) }}"
-                       class="guru-filter-nav-btn {{ request('akses') === 'premium' ? 'active' : '' }}">
-                        <i class="ti ti-lock"></i>
-                        <span>Premium</span>
-                        <span class="badge-pill-count">{{ $totalPremium }}</span>
                     </a>
                 </li>
             </ul>
@@ -91,6 +85,9 @@
             <form method="GET" action="{{ route('guru.repository.index') }}" id="guru-repo-filter-form">
                 @if(request('akses'))
                     <input type="hidden" name="akses" value="{{ request('akses') }}">
+                @endif
+                @if(request('semester_id'))
+                    <input type="hidden" name="semester_id" value="{{ request('semester_id') }}">
                 @endif
 
                 <div class="row g-2 align-items-center">
@@ -147,11 +144,36 @@
                     </div>
                 </div>
 
+                {{-- Pilihan Cepat Jenis Perangkat Ajar (Sesuai Kategori Standar: Sampul, ATP, Prota, Prosem, KKTP, Jurnal, Modul) --}}
+                @if($jenisDokumens->count() > 0)
+                    <div class="d-flex align-items-center gap-2 flex-wrap pt-3 mt-3 border-top">
+                        <span class="text-secondary small fw-semibold me-1">
+                            <i class="ti ti-printer me-1 text-danger"></i>Perangkat Ajar:
+                        </span>
+                        <a href="{{ request()->fullUrlWithQuery(['jenis_dokumen_id' => null, 'page' => 1]) }}"
+                           class="btn btn-sm rounded-pill px-3 {{ !request('jenis_dokumen_id') ? 'btn-danger text-white fw-semibold' : 'btn-outline-secondary' }}">
+                            Semua
+                        </a>
+                        @foreach($jenisDokumens as $jenis)
+                            <a href="{{ request()->fullUrlWithQuery(['jenis_dokumen_id' => $jenis->id, 'page' => 1]) }}"
+                               class="btn btn-sm rounded-pill px-3 {{ request('jenis_dokumen_id') == $jenis->id ? 'btn-danger text-white fw-semibold' : 'btn-outline-secondary' }}">
+                                {{ $jenis->nama }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+
                 {{-- Status Filter Aktif & Reset Link --}}
-                @if(request()->hasAny(['search', 'kelas_id', 'mata_pelajaran_id', 'jenis_dokumen_id']))
+                @if(request()->hasAny(['search', 'kelas_id', 'semester_id', 'mata_pelajaran_id', 'jenis_dokumen_id', 'akses']))
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pt-3 mt-3 border-top">
                         <div class="d-flex align-items-center gap-1.5 flex-wrap small">
                             <span class="text-secondary fw-semibold me-1">Filter Aktif:</span>
+                            @if(request('semester_id'))
+                                @php $namaSemester = $semesters->firstWhere('id', request('semester_id'))?->nama; @endphp
+                                <span class="guru-active-chip">
+                                    <i class="ti ti-calendar me-1"></i> {{ $namaSemester }}
+                                </span>
+                            @endif
                             @if(request('search'))
                                 <span class="guru-active-chip">
                                     Kata Kunci: "{{ request('search') }}"
@@ -175,9 +197,14 @@
                                     {{ $namaJenis }}
                                 </span>
                             @endif
+                            @if(request('akses') === 'milik_saya')
+                                <span class="guru-active-chip">
+                                    <i class="ti ti-circle-check me-1"></i> Akses Saya
+                                </span>
+                            @endif
                         </div>
 
-                        <a href="{{ route('guru.repository.index', request('akses') ? ['akses' => request('akses')] : []) }}"
+                        <a href="{{ route('guru.repository.index') }}"
                            class="text-danger small fw-semibold text-decoration-none d-inline-flex align-items-center gap-1">
                             <i class="ti ti-x"></i> Reset Filter
                         </a>
@@ -192,7 +219,7 @@
         <div class="row g-4">
             @foreach($repositories as $item)
                 @php
-                    $isSubscribed = in_array($item->kelas_id, $activeSubscribedKelasIds);
+                    $isSubscribed = in_array($item->semester_id, $activeSubscribedSemesterIds) || auth()->user()->hasRole('Super Admin');
                     $canAccess = ($item->akses === 'gratis') || $isSubscribed;
                     $ext = strtolower($item->tipe_file ?? pathinfo($item->nama_file, PATHINFO_EXTENSION));
                     $formatClass = match($ext) {
@@ -316,16 +343,16 @@
                                 <div class="d-flex align-items-center gap-2" style="gap: 8px !important;">
                                     @if($canAccess)
                                         <a href="{{ route('guru.repository.show', $item) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold">
-                                            Buka Materi
+                                            Baca Materi
                                         </a>
-                                        <a href="{{ route('guru.repository.download', $item) }}" class="btn btn-danger btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-xs" title="Unduh Berkas Langsung">
-                                            <i class="ti ti-download"></i> Unduh
+                                        <a href="{{ route('guru.repository.show', [$item, 'print' => 1]) }}" class="btn btn-danger btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-xs" title="Cetak Dokumen Langsung">
+                                            <i class="ti ti-printer"></i> Cetak
                                         </a>
                                     @else
                                         <a href="{{ route('guru.repository.show', $item) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold">
-                                            Detail
+                                            Pratinjau
                                         </a>
-                                        <a href="{{ route('guest.paket-langganan') }}" class="btn btn-warning text-dark btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-xs">
+                                        <a href="{{ route('guru.langganan.index') }}" class="btn btn-warning text-dark btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-xs">
                                             <i class="ti ti-lock"></i> Langganan
                                         </a>
                                     @endif

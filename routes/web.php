@@ -19,6 +19,9 @@ use App\Http\Controllers\Guest\PaketLanggananController as GuestPaketLanggananCo
 use App\Http\Controllers\Guest\PreviewMateriController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\Guru\RepositoryController as GuruRepositoryController;
+use App\Http\Controllers\Guru\LanggananController as GuruLanggananController;
+use App\Http\Controllers\Admin\LanggananController as AdminLanggananController;
+use App\Http\Controllers\Admin\PembayaranController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('guest.home');
@@ -45,6 +48,8 @@ Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
     Route::get('/repository', [GuruRepositoryController::class, 'index'])->name('repository.index');
     Route::get('/repository/{repository}', [GuruRepositoryController::class, 'show'])->name('repository.show');
     Route::get('/repository/{repository}/download', [GuruRepositoryController::class, 'download'])->name('repository.download');
+    Route::get('/langganan', [GuruLanggananController::class, 'index'])->name('langganan.index');
+    Route::post('/langganan', [GuruLanggananController::class, 'store'])->name('langganan.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -80,6 +85,11 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
         'admin/paket-langganan',
         PaketLanggananController::class
     )->names('admin.paket-langganan');
+
+    Route::get('/admin/langganan', [AdminLanggananController::class, 'index'])->name('admin.langganan.index');
+    Route::get('/admin/pembayaran', [PembayaranController::class, 'index'])->name('admin.pembayaran.index');
+    Route::post('/admin/pembayaran/{pembayaran}/verifikasi', [PembayaranController::class, 'verifikasi'])->name('admin.pembayaran.verifikasi');
+    Route::post('/admin/pembayaran/{pembayaran}/tolak', [PembayaranController::class, 'tolak'])->name('admin.pembayaran.tolak');
 
     Route::resource('/admin/semester', SemesterController::class)
         ->names('admin.semester');

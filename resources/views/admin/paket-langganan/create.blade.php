@@ -50,7 +50,7 @@
                                 name="nama"
                                 value="{{ old('nama') }}"
                                 class="form-control @error('nama') is-invalid @enderror"
-                                placeholder="Contoh: Paket Lengkap Kelas 4 SD Semester 1 & 2"
+                                placeholder="Contoh: Paket Semester 1 (Kelas 1–6 SD)"
                                 required
                             >
                             @error('nama')
@@ -58,45 +58,22 @@
                                     {{ $message }}
                                 </div>
                             @enderror
-                            <small class="form-hint">Gunakan nama yang jelas dan mendeskripsikan target kelas/semester.</small>
+                            <small class="form-hint">Gunakan nama yang jelas dan mendeskripsikan target semester.</small>
                         </div>
 
-                        {{-- Kelas & Semester --}}
+                        {{-- Semester & Cakupan Kelas --}}
                         <div class="row g-3 mb-4">
-                            {{-- Kelas --}}
-                            <div class="col-md-6">
-                                <label class="form-label required">
-                                    Kelas
-                                </label>
-                                <select
-                                    name="kelas_id"
-                                    class="form-select @error('kelas_id') is-invalid @enderror"
-                                    required
-                                >
-                                    <option value="" disabled selected>-- Pilih Tingkat Kelas --</option>
-                                    @foreach($kelas as $item)
-                                        <option value="{{ $item->id }}" @selected(old('kelas_id') == $item->id)>
-                                            {{ $item->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('kelas_id')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
                             {{-- Semester --}}
                             <div class="col-md-6">
-                                <label class="form-label">
-                                    Semester <span class="text-secondary fw-normal">(Opsional)</span>
+                                <label class="form-label required">
+                                    Semester
                                 </label>
                                 <select
                                     name="semester_id"
                                     class="form-select @error('semester_id') is-invalid @enderror"
+                                    required
                                 >
-                                    <option value="">Semua Semester (1 Tahun Ajaran)</option>
+                                    <option value="" disabled selected>-- Pilih Semester --</option>
                                     @foreach($semesters as $item)
                                         <option value="{{ $item->id }}" @selected(old('semester_id') == $item->id)>
                                             {{ $item->nama }}
@@ -108,6 +85,21 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                <small class="form-hint">Pilih Semester 1 atau Semester 2.</small>
+                            </div>
+
+                            {{-- Cakupan Kelas --}}
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    Cakupan Kelas
+                                </label>
+                                <input
+                                    type="text"
+                                    class="form-control bg-light"
+                                    value="Seluruh Kelas 1 s/d Kelas 6 SD"
+                                    readonly
+                                >
+                                <small class="form-hint text-muted">Paket otomatis mencakup seluruh jenjang Kelas 1 sampai 6.</small>
                             </div>
                         </div>
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kelas;
 use App\Models\PaketLangganan;
 use App\Models\Semester;
 use Illuminate\Database\QueryException;
@@ -11,15 +10,12 @@ use Illuminate\Http\Request;
 
 class PaketLanggananController extends Controller
 {
-  
     public function index(Request $request)
     {
-        $paketLangganans = PaketLangganan::with(['kelas', 'semester'])
+        $paketLangganans = PaketLangganan::with(['semester'])
             ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where('nama', 'like', '%' . $request->search . '%');
-            })
-            ->when($request->filled('kelas_id'), function ($query) use ($request) {
-                $query->where('kelas_id', $request->kelas_id);
+                $query->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
             })
             ->when($request->filled('semester_id'), function ($query) use ($request) {
                 $query->where('semester_id', $request->semester_id);
@@ -31,26 +27,16 @@ class PaketLanggananController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kelas = Kelas::aktif()->orderBy('urutan')->get();
         $semesters = Semester::aktif()->orderBy('urutan')->get();
 
-        return view('admin.paket-langganan.index', compact('paketLangganans', 'kelas', 'semesters'));
+        return view('admin.paket-langganan.index', compact('paketLangganans', 'semesters'));
     }
 
     public function create()
     {
-        $kelas = Kelas::aktif()
-            ->orderBy('urutan')
-            ->get();
+        $semesters = Semester::aktif()->orderBy('urutan')->get();
 
-        $semesters = Semester::aktif()
-            ->orderBy('urutan')
-            ->get();
-
-        return view('admin.paket-langganan.create', compact(
-            'kelas',
-            'semesters'
-        ));
+        return view('admin.paket-langganan.create', compact('semesters'));
     }
 
     public function store(Request $request)
@@ -64,13 +50,12 @@ class PaketLanggananController extends Controller
             ->with('success', 'Paket langganan berhasil ditambahkan.');
     }
 
-
     public function show(PaketLangganan $paketLangganan)
     {
         $paketLangganan->load([
-            'kelas',
             'semester',
             'langganans.user',
+            'langganans.pembayarans',
         ]);
 
         return view(
@@ -81,17 +66,10 @@ class PaketLanggananController extends Controller
 
     public function edit(PaketLangganan $paketLangganan)
     {
-        $kelas = Kelas::aktif()
-            ->orderBy('urutan')
-            ->get();
-
-        $semesters = Semester::aktif()
-            ->orderBy('urutan')
-            ->get();
+        $semesters = Semester::aktif()->orderBy('urutan')->get();
 
         return view('admin.paket-langganan.edit', compact(
             'paketLangganan',
-            'kelas',
             'semesters'
         ));
     }
@@ -107,7 +85,6 @@ class PaketLanggananController extends Controller
             ->with('success', 'Paket langganan berhasil diperbarui.');
     }
 
-   
     public function destroy(PaketLangganan $paketLangganan)
     {
         try {
@@ -123,17 +100,18 @@ class PaketLanggananController extends Controller
         }
     }
 
-    
     private function validasiData(Request $request): array
     {
         return $request->validate([
-            'kelas_id' => ['required', 'exists:kelas,id'],
-            'semester_id' => ['nullable', 'exists:semesters,id'],
+            'semester_id' => ['required', 'exists:semesters,id'],
             'nama' => ['required', 'string', 'max:100'],
             'deskripsi' => ['nullable', 'string'],
             'harga' => ['required', 'numeric', 'min:0'],
             'durasi_bulan' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'in:aktif,tidak_aktif'],
+        ], [
+            'semester_id.required' => 'Silakan pilih semester untuk paket ini (Semester 1 atau Semester 2).',
+            'semester_id.exists' => 'Semester yang dipilih tidak valid.',
         ]);
     }
 }

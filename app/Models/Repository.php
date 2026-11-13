@@ -39,7 +39,7 @@ class Repository extends Model
     {
         $mapel = strtolower($this->mataPelajaran?->nama ?? '');
 
-        if (str_contains($mapel, 'matematika')) {
+        if (str_contains($mapel, 'matematika') || str_contains($mapel, 'mtk')) {
             return [
                 'gradient' => 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
                 'accent' => '#93c5fd',
@@ -53,7 +53,7 @@ class Repository extends Model
                 'icon' => 'ti ti-leaf',
                 'pattern' => 'science',
             ];
-        } elseif (str_contains($mapel, 'indonesia')) {
+        } elseif (str_contains($mapel, 'indonesia') || str_contains($mapel, 'indo')) {
             return [
                 'gradient' => 'linear-gradient(135deg, #9a3412 0%, #ea580c 100%)',
                 'accent' => '#fed7aa',
@@ -81,7 +81,7 @@ class Repository extends Model
                 'icon' => 'ti ti-moon-stars',
                 'pattern' => 'religion',
             ];
-        } elseif (str_contains($mapel, 'seni') || str_contains($mapel, 'budaya') || str_contains($mapel, 'prakarya')) {
+        } elseif (str_contains($mapel, 'seni') || str_contains($mapel, 'rupa') || str_contains($mapel, 'musik') || str_contains($mapel, 'music') || str_contains($mapel, 'tari') || str_contains($mapel, 'teater') || str_contains($mapel, 'budaya') || str_contains($mapel, 'prakarya')) {
             return [
                 'gradient' => 'linear-gradient(135deg, #701a75 0%, #c026d3 100%)',
                 'accent' => '#f5d0fe',
@@ -94,6 +94,13 @@ class Repository extends Model
                 'accent' => '#a5f3fc',
                 'icon' => 'ti ti-ball-football',
                 'pattern' => 'sport',
+            ];
+        } elseif (str_contains($mapel, 'kka') || str_contains($mapel, 'koding') || str_contains($mapel, 'kecerdasan')) {
+            return [
+                'gradient' => 'linear-gradient(135deg, #0f172a 0%, #334155 100%)',
+                'accent' => '#94a3b8',
+                'icon' => 'ti ti-cpu',
+                'pattern' => 'tech',
             ];
         }
 
