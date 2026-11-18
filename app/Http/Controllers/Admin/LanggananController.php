@@ -33,7 +33,7 @@ class LanggananController extends Controller
             ->whereDate('tanggal_berakhir', '>=', now())
             ->where(function ($q) {
                 $q->whereHas('pembayarans', fn($p) => $p->where('status', 'berhasil'))
-                  ->orWhereDoesntHave('pembayarans');
+                ->orWhereDoesntHave('pembayarans');
             })
             ->count();
 

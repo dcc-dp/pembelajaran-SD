@@ -144,7 +144,7 @@
                         @php
                             $user = $item->langganan?->user;
                             $paket = $item->langganan?->paketLangganan;
-                            $orderId = 'INV-' . \Carbon\Carbon::parse($item->tanggal_pembayaran)->format('Ymd') . '-' . str_pad((string) $item->id, 4, '0', STR_PAD_LEFT);
+                            $orderId = $item->order_id ?? ('INV-' . \Carbon\Carbon::parse($item->tanggal_pembayaran)->format('Ymd') . '-' . str_pad((string) $item->id, 4, '0', STR_PAD_LEFT));
                         @endphp
                         <tr>
                             {{-- Order ID --}}

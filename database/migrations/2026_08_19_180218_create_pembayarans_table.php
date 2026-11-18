@@ -18,6 +18,8 @@ return new class extends Migration
                 ->constrained('langganan')
                 ->cascadeOnDelete();
 
+            $table->string('order_id', 100)->nullable()->unique();
+            $table->string('snap_token')->nullable();
             $table->string('metode_pembayaran', 50);
             $table->decimal('jumlah', 12, 2);
             $table->dateTime('tanggal_pembayaran');

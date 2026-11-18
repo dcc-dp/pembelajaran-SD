@@ -703,7 +703,7 @@
                     @forelse($riwayatLangganan as $idx => $item)
                         @php
                             $pembayaran = $item->pembayarans->last();
-                            $orderId = 'INV-' . ($pembayaran?->created_at?->format('Ymd') ?? date('Ymd')) . '-' . str_pad($pembayaran?->id ?? $item->id, 4, '0', STR_PAD_LEFT);
+                            $orderId = $pembayaran?->order_id ?? ('INV-' . ($pembayaran?->created_at?->format('Ymd') ?? date('Ymd')) . '-' . str_pad($pembayaran?->id ?? $item->id, 4, '0', STR_PAD_LEFT));
                         @endphp
                         <tr>
                             <td class="text-secondary">{{ $riwayatLangganan->firstItem() + $idx }}</td>
@@ -740,19 +740,40 @@
                                 </span>
                             </td>
                             <td>
-                                @if($pembayaran?->status === 'berhasil')
-                                    <span class="badge bg-success-lt text-success fw-bold">
-                                        <i class="ti ti-circle-check me-1"></i> Lunas
-                                    </span>
-                                @elseif($pembayaran?->status === 'gagal')
-                                    <span class="badge bg-danger-lt text-danger fw-bold">
-                                        <i class="ti ti-x me-1"></i> Dibatalkan
-                                    </span>
-                                @else
-                                    <span class="badge bg-warning-lt text-warning fw-bold">
-                                        <i class="ti ti-clock me-1"></i> Menunggu Pembayaran
-                                    </span>
-                                @endif
+                                <div class="d-flex flex-wrap align-items-center gap-1.5">
+                                    @if($pembayaran?->status === 'berhasil')
+                                        <span class="badge bg-success-lt text-success fw-bold">
+                                            <i class="ti ti-circle-check me-1"></i> Lunas ({{ $pembayaran->metode_pembayaran }})
+                                        </span>
+                                    @elseif($pembayaran?->status === 'gagal')
+                                        <span class="badge bg-danger-lt text-danger fw-bold">
+                                            <i class="ti ti-x me-1"></i> Dibatalkan
+                                        </span>
+                                    @else
+                                        <span class="badge bg-warning-lt text-warning fw-bold">
+                                            <i class="ti ti-clock me-1"></i> Menunggu
+                                        </span>
+
+                                        @if($pembayaran?->snap_token)
+                                            <button
+                                                type="button"
+                                                onclick="bukaPopupMidtrans('{{ $pembayaran->snap_token }}', '{{ route('guru.langganan.check-status', $pembayaran->id) }}')"
+                                                class="btn btn-sm btn-danger rounded-pill px-2.5 py-0.5 fw-semibold"
+                                            >
+                                                Bayar
+                                            </button>
+                                        @endif
+
+                                        @if($pembayaran)
+                                            <a
+                                                href="{{ route('guru.langganan.check-status', $pembayaran->id) }}"
+                                                class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-0.5 fw-semibold"
+                                            >
+                                                Cek Status
+                                            </a>
+                                        @endif
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -814,5 +835,49 @@ function selectPaket(paketId) {
         }
     });
 }
+
+function bukaPopupMidtrans(snapToken, checkStatusUrl) {
+    if (!window.snap) {
+        alert('Layanan pembayaran sedang dimuat, silakan tunggu beberapa detik lalu klik tombol Bayar.');
+        return;
+    }
+
+    window.snap.pay(snapToken, {
+        onSuccess: function () {
+            window.location.href = checkStatusUrl;
+        },
+        onPending: function () {
+            window.location.href = checkStatusUrl;
+        },
+        onError: function () {
+            window.location.href = checkStatusUrl;
+        },
+        onClose: function () {
+            // Popup ditutup oleh pengguna sebelum selesai bayar
+        }
+    });
+}
 </script>
+
+@php
+    $midtransClientKey = config('services.midtrans.client_key');
+    $midtransSnapJsUrl = config('services.midtrans.is_production')
+        ? 'https://app.midtrans.com/snap/snap.js'
+        : 'https://app.sandbox.midtrans.com/snap/snap.js';
+@endphp
+
+@if($midtransClientKey)
+    <script src="{{ $midtransSnapJsUrl }}" data-client-key="{{ $midtransClientKey }}"></script>
+@endif
+
+@if(session('snap_token') && session('pembayaran_id'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            bukaPopupMidtrans(
+                @json(session('snap_token')),
+                @json(route('guru.langganan.check-status', session('pembayaran_id')))
+            );
+        });
+    </script>
+@endif
 @endsection

@@ -43,6 +43,8 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::post('/midtrans/callback', [GuruLanggananController::class, 'callback'])->name('midtrans.callback');
+
 Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/repository', [GuruRepositoryController::class, 'index'])->name('repository.index');
@@ -50,6 +52,7 @@ Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
     Route::get('/repository/{repository}/download', [GuruRepositoryController::class, 'download'])->name('repository.download');
     Route::get('/langganan', [GuruLanggananController::class, 'index'])->name('langganan.index');
     Route::post('/langganan', [GuruLanggananController::class, 'store'])->name('langganan.store');
+    Route::get('/langganan/{pembayaran}/check-status', [GuruLanggananController::class, 'checkStatus'])->name('langganan.check-status');
 });
 
 Route::middleware('auth')->group(function () {

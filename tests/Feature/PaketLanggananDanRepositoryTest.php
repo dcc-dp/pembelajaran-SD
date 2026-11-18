@@ -429,4 +429,37 @@ class PaketLanggananDanRepositoryTest extends TestCase
         $resAdminPembayaran = $this->actingAs($this->admin)->get(route('admin.pembayaran.index'));
         $resAdminPembayaran->assertStatus(200);
     }
+
+    public function test_midtrans_callback_mengaktifkan_langganan_saat_settlement(): void
+    {
+        config(['services.midtrans.server_key' => 'Mid-server-test-key']);
+
+        $this->actingAs($this->guru)->post(route('guru.langganan.store'), [
+            'paket_langganan_id' => $this->paketSem1->id,
+        ]);
+
+        $pembayaran = Pembayaran::latest()->first();
+        $this->assertNotNull($pembayaran);
+        $this->assertNotNull($pembayaran->order_id);
+        $this->assertEquals(Pembayaran::STATUS_MENUNGGU, $pembayaran->status);
+
+        $orderId = $pembayaran->order_id;
+        $statusCode = '200';
+        $grossAmount = '150000.00';
+        $signatureKey = hash('sha512', $orderId . $statusCode . $grossAmount . 'Mid-server-test-key');
+
+        $response = $this->postJson(route('midtrans.callback'), [
+            'order_id' => $orderId,
+            'status_code' => $statusCode,
+            'gross_amount' => $grossAmount,
+            'signature_key' => $signatureKey,
+            'transaction_status' => 'settlement',
+            'payment_type' => 'qris',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals(Pembayaran::STATUS_BERHASIL, $pembayaran->fresh()->status);
+        $this->assertEquals('QRIS', $pembayaran->fresh()->metode_pembayaran);
+        $this->assertTrue($this->guru->fresh()->hasActiveSubscription($this->semester1->id));
+    }
 }
